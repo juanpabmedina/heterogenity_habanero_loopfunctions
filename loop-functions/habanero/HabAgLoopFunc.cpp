@@ -6,12 +6,12 @@
   * @license MIT License
   */
 
-#include "HabStLoopFunc.h"
+#include "HabAgLoopFunc.h"
 
 /****************************************/
 /****************************************/
 
-HabStLoopFunction::HabStLoopFunction() {
+HabAgLoopFunction::HabAgLoopFunction() {
     m_unClock = 0;
     m_unStopTime = 0;
     m_unStopBlock = 0;
@@ -21,18 +21,18 @@ HabStLoopFunction::HabStLoopFunction() {
 /****************************************/
 /****************************************/
 
-HabStLoopFunction::HabStLoopFunction(const HabStLoopFunction& orig) {
+HabAgLoopFunction::HabAgLoopFunction(const HabAgLoopFunction& orig) {
 }
 
 /****************************************/
 /****************************************/
 
-HabStLoopFunction::~HabStLoopFunction() {}
+HabAgLoopFunction::~HabAgLoopFunction() {}
 
 /****************************************/
 /****************************************/
 
-void HabStLoopFunction::Destroy() {
+void HabAgLoopFunction::Destroy() {
 
     m_tRobotStates.clear();
     m_tLEDStates.clear();
@@ -41,7 +41,7 @@ void HabStLoopFunction::Destroy() {
 /****************************************/
 /****************************************/
 
-void HabStLoopFunction::Init(TConfigurationNode& t_tree) {
+void HabAgLoopFunction::Init(TConfigurationNode& t_tree) {
 
     CoreLoopFunctions::Init(t_tree);
     TConfigurationNode cParametersNode;
@@ -60,7 +60,7 @@ void HabStLoopFunction::Init(TConfigurationNode& t_tree) {
 /****************************************/
 /****************************************/
 
-void HabStLoopFunction::Reset() {
+void HabAgLoopFunction::Reset() {
     CoreLoopFunctions::Reset();
 
 
@@ -79,20 +79,19 @@ void HabStLoopFunction::Reset() {
 /****************************************/
 /****************************************/
 
-void HabStLoopFunction::PostStep() {
+void HabAgLoopFunction::PostStep() {
 
     m_unClock = GetSpace().GetSimulationClock();
 
     ScoreControl();
-    MocaControl();
     UpdatePhormicaState();
-    //LOG << m_fObjectiveFunction << std::endl;
+    LOG << m_fObjectiveFunction << std::endl;
 }
 
 /****************************************/
 /****************************************/
 
-void HabStLoopFunction::PostExperiment() {
+void HabAgLoopFunction::PostExperiment() {
     if (m_bMaximization == true){
         LOG << -m_fObjectiveFunction << std::endl;
     }
@@ -104,7 +103,7 @@ void HabStLoopFunction::PostExperiment() {
 /****************************************/
 /****************************************/
 
-Real HabStLoopFunction::GetObjectiveFunction() {
+Real HabAgLoopFunction::GetObjectiveFunction() {
     if (m_bMaximization == true){
         return -m_fObjectiveFunction;
     }
@@ -116,7 +115,7 @@ Real HabStLoopFunction::GetObjectiveFunction() {
 /****************************************/
 /****************************************/
 
-void HabStLoopFunction::MocaControl() {
+void HabAgLoopFunction::MocaControl() {
 
     if (m_unClock == m_unStopTime) {
         CSpace::TMapPerType& tBlocksMap = GetSpace().GetEntitiesByType("block");
@@ -135,59 +134,41 @@ void HabStLoopFunction::MocaControl() {
 /****************************************/
 /****************************************/
 
-void HabStLoopFunction::ScoreControl(){
+void HabAgLoopFunction::ScoreControl(){
 
-    if (m_unClock == 1) {
-        m_unStopTime = GetRandomTime(400, 601);
-        m_unStopBlock = GetRandomTime(1, 25);
-    }
+    m_fObjectiveFunction += GetAggregationScore();
 
-    if (m_unClock <= m_unStopTime)
-        m_fObjectiveFunction += GetMoveScore();
-    else
-        m_fObjectiveFunction += GetStopScore();
 }
 
 /****************************************/
 /****************************************/
 
-Real HabStLoopFunction::GetStopScore() {
+Real HabAgLoopFunction::GetAggregationScore() {
 
     UpdateRobotPositions();
 
-    Real unScore = 0;
+    Real fScore = 0;
+    Real fDistance = 0;
     TRobotStateMap::iterator it;
+    TRobotStateMap::iterator jt;
     for (it = m_tRobotStates.begin(); it != m_tRobotStates.end(); ++it) {
-        Real d = (it->second.cPosition - it->second.cLastPosition).Length();
-        if (d > 0.0005)
-            unScore+=1;
+        for (jt = it; jt != m_tRobotStates.end(); ++jt) {
+            if (it != jt){
+                Real d = (it->second.cPosition - jt->second.cPosition).Length();
+                fDistance = fDistance + d;
+            }
+        }
     }
 
-    return unScore;
+    fScore = fDistance / m_tRobotStates.size();
+
+    return fScore;
 }
 
 /****************************************/
 /****************************************/
 
-Real HabStLoopFunction::GetMoveScore() {
-
-    UpdateRobotPositions();
-
-    Real unScore = 0;
-    TRobotStateMap::iterator it;
-    for (it = m_tRobotStates.begin(); it != m_tRobotStates.end(); ++it) {
-        Real d = (it->second.cPosition - it->second.cLastPosition).Length();
-        if (d <= 0.0005)
-            unScore+=1;
-    }
-
-    return unScore;
-}
-
-/****************************************/
-/****************************************/
-
-argos::CColor HabStLoopFunction::GetFloorColor(const argos::CVector2& c_position_on_plane) {
+argos::CColor HabAgLoopFunction::GetFloorColor(const argos::CVector2& c_position_on_plane) {
 
     return CColor::WHITE;
 }
@@ -195,7 +176,7 @@ argos::CColor HabStLoopFunction::GetFloorColor(const argos::CVector2& c_position
 /****************************************/
 /****************************************/
 
-void HabStLoopFunction::UpdateRobotPositions() {
+void HabAgLoopFunction::UpdateRobotPositions() {
     CSpace::TMapPerType& tEpuckMap = GetSpace().GetEntitiesByType("epuck");
     CVector2 cEpuckPosition(0,0);
     for (CSpace::TMapPerType::iterator it = tEpuckMap.begin(); it != tEpuckMap.end(); ++it) {
@@ -211,7 +192,7 @@ void HabStLoopFunction::UpdateRobotPositions() {
 /****************************************/
 /****************************************/
 
-void HabStLoopFunction::InitRobotStates() {
+void HabAgLoopFunction::InitRobotStates() {
 
     CSpace::TMapPerType& tEpuckMap = GetSpace().GetEntitiesByType("epuck");
     CVector2 cEpuckPosition(0,0);
@@ -229,7 +210,7 @@ void HabStLoopFunction::InitRobotStates() {
 /****************************************/
 /****************************************/
 
-void HabStLoopFunction::InitPhormicaState() {
+void HabAgLoopFunction::InitPhormicaState() {
 
     CSpace::TMapPerType& tPhormicaMap = GetSpace().GetEntitiesByType("phormica");
     CVector2 cLEDPosition(0,0);
@@ -252,7 +233,7 @@ void HabStLoopFunction::InitPhormicaState() {
 /****************************************/
 /****************************************/
 
-void HabStLoopFunction::UpdatePhormicaState() {
+void HabAgLoopFunction::UpdatePhormicaState() {
 
     TLEDStateMap::iterator itLED;
     TRobotStateMap::iterator it;
@@ -279,7 +260,7 @@ void HabStLoopFunction::UpdatePhormicaState() {
 /****************************************/
 /****************************************/
 
-void HabStLoopFunction::InitMocaState() {
+void HabAgLoopFunction::InitMocaState() {
 
     CSpace::TMapPerType& tBlocksMap = GetSpace().GetEntitiesByType("block");
     for (CSpace::TMapPerType::iterator it = tBlocksMap.begin(); it != tBlocksMap.end(); ++it) {
@@ -292,10 +273,10 @@ void HabStLoopFunction::InitMocaState() {
 /****************************************/
 /****************************************/
 
-CVector3 HabStLoopFunction::GetRandomPosition() {
+CVector3 HabAgLoopFunction::GetRandomPosition() {
   Real temp;
-  Real a = m_pcRng->Uniform(CRange<Real>(0.0f, 1.0f));
-  Real b = m_pcRng->Uniform(CRange<Real>(0.0f, 1.0f));
+  Real a = m_pcRng->Uniform(CRange<Real>(-1.0f, 1.0f));
+  Real b = m_pcRng->Uniform(CRange<Real>(-1.0f, 1.0f));
   Real c = m_pcRng->Uniform(CRange<Real>(-1.0f, 1.0f));
   Real d = m_pcRng->Uniform(CRange<Real>(-1.0f, 1.0f));
   // If b < a, swap them
@@ -314,7 +295,7 @@ CVector3 HabStLoopFunction::GetRandomPosition() {
 /****************************************/
 /****************************************/
 
-UInt32 HabStLoopFunction::GetRandomTime(UInt32 unMin, UInt32 unMax) {
+UInt32 HabAgLoopFunction::GetRandomTime(UInt32 unMin, UInt32 unMax) {
   UInt32 unStopAt = m_pcRng->Uniform(CRange<UInt32>(unMin, unMax));
   return unStopAt;
 
@@ -323,7 +304,7 @@ UInt32 HabStLoopFunction::GetRandomTime(UInt32 unMin, UInt32 unMax) {
 /****************************************/
 /****************************************/
 
-bool HabStLoopFunction::IsEven(UInt32 unNumber) {
+bool HabAgLoopFunction::IsEven(UInt32 unNumber) {
     bool even;
     if((unNumber%2)==0)
        even = true;
@@ -336,4 +317,4 @@ bool HabStLoopFunction::IsEven(UInt32 unNumber) {
 /****************************************/
 /****************************************/
 
-REGISTER_LOOP_FUNCTIONS(HabStLoopFunction, "hab_st_loop_function");
+REGISTER_LOOP_FUNCTIONS(HabAgLoopFunction, "hab_ag_loop_function");

@@ -8,3 +8,6 @@ link_directories(
 add_library(hab_st_loopfunc SHARED HabStLoopFunc.h HabStLoopFunc.cpp)
 target_link_libraries(hab_st_loopfunc argos3plugin_${ARGOS_BUILD_FOR}_epuck)
 
+add_library(hab_ag_loopfunc SHARED HabAgLoopFunc.h HabAgLoopFunc.cpp)
+target_link_libraries(hab_ag_loopfunc argos3plugin_${ARGOS_BUILD_FOR}_epuck)
+
