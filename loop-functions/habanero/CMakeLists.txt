@@ -5,5 +5,6 @@ link_directories(
 	${CMAKE_BINARY_DIR}/src
     )
 
-#add_subdirectory(moca)
-add_subdirectory(habanero)
+add_library(hab_st_loopfunc SHARED HabStLoopFunc.h HabStLoopFunc.cpp)
+target_link_libraries(hab_st_loopfunc argos3plugin_${ARGOS_BUILD_FOR}_epuck)
+
