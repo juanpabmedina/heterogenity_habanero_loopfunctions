@@ -48,7 +48,7 @@ class HabStLoopFunction: public CoreLoopFunctions {
     void MocaControl();
 
     void ScoreControl();
-    Real GetStopScore();  
+    Real GetStopScore();
     Real GetMoveScore();
 
   private:
@@ -84,10 +84,17 @@ class HabStLoopFunction: public CoreLoopFunctions {
     UInt32 m_unNumberLEDs;
     Real m_fObjectiveFunction;
 
+    /*
+    * Parameter to determine the width of pheromone trail based on the UV LEDs
+    */
+
+    Real m_fPheromoneParameter;
+
     struct RobotStateStruct {
         CVector2 cLastPosition;
         CVector2 cPosition;
         UInt32 unItem;
+        UInt32 unPheromoneLEDs;
     };
 
     struct LEDStateStruct {
@@ -102,6 +109,8 @@ class HabStLoopFunction: public CoreLoopFunctions {
 
     TRobotStateMap m_tRobotStates;
     TLEDStateMap m_tLEDStates;
+
+    CColor m_cUVColor;
 
 };
 
