@@ -68,7 +68,6 @@ void HabStLoopFunction::Init(TConfigurationNode& t_tree) {
 void HabStLoopFunction::Reset() {
     CoreLoopFunctions::Reset();
 
-
     m_pcPhormica->GetLEDEquippedEntity().SetAllLEDsColors(CColor::BLACK);
     m_unClock = 0;
     m_unStopBlock = 0;
@@ -76,9 +75,11 @@ void HabStLoopFunction::Reset() {
     m_fObjectiveFunction = 0;
 
     m_tRobotStates.clear();
+    m_tLEDStates.clear();
 
     InitMocaState();
     InitRobotStates();
+    InitPhormicaState();
 }
 
 /****************************************/
@@ -144,7 +145,7 @@ void HabStLoopFunction::ScoreControl(){
 
     if (m_unClock == 1) {
         m_unStopTime = GetRandomTime(400, 601);
-        m_unStopBlock = GetRandomTime(1, 25);
+        m_unStopBlock = GetRandomTime(0, 20);
     }
 
     if (m_unClock <= m_unStopTime)
@@ -211,7 +212,6 @@ void HabStLoopFunction::UpdateRobotPositions() {
         m_tRobotStates[pcEpuck].cLastPosition = m_tRobotStates[pcEpuck].cPosition;
         m_tRobotStates[pcEpuck].cPosition = cEpuckPosition;
 
-
         // Updating the Pheromone trail width parameter w.r.t ON UV LEDs
 
         CColor cEpuckUVOne = pcEpuck->GetLEDEquippedEntity().GetLED(11).GetColor();
@@ -219,15 +219,18 @@ void HabStLoopFunction::UpdateRobotPositions() {
         CColor cEpuckUVThree = pcEpuck->GetLEDEquippedEntity().GetLED(13).GetColor();
 
         if (cEpuckUVOne == CColor::BLACK && cEpuckUVTwo == m_cUVColor && cEpuckUVThree == CColor::BLACK){
-            m_fPheromoneParameter = 0.02; // Thin pheromone trail
+            //m_fPheromoneParameter = 0.02; // Thin pheromone trail
+            m_tRobotStates[pcEpuck].unPheromoneLEDs = 3;
         }
         else if (cEpuckUVOne == m_cUVColor && cEpuckUVTwo == m_cUVColor && cEpuckUVThree == m_cUVColor){
-            m_fPheromoneParameter = 0.045; // Thick pheromone trails
+            //m_fPheromoneParameter = 0.045; // Thick pheromone trails
+            m_tRobotStates[pcEpuck].unPheromoneLEDs = 9;
         }
         else {
-            m_fPheromoneParameter = 0; // No pheromone trail
+            //m_fPheromoneParameter = 0; // No pheromone trail
+            m_tRobotStates[pcEpuck].unPheromoneLEDs = 0;
         }
-//        LOG<<m_fPheromoneParameter<< " Init robot update LED color\n" << std::endl;
+        //LOG<< m_fPheromoneParameter<< "Robot update LED color" << std::endl;
     }
 }
 
@@ -245,6 +248,7 @@ void HabStLoopFunction::InitRobotStates() {
 
         m_tRobotStates[pcEpuck].cLastPosition = cEpuckPosition;
         m_tRobotStates[pcEpuck].cPosition = cEpuckPosition;
+        m_tRobotStates[pcEpuck].unPheromoneLEDs = 0;
         m_tRobotStates[pcEpuck].unItem = 0;
     }
 }
@@ -283,9 +287,20 @@ void HabStLoopFunction::UpdatePhormicaState() {
 
         for (it = m_tRobotStates.begin(); it != m_tRobotStates.end(); ++it) {
             Real d = (itLED->second.cLEDPosition - it->second.cPosition).Length();
-            if (d <= m_fPheromoneParameter) {
+            Real fPheromone = 0;
+
+            if (it->second.unPheromoneLEDs <= 0)
+                fPheromone = 0;
+            else if (it->second.unPheromoneLEDs <= 3)
+                fPheromone = 0.02;
+            else
+                fPheromone = 0.045;
+
+            //if (d <= m_fPheromoneParameter) {
+            if (d <= fPheromone) {
                 itLED->second.unTimer = 400; // Pheromone decay time
                 m_pcPhormica->GetLEDEquippedEntity().SetLEDColor(itLED->second.unLEDIndex,CColor::MAGENTA);
+                //LOG << "Colored LED: " << itLED->second.unLEDIndex << std::endl;
             }
         }
 

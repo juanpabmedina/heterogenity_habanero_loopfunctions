@@ -42,8 +42,8 @@
 		    <epuck_ground implementation="rot_z_only" noise_level="0.05" calibrated="true"/>
             <epuck_omnidirectional_camera implementation="rot_z_only" medium="leds" show_rays="false"/>
       </sensors>
-    <params readable="true" history='false' fsm-config="--nstates 1 --s0 0 --cle0 1 --phe0 9 --rwm0 1"/> 
-   <!-- <!--  <params fsm-config="--nstates 2 --s0 6 --phe0 3 --cle0 0 --n0 1 --n0x0 0 --c0x0 5 --p0x0 0.5 --s1 10 --vel1 0.5 --phe1 3 --fov1 1.6 --n1 1 --n1x0 0 --c1x0 5 --p1x0 0.5" history="false" readable="true" /> -->
+    <!--params readable="true" history='false' fsm-config="--nstates 1 --s0 0 --cle0 1 --phe0 9 --rwm0 1"/--> 
+    <params fsm-config="--nstates 2 --s0 6 --phe0 0 --vel0 0.5 --fov0 1.6 --n0 1 --n0x0 0 --c0x0 5 --p0x0 0.5 --s1 5 --vel1 0.5 --phe1 3 --fov1 1.6 --n1 1 --n1x0 0 --c1x0 5 --p1x0 0.5" history="false" readable="true" />
 
                                         <!-- From sa -> n0x0 sb = n0x0 sb+1, (a < b) -->
                                         <!-- From sa -> n0x0 sb = n0x0 sb  , (a > b)-->
