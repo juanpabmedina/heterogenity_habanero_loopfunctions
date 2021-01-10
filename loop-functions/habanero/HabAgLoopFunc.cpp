@@ -92,7 +92,7 @@ void HabAgLoopFunction::PostStep() {
 
     ScoreControl();
     UpdatePhormicaState();
-    LOG << m_fObjectiveFunction << std::endl;
+    //LOG << m_fObjectiveFunction << std::endl;
 }
 
 /****************************************/
@@ -143,8 +143,7 @@ void HabAgLoopFunction::MocaControl() {
 
 void HabAgLoopFunction::ScoreControl(){
 
-    // m_fObjectiveFunction += GetAggregationScore(); // check this,
-    m_fObjectiveFunction = GetAggregationScore();
+    m_fObjectiveFunction += GetAggregationScore(); // check this,
 
 }
 

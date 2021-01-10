@@ -14,7 +14,7 @@
   <!-- <loop_functions library="/home/dgarzon/habanero/experiments-loop-functions/build/loop-functions/habanero/libhab_st_loopfunc.so" -->
     <loop_functions library="/home/salman/habanero-loop-functions/build/loop-functions/habanero/libhab_st_loopfunc.so"
    label="hab_st_loop_function">
-       <params number_robots="2"
+       <params number_robots="8"
 		       dist_radius="1.0"
                maximization="false"/>
   </loop_functions>
@@ -36,7 +36,7 @@
         <epuck_ground_leds ground_led_pwm="200" implementation="default" medium="leds" />
       </actuators>
       <sensors>
-		    <epuck_proximity implementation="default" show_rays="true" noise_level="0.05" calibrated="true"/>
+		    <epuck_proximity implementation="default" show_rays="false" noise_level="0.05" calibrated="true"/>
         <epuck_range_and_bearing implementation="medium" medium="rab" data_size="4" noise_std_deviation="1.5" loss_probability="0.85" calibrated="true"/>
 		    <epuck_light implementation="default" show_rays="false" noise_level="0.05" calibrated="true"/>
 		    <epuck_ground implementation="rot_z_only" noise_level="0.05" calibrated="true"/>
@@ -45,16 +45,16 @@
    <!--params readable="true" history='false' fsm-config="--nstates 1 
                                                           --s0 4 --clr0 2 --phe0 9 --vel0 1.0 --fov0 1.47"/--> 
     <params fsm-config="--nstates 3 
-                        --s0 0 --rwm0 1 --phe0 0 
+                        --s0 0 --rwm0 10 --phe0 0 
                         --n0 2 
-                        --n0x0 0 --c0x0 7 --p0x0 1.0 --l0x0 2 --f0x0 3.14 
-                        --n0x1 0 --c0x1 8 --p0x1 1.0 --f0x1 3.14 
-                        --s1 0 --rwm1 1 --phe1 9 
-                        --n1 0 
-                        --n1x0 1 --c1x0 5 --p1x0 0.1 
-                        --s2 1 --phe2 9 
+                        --n0x0 0 --c0x0 5 --p0x0 1.0 --l0x0 2 --f0x0 1 
+                        --n0x1 0 --c0x1 6 --p0x1 1.0 --f0x1 1
+                        --s1 4 --phe1 2 
+                        --n1 1 
+                        --n1x0 1 --c1x0 4 --p1x0 0.1 
+                        --s2 1 --phe2 2 
                         --n2 1 
-                        --n2x0 1 --c2x0 5 --p2x0 0.1" history="false" readable="true" /> 
+                        --n2x0 1 --c2x0 4 --p2x0 0.1" history="false" readable="true" /> 
                                         <!-- From sa -> n0x0 sb = n0x0 sb+1, (a < b) -->
                                         <!-- From sa -> n0x0 sb = n0x0 sb  , (a > b)-->
     </automode_controller>
@@ -82,7 +82,7 @@
   <distribute>
     <position method="uniform" min="-1,-1,0" max="1,1,0" />
     <orientation method="gaussian" mean="0,0,0" std_dev="360,0,0" />
-    <entity quantity="2" max_trials="100">
+    <entity quantity="8" max_trials="100">
       <e-puck id="epuck">
        <controller config="habanero" />
       </e-puck>
