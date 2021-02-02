@@ -14,7 +14,7 @@
   <!-- <loop_functions library="/home/dgarzon/habanero/experiments-loop-functions/build/loop-functions/habanero/libhab_ag_loopfunc.so" -->
   <loop_functions library="/home/salman/habanero-loop-functions/build/loop-functions/habanero/libhab_ag_loopfunc.so"
    label="hab_ag_loop_function">
-       <params number_robots="4"
+       <params number_robots="8"
 		       dist_radius="1.0"
                maximization="false"/>
   </loop_functions>
@@ -43,7 +43,7 @@
             <epuck_omnidirectional_camera implementation="rot_z_only" medium="leds" show_rays="false"/>
       </sensors>
     <!--params readable="true" history='false' fsm-config="--nstates 1 --s0 0 --phe0 2 --rwm0 10"/--> 
-    <params fsm-config="--nstates 2 --s0 6 --phe0 2 --vel0 0.5 --fov0 1 --n0 1 --n0x0 0 --c0x0 4 --p0x0 0.5 --s1 5 --vel1 0.5 --phe1 1 --fov1 1 --n1 1 --n1x0 0 --c1x0 4 --p1x0 0.5" history="false" readable="true" />
+    <params fsm-config="--nstates 4 --s0 1 --phe0 0 --n0 3 --n0x0 0 --c0x0 4 --p0x0 0.82 --n0x1 2 --c0x1 3 --p0x1 0.47 --n0x2 0 --c0x2 0 --p0x2 0.3 --s1 5 --fov1 1 --vel1 1.0 --phe1 0 --n1 1 --n1x0 1 --c1x0 2 --p1x0 0.8 --s2 5 --fov2 1 --vel2 1.0 --phe2 0 --n2 2 --n2x0 0 --c2x0 6 --p2x0 0.52 --f2x0 0 --n2x1 1 --c2x1 5 --p2x1 0.42 --f2x1 1 --l2x1 3 --s3 1 --phe3 2 --n3 4 --n3x0 2 --c3x0 4 --p3x0 0.82 --n3x1 0 --c3x1 3 --p3x1 0.44 --n3x2 0 --c3x2 6 --p3x2 0.42 --f3x2 1 --n3x3 1 --c3x3 1 --p3x3 0.46" history="false" readable="true" />
 
                                         <!-- From sa -> n0x0 sb = n0x0 sb+1, (a < b) -->
                                         <!-- From sa -> n0x0 sb = n0x0 sb  , (a > b)-->
@@ -72,7 +72,7 @@
   <distribute>
     <position method="uniform" min="-1,-1,0" max="1,1,0" />
     <orientation method="gaussian" mean="0,0,0" std_dev="360,0,0" />
-    <entity quantity="4" max_trials="100">
+    <entity quantity="8" max_trials="100">
       <e-puck id="epuck">
        <controller config="habanero" />
       </e-puck>
