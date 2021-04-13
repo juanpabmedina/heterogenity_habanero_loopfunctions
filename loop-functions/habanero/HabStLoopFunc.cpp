@@ -144,7 +144,7 @@ void HabStLoopFunction::MocaControl() {
 void HabStLoopFunction::ScoreControl(){
 
     if (m_unClock == 1) {
-        m_unStopTime = GetRandomTime(400, 601);
+        m_unStopTime = GetRandomTime(700, 901);
         m_unStopBlock = GetRandomTime(0, 20);
     }
 
