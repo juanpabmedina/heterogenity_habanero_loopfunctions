@@ -92,7 +92,7 @@ void HabHzLoopFunction::PostStep() {
     ScoreControl();
     MocaControl();
     UpdatePhormicaState();
-    LOG << m_fObjectiveFunction << std::endl;
+    // LOG << m_fObjectiveFunction << std::endl;
 }
 
 /****************************************/
@@ -139,7 +139,7 @@ void HabHzLoopFunction::MocaControl() {
             case 1:
                 pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::BLUE);
                 break;
-            
+
             case 12:
                 pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::BLUE);
                 break;
@@ -151,7 +151,7 @@ void HabHzLoopFunction::MocaControl() {
             case 14:
                 pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::BLUE);
                 break;
-            
+
             default:
                 break;
             }
