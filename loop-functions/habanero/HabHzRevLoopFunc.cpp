@@ -48,7 +48,7 @@ void HabHzRevLoopFunction::Init(TConfigurationNode& t_tree) {
     TConfigurationNode cParametersNode;
     try {
       cParametersNode = GetNode(t_tree, "params");
-      GetNodeAttributeOrDefault(cParametersNode, "maximization", m_bMaximization, (bool) false);
+      GetNodeAttributeOrDefault(cParametersNode, "maximization", m_bMaximization, (bool) true);
     } catch(std::exception e) {
     }
 
