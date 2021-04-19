@@ -6,12 +6,12 @@
   * @license MIT License
   */
 
-#include "HabHzLoopFunc.h"
+#include "HabRenLoopFunc.h"
 
 /****************************************/
 /****************************************/
 
-HabHzLoopFunction::HabHzLoopFunction() {
+HabRenLoopFunction::HabRenLoopFunction() {
     m_unClock = 0;
     m_unStopTime = 0;
     m_unStopBlock = 0;
@@ -22,18 +22,18 @@ HabHzLoopFunction::HabHzLoopFunction() {
 /****************************************/
 /****************************************/
 
-HabHzLoopFunction::HabHzLoopFunction(const HabHzLoopFunction& orig) {
+HabRenLoopFunction::HabRenLoopFunction(const HabRenLoopFunction& orig) {
 }
 
 /****************************************/
 /****************************************/
 
-HabHzLoopFunction::~HabHzLoopFunction() {}
+HabRenLoopFunction::~HabRenLoopFunction() {}
 
 /****************************************/
 /****************************************/
 
-void HabHzLoopFunction::Destroy() {
+void HabRenLoopFunction::Destroy() {
 
     m_tRobotStates.clear();
     m_tLEDStates.clear();
@@ -42,7 +42,7 @@ void HabHzLoopFunction::Destroy() {
 /****************************************/
 /****************************************/
 
-void HabHzLoopFunction::Init(TConfigurationNode& t_tree) {
+void HabRenLoopFunction::Init(TConfigurationNode& t_tree) {
 
     CoreLoopFunctions::Init(t_tree);
     TConfigurationNode cParametersNode;
@@ -65,7 +65,7 @@ void HabHzLoopFunction::Init(TConfigurationNode& t_tree) {
 /****************************************/
 /****************************************/
 
-void HabHzLoopFunction::Reset() {
+void HabRenLoopFunction::Reset() {
     CoreLoopFunctions::Reset();
 
     m_pcPhormica->GetLEDEquippedEntity().SetAllLEDsColors(CColor::BLACK);
@@ -85,11 +85,11 @@ void HabHzLoopFunction::Reset() {
 /****************************************/
 /****************************************/
 
-void HabHzLoopFunction::PostStep() {
+void HabRenLoopFunction::PostStep() {
 
     m_unClock = GetSpace().GetSimulationClock();
-
-    ScoreControl();
+    GetRobotScore();
+    TimerControl();
     MocaControl();
     UpdatePhormicaState();
     // LOG << m_fObjectiveFunction << std::endl;
@@ -98,7 +98,8 @@ void HabHzLoopFunction::PostStep() {
 /****************************************/
 /****************************************/
 
-void HabHzLoopFunction::PostExperiment() {
+void HabRenLoopFunction::PostExperiment() {
+
     if (m_bMaximization == true){
         LOG << -m_fObjectiveFunction << std::endl;
     }
@@ -110,7 +111,7 @@ void HabHzLoopFunction::PostExperiment() {
 /****************************************/
 /****************************************/
 
-Real HabHzLoopFunction::GetObjectiveFunction() {
+Real HabRenLoopFunction::GetObjectiveFunction() {
     if (m_bMaximization == true){
         return -m_fObjectiveFunction;
     }
@@ -122,7 +123,7 @@ Real HabHzLoopFunction::GetObjectiveFunction() {
 /****************************************/
 /****************************************/
 
-void HabHzLoopFunction::MocaControl() {
+void HabRenLoopFunction::MocaControl() {
 
     if (m_unClock == m_unStopTime) {
         CSpace::TMapPerType& tBlocksMap = GetSpace().GetEntitiesByType("block");
@@ -132,24 +133,36 @@ void HabHzLoopFunction::MocaControl() {
 
             switch (unBlocksID)
             {
-            case 0:
-                pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::BLUE);
+            case 5:
+                pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::BLACK);
                 break;
 
-            case 1:
-                pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::BLUE);
+            case 6:
+                pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::BLACK);
                 break;
 
-            case 12:
-                pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::BLUE);
+            case 7:
+                pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::BLACK);
                 break;
 
-            case 13:
-                pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::BLUE);
+            case 8:
+                pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::BLACK);
                 break;
 
-            case 14:
-                pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::BLUE);
+            case 2:
+                pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::BLACK);
+                break;
+
+            case 3:
+                pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::BLACK);
+                break;
+
+            case 18:
+                pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::BLACK);
+                break;
+
+            case 19:
+                pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::BLACK);
                 break;
 
             default:
@@ -164,59 +177,51 @@ void HabHzLoopFunction::MocaControl() {
 /****************************************/
 /****************************************/
 
-void HabHzLoopFunction::ScoreControl(){
+void HabRenLoopFunction::TimerControl(){
 
     if (m_unClock == 1) {
         m_unStopTime = GetRandomTime(700, 901);
     }
-
-    if (m_unClock <= m_unStopTime)
-        m_fObjectiveFunction -= GetRobotInScore();
-    else
-        m_fObjectiveFunction += GetRobotInScore();
 }
 
 /****************************************/
 /****************************************/
 
-Real HabHzLoopFunction::GetRobotInScore() {
+void HabRenLoopFunction::GetRobotScore() {
 
-    UpdateRobotPositions();
+  UpdateRobotPositions();
 
-    Real unScore = 0;
-    TRobotStateMap::iterator it;
-    for (it = m_tRobotStates.begin(); it != m_tRobotStates.end(); ++it) {
-        if (it->second.cPosition.GetY() <= -0.60)
-            unScore+=1;
-    }
+  Real unScore = 0;
+  TRobotStateMap::iterator it;
+  for (it = m_tRobotStates.begin(); it != m_tRobotStates.end(); ++it) {
+      if (it->second.cPosition.GetX() <= -0.17 && it->second.cPosition.GetY() <= -0.10)
+          unScore+=1;
+  }
 
-    return unScore;
+  m_fObjectiveFunction = unScore - (8 - unScore);
 }
 
 /****************************************/
 /****************************************/
 
-Real HabHzLoopFunction::GetRobotOutScore() {
-
-    UpdateRobotPositions();
-
-    Real unScore = 0;
-    TRobotStateMap::iterator it;
-    for (it = m_tRobotStates.begin(); it != m_tRobotStates.end(); ++it) {
-        if (it->second.cPosition.GetY() >= -0.60)
-            unScore+=1;
-    }
-
-    return unScore;
-}
+// Real HabRenLoopFunction::GetRobotOutScore() {
+//
+//     UpdateRobotPositions();
+//
+//     Real unScore = 0;
+//     TRobotStateMap::iterator it;
+//     for (it = m_tRobotStates.begin(); it != m_tRobotStates.end(); ++it) {
+//         if (it->second.cPosition.GetY() >= -0.60)
+//             unScore+=1;
+//     }
+//
+//     return unScore;
+// }
 
 /****************************************/
 /****************************************/
 
-argos::CColor HabHzLoopFunction::GetFloorColor(const argos::CVector2& c_position_on_plane) {
-
-    if (c_position_on_plane.GetY() < -0.635)
-        return CColor::BLACK;
+argos::CColor HabRenLoopFunction::GetFloorColor(const argos::CVector2& c_position_on_plane) {
 
     return CColor::WHITE;
 }
@@ -224,7 +229,7 @@ argos::CColor HabHzLoopFunction::GetFloorColor(const argos::CVector2& c_position
 /****************************************/
 /****************************************/
 
-void HabHzLoopFunction::UpdateRobotPositions() {
+void HabRenLoopFunction::UpdateRobotPositions() {
     CSpace::TMapPerType& tEpuckMap = GetSpace().GetEntitiesByType("epuck");
     CVector2 cEpuckPosition(0,0);
     for (CSpace::TMapPerType::iterator it = tEpuckMap.begin(); it != tEpuckMap.end(); ++it) {
@@ -260,7 +265,7 @@ void HabHzLoopFunction::UpdateRobotPositions() {
 /****************************************/
 /****************************************/
 
-void HabHzLoopFunction::InitRobotStates() {
+void HabRenLoopFunction::InitRobotStates() {
 
     CSpace::TMapPerType& tEpuckMap = GetSpace().GetEntitiesByType("epuck");
     CVector2 cEpuckPosition(0,0);
@@ -279,7 +284,7 @@ void HabHzLoopFunction::InitRobotStates() {
 /****************************************/
 /****************************************/
 
-void HabHzLoopFunction::InitPhormicaState() {
+void HabRenLoopFunction::InitPhormicaState() {
 
     CSpace::TMapPerType& tPhormicaMap = GetSpace().GetEntitiesByType("phormica");
     CVector2 cLEDPosition(0,0);
@@ -302,7 +307,7 @@ void HabHzLoopFunction::InitPhormicaState() {
 /****************************************/
 /****************************************/
 
-void HabHzLoopFunction::UpdatePhormicaState() {
+void HabRenLoopFunction::UpdatePhormicaState() {
 
     TLEDStateMap::iterator itLED;
     TRobotStateMap::iterator it;
@@ -340,25 +345,32 @@ void HabHzLoopFunction::UpdatePhormicaState() {
 /****************************************/
 /****************************************/
 
-void HabHzLoopFunction::InitMocaState() {
+void HabRenLoopFunction::InitMocaState() {
 
-    CSpace::TMapPerType& tBlocksMap = GetSpace().GetEntitiesByType("block");
-    UInt32 unBlocksID = 0;
-    for (CSpace::TMapPerType::iterator it = tBlocksMap.begin(); it != tBlocksMap.end(); ++it) {
-        CBlockEntity* pcBlock = any_cast<CBlockEntity*>(it->second);
-        pcBlock->GetLEDEquippedEntity().Enable();
-        pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::BLACK);
-        if (unBlocksID >= 2 && unBlocksID <= 6) {
-                pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::GREEN);
-            }
-        unBlocksID += 1;
-    }
+  CSpace::TMapPerType& tBlocksMap = GetSpace().GetEntitiesByType("block");
+  UInt32 unBlocksID = 0;
+  for (CSpace::TMapPerType::iterator it = tBlocksMap.begin(); it != tBlocksMap.end(); ++it) {
+      CBlockEntity* pcBlock = any_cast<CBlockEntity*>(it->second);
+      pcBlock->GetLEDEquippedEntity().Enable();
+      pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::BLACK);
+      if (unBlocksID >= 2 && unBlocksID <= 3) {
+              pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::BLUE);
+          }
+      else if (unBlocksID >= 18 && unBlocksID <= 19) {
+              pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::BLUE);
+          }
+      else if (unBlocksID >= 5 && unBlocksID <= 8) {
+              pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::GREEN);
+          }
+
+      unBlocksID += 1;
+  }
 }
 
 /****************************************/
 /****************************************/
 
-// CVector3 HabHzLoopFunction::GetRandomPosition() {
+// CVector3 HabRenLoopFunction::GetRandomPosition() {
 //   Real temp;
 //   Real a = m_pcRng->Uniform(CRange<Real>(0.0f, 1.0f));
 //   Real b = m_pcRng->Uniform(CRange<Real>(0.0f, 1.0f));
@@ -376,7 +388,7 @@ void HabHzLoopFunction::InitMocaState() {
 //
 //   return CVector3(fPosX, fPosY, 0);
 // }
-CVector3 HabHzLoopFunction::GetRandomPosition() {
+CVector3 HabRenLoopFunction::GetRandomPosition() {
     Real a;
     Real b;
 
@@ -392,7 +404,7 @@ CVector3 HabHzLoopFunction::GetRandomPosition() {
 /****************************************/
 /****************************************/
 
-UInt32 HabHzLoopFunction::GetRandomTime(UInt32 unMin, UInt32 unMax) {
+UInt32 HabRenLoopFunction::GetRandomTime(UInt32 unMin, UInt32 unMax) {
   UInt32 unStopAt = m_pcRng->Uniform(CRange<UInt32>(unMin, unMax));
   return unStopAt;
 
@@ -401,7 +413,7 @@ UInt32 HabHzLoopFunction::GetRandomTime(UInt32 unMin, UInt32 unMax) {
 /****************************************/
 /****************************************/
 
-bool HabHzLoopFunction::IsEven(UInt32 unNumber) {
+bool HabRenLoopFunction::IsEven(UInt32 unNumber) {
     bool even;
     if((unNumber%2)==0)
        even = true;
@@ -414,4 +426,4 @@ bool HabHzLoopFunction::IsEven(UInt32 unNumber) {
 /****************************************/
 /****************************************/
 
-REGISTER_LOOP_FUNCTIONS(HabHzLoopFunction, "hab_hz_loop_function");
+REGISTER_LOOP_FUNCTIONS(HabRenLoopFunction, "hab_ren_loop_function");

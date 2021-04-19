@@ -171,7 +171,7 @@ void HabHzRevLoopFunction::ScoreControl(){
     }
 
     if (m_unClock <= m_unStopTime)
-        m_fObjectiveFunction += GetRobotOutScore();
+        m_fObjectiveFunction -= GetRobotInScore();
     else
         m_fObjectiveFunction += GetRobotInScore();
 }
@@ -186,7 +186,7 @@ Real HabHzRevLoopFunction::GetRobotInScore() {
     Real unScore = 0;
     TRobotStateMap::iterator it;
     for (it = m_tRobotStates.begin(); it != m_tRobotStates.end(); ++it) {
-        if (it->second.cPosition.GetY() >= -0.60)
+        if (it->second.cPosition.GetY() <= -0.60)
             unScore+=1;
     }
 
@@ -203,7 +203,7 @@ Real HabHzRevLoopFunction::GetRobotOutScore() {
     Real unScore = 0;
     TRobotStateMap::iterator it;
     for (it = m_tRobotStates.begin(); it != m_tRobotStates.end(); ++it) {
-        if (it->second.cPosition.GetY() <= -0.60)
+        if (it->second.cPosition.GetY() >= -0.60)
             unScore+=1;
     }
 

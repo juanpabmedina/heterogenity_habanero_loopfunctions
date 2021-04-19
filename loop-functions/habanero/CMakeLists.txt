@@ -16,3 +16,6 @@ target_link_libraries(hab_hz_loopfunc argos3plugin_${ARGOS_BUILD_FOR}_epuck)
 
 add_library(hab_hz_rev_loopfunc SHARED HabHzRevLoopFunc.h HabHzRevLoopFunc.cpp)
 target_link_libraries(hab_hz_rev_loopfunc argos3plugin_${ARGOS_BUILD_FOR}_epuck)
+
+add_library(hab_ren_loopfunc SHARED HabRenLoopFunc.h HabRenLoopFunc.cpp)
+target_link_libraries(hab_ren_loopfunc argos3plugin_${ARGOS_BUILD_FOR}_epuck)
