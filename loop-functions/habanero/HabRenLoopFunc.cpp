@@ -48,7 +48,8 @@ void HabRenLoopFunction::Init(TConfigurationNode& t_tree) {
     TConfigurationNode cParametersNode;
     try {
       cParametersNode = GetNode(t_tree, "params");
-      GetNodeAttributeOrDefault(cParametersNode, "maximization", m_bMaximization, (bool) true);
+      GetNodeAttributeOrDefault(cParametersNode, "maximization", m_bMaximization, (bool) false);
+      m_bMaximization = true;
     } catch(std::exception e) {
     }
 
@@ -105,6 +106,7 @@ void HabRenLoopFunction::PostExperiment() {
     }
     else {
         LOG << m_fObjectiveFunction << std::endl;
+
     }
 }
 
