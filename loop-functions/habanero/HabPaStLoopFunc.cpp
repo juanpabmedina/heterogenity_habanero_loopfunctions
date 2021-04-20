@@ -359,11 +359,11 @@ CVector3 HabPaStLoopFunction::GetRandomPosition() {
   Real a;
   Real b;
 
-  a = m_pcRng->Uniform(CRange<Real>(0.0f, 1.0f));
-  b = m_pcRng->Uniform(CRange<Real>(-1.0f, 1.0f));
+  a = m_pcRng->Uniform(CRange<Real>(-0.455f, 0.455f));
+  b = m_pcRng->Uniform(CRange<Real>(-0.705f, 0.705f));
 
-  Real fPosY = 0.5 + a * 0.3;
-  Real fPosX = 0.0 + b * 0.35;
+  Real fPosX = a;
+  Real fPosY = b;
 
   return CVector3(fPosX, fPosY, 0);
 }
