@@ -22,3 +22,6 @@ target_link_libraries(hab_ren_loopfunc argos3plugin_${ARGOS_BUILD_FOR}_epuck)
 
 add_library(hab_pa_st_loopfunc SHARED HabPaStLoopFunc.h HabPaStLoopFunc.cpp)
 target_link_libraries(hab_pa_st_loopfunc argos3plugin_${ARGOS_BUILD_FOR}_epuck)
+
+add_library(hab_dec_loopfunc SHARED HabDecLoopFunc.h HabDecLoopFunc.cpp)
+target_link_libraries(hab_dec_loopfunc argos3plugin_${ARGOS_BUILD_FOR}_epuck)
