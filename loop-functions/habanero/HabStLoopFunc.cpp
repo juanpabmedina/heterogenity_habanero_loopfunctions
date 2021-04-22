@@ -130,7 +130,7 @@ void HabStLoopFunction::MocaControl() {
         for (CSpace::TMapPerType::iterator it = tBlocksMap.begin(); it != tBlocksMap.end(); ++it) {
             CBlockEntity* pcBlock = any_cast<CBlockEntity*>(it->second);
             if (unBlocksID == m_unStopBlock) {
-                pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::GREEN);
+                pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::BLUE);
                 break;
             }
             unBlocksID += 1;
