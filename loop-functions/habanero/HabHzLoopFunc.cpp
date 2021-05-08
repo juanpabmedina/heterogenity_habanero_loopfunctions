@@ -313,6 +313,10 @@ void HabHzLoopFunction::UpdatePhormicaState() {
             Real d = (itLED->second.cLEDPosition - it->second.cPosition).Length();
             Real fPheromone = 0;
 
+            // to slove reset bug
+            if (m_unClock == 1)
+                it->second.unPheromoneLEDs = 0;
+
             if (it->second.unPheromoneLEDs <= 0)
                 fPheromone = 0;
             else if (it->second.unPheromoneLEDs <= 3)

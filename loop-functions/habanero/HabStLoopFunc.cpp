@@ -80,6 +80,7 @@ void HabStLoopFunction::Reset() {
     InitMocaState();
     InitRobotStates();
     InitPhormicaState();
+
 }
 
 /****************************************/
@@ -250,6 +251,7 @@ void HabStLoopFunction::InitRobotStates() {
         m_tRobotStates[pcEpuck].cPosition = cEpuckPosition;
         m_tRobotStates[pcEpuck].unPheromoneLEDs = 0;
         m_tRobotStates[pcEpuck].unItem = 0;
+        //LOG<<m_tRobotStates[pcEpuck].unPheromoneLEDs<<" unPheromoneLEDs in InitRobotStates()\n";
     }
 }
 
@@ -288,6 +290,10 @@ void HabStLoopFunction::UpdatePhormicaState() {
         for (it = m_tRobotStates.begin(); it != m_tRobotStates.end(); ++it) {
             Real d = (itLED->second.cLEDPosition - it->second.cPosition).Length();
             Real fPheromone = 0;
+
+            // to slove reset bug
+            if (m_unClock == 1)
+                it->second.unPheromoneLEDs = 0;
 
             if (it->second.unPheromoneLEDs <= 0)
                 fPheromone = 0;
