@@ -49,7 +49,7 @@ void HabRenLoopFunction::Init(TConfigurationNode& t_tree) {
     try {
       cParametersNode = GetNode(t_tree, "params");
       GetNodeAttributeOrDefault(cParametersNode, "maximization", m_bMaximization, (bool) false);
-      m_bMaximization = true;
+      // m_bMaximization = true;
     } catch(std::exception e) {
     }
 
