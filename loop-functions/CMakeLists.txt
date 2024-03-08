@@ -7,3 +7,6 @@ link_directories(
 
 #add_subdirectory(moca)
 add_subdirectory(habanero)
+add_subdirectory(complexity)
+add_subdirectory(NEATvsEvo)
+add_subdirectory(heterogeneity)
