@@ -12,7 +12,7 @@
   <!-- * Loop functions * -->
   <!-- ****************** -->
   <!-- <loop_functions library="/home/dgarzon/habanero/experiments-loop-functions/build/loop-functions/habanero/libhab_st_loopfunc.so" -->
-	  <loop_functions library="/home/salman/habanero-loop-functions/build/loop-functions/habanero/libhab_ren_loopfunc.so"
+	  <loop_functions library="/home/robotmaster/argos3-installation/habanero/habanero-loopfunctions/build/loop-functions/habanero/libhab_ren_loopfunc.so"
    label="hab_ren_loop_function">
        <params number_robots="8"
 		       dist_radius="1.0"
@@ -27,7 +27,7 @@
     <!-- <automode_controller id="habanero"
                         library="/home/dgarzon/habanero/ARGoS3-AutoMoDe/build/src/libautomode.so"> -->
     <automode_controller id="habanero"
-	    library="/home/salman/AutoMoDe-habanero/build/src/libautomode.so">
+	    library="/home/robotmaster/argos3-installation/habanero/AutoMoDe-habanero/build/src/libautomode.so">
       <actuators>
         <epuck_wheels implementation="default" noise_std_dev="0.05"/>
         <epuck_rgb_leds implementation="default" medium="leds"/>

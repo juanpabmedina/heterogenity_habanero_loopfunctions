@@ -12,7 +12,7 @@
   <!-- * Loop functions * -->
   <!-- ****************** -->
   <!-- <loop_functions library="/home/dgarzon/habanero/experiments-loop-functions/build/loop-functions/habanero/libhab_ag_loopfunc.so" -->
-  <loop_functions library="/home/salman/habanero-loop-functions/build/loop-functions/habanero/libhab_ag_loopfunc.so"
+  <loop_functions library="/home/robotmaster/argos3-installation/habanero/habanero-loopfunctions/build/loop-functions/habanero/libhab_ag_loopfunc.so"
    label="hab_ag_loop_function">
        <params number_robots="8"
 		       dist_radius="1.0"

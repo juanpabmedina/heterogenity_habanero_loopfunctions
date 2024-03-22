@@ -6,7 +6,7 @@
   * @license MIT License
   */
 
-#include "HeteroChLoopFunc.h"
+#include "MemoryAggLoopFunc.h"
 
 /****************************************/
 /****************************************/
@@ -75,7 +75,7 @@ void HabDecLoopFunction::Reset() {
     m_unStopTime = 0;
     m_fObjectiveFunction = 0;
 
-    m_tRobotStates.clear();
+    m_tRobotStates.clear(); 
     m_tLEDStates.clear();
 
     InitMocaState();
@@ -89,10 +89,11 @@ void HabDecLoopFunction::Reset() {
 void HabDecLoopFunction::PostStep() {
 
     m_unClock = GetSpace().GetSimulationClock();
-    GetRobotScore();
     TimerControl();
     MocaControl();
+    UpdateRobotPositions();
     UpdatePhormicaState();
+    
     // LOG << m_fObjectiveFunction << std::endl;
 }
 
@@ -100,7 +101,7 @@ void HabDecLoopFunction::PostStep() {
 /****************************************/
 
 void HabDecLoopFunction::PostExperiment() {
-
+    GetRobotScore();
     if (m_bMaximization == true){
         LOG << -m_fObjectiveFunction << std::endl;
     }
@@ -132,6 +133,7 @@ void HabDecLoopFunction::MocaControl() {
         UInt32 unBlocksID = 0;
         for (CSpace::TMapPerType::iterator it = tBlocksMap.begin(); it != tBlocksMap.end(); ++it) {
             CBlockEntity* pcBlock = any_cast<CBlockEntity*>(it->second);
+             pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::BLACK);
 
             switch (unBlocksID)
             {
@@ -163,7 +165,7 @@ void HabDecLoopFunction::MocaControl() {
                 break;
             }
 
-            // unBlocksID += 1;
+            unBlocksID += 1;
         }
     }
 }
@@ -174,7 +176,7 @@ void HabDecLoopFunction::MocaControl() {
 void HabDecLoopFunction::TimerControl(){
 
     if (m_unClock == 1) {
-        m_unStopTime = GetRandomTime(850, 901);
+        m_unStopTime = 600;
     }
 }
 
@@ -183,21 +185,18 @@ void HabDecLoopFunction::TimerControl(){
 
 void HabDecLoopFunction::GetRobotScore() {
 
-  UpdateRobotPositions();
+
 
   Real unScore = 0;
   TRobotStateMap::iterator it;
   for (it = m_tRobotStates.begin(); it != m_tRobotStates.end(); ++it) {
-      if (it->second.cPosition.GetX() <= -0.125 && it->second.cPosition.GetY() <= -0.375){
+      if (it->second.cPosition.GetX() >= 0.25 && it->second.cPosition.GetY() >= 0.25){
         unScore+=1;
-      }
-      else if(it->second.cPosition.GetX() >= 0.125 && it->second.cPosition.GetY() >= 0.375){
-        unScore+=2;
       }
 
   }
 
-  m_fObjectiveFunction += unScore;
+  m_fObjectiveFunction = unScore;
 }
 
 /****************************************/
@@ -221,6 +220,9 @@ void HabDecLoopFunction::GetRobotScore() {
 /****************************************/
 
 argos::CColor HabDecLoopFunction::GetFloorColor(const argos::CVector2& c_position_on_plane) {
+    // if (c_position_on_plane.GetY() >= 0.25 && c_position_on_plane.GetY() <= 0.75+0.1 && c_position_on_plane.GetX() >= 0.25 && c_position_on_plane.GetX() <= 0.75+0.1){
+    //     return CColor::GRAY30;
+    // } 
 
     return CColor::WHITE;
 }
@@ -317,7 +319,7 @@ void HabDecLoopFunction::UpdatePhormicaState() {
     TLEDStateMap::iterator itLED;
     TRobotStateMap::iterator it;
     for (itLED = m_tLEDStates.begin(); itLED != m_tLEDStates.end(); ++itLED) {
-
+        
         for (it = m_tRobotStates.begin(); it != m_tRobotStates.end(); ++it) {
             Real d = (itLED->second.cLEDPosition - it->second.cPosition).Length();
             Real fPheromone = 0;
@@ -332,30 +334,53 @@ void HabDecLoopFunction::UpdatePhormicaState() {
             else
                 fPheromone = 0.045;
             
- 
+            // fPheromone = 0.01;
            
             UInt32 swarmId = it->second.unId;
+            
             //if (d <= m_fPheromoneParameter) {
             if (d <= fPheromone) {
-                itLED->second.unTimer = 200; // Pheromone decay time
-                // m_pcPhormica->GetLEDEquippedEntity().SetLEDColor(itLED->second.unLEDIndex,CColor::RED);
-                if (swarmId == 1){
-                    m_pcPhormica->GetLEDEquippedEntity().SetLEDColor(itLED->second.unLEDIndex,CColor::RED);
-                }
-                if (swarmId == 2){
-                    m_pcPhormica->GetLEDEquippedEntity().SetLEDColor(itLED->second.unLEDIndex,CColor::GREEN);
-                }
-                if (swarmId == 3){
-                    m_pcPhormica->GetLEDEquippedEntity().SetLEDColor(itLED->second.unLEDIndex,CColor::GREEN);
-                }
+                itLED->second.unTimer = 400; // Pheromone decay time
+                // if (itLED->second.unCount == 0){
+                //     itLED->second.unCount = 1;
+                    
+                // }
+                // else {
+                //     itLED->second.unTimer = itLED->second.unTimer + 1;
+
+                // }
+
+
+                itLED->second.unCount = itLED->second.unCount + 1;
                 
+                // m_pcPhormica->GetLEDEquippedEntity().SetLEDColor(itLED->second.unLEDIndex,CColor::RED);
+                // if (swarmId == 1){
+                //     m_pcPhormica->GetLEDEquippedEntity().SetLEDColor(itLED->second.unLEDIndex,CColor::RED);
+                // }
+                // else if (swarmId == 1){
+                //     m_pcPhormica->GetLEDEquippedEntity().SetLEDColor(itLED->second.unLEDIndex,CColor::GREEN);
+                // }
+                // else if (swarmId == 3){
+                //     m_pcPhormica->GetLEDEquippedEntity().SetLEDColor(itLED->second.unLEDIndex,CColor::GREEN);
+                // }
             }
         }
         
 
         UInt32 unLEDTimer = itLED->second.unTimer;
+        UInt32 unLEDCount = itLED->second.unCount;
+        
+
+        if (unLEDCount > 10){
+            m_pcPhormica->GetLEDEquippedEntity().SetLEDColor(itLED->second.unLEDIndex,CColor::MAGENTA);
+        }
+        // else {
+        //     m_pcPhormica->GetLEDEquippedEntity().SetLEDColor(itLED->second.unLEDIndex,CColor::RED);
+        // }
+    
         if (unLEDTimer == 0){
             m_pcPhormica->GetLEDEquippedEntity().SetLEDColor(itLED->second.unLEDIndex,CColor::BLACK);
+            itLED->second.unCount = 0;
         }
         else {
             itLED->second.unTimer = unLEDTimer - 1;
@@ -376,18 +401,18 @@ void HabDecLoopFunction::InitMocaState() {
         UInt32 nBlockId = std::stoi(strBlockId);
       pcBlock->GetLEDEquippedEntity().Enable();
       pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::BLACK);
-    if (nBlockId >= 0 && nBlockId <= 7|| nBlockId >= 22 && nBlockId <= 23) {
+    if (nBlockId >= 0 && nBlockId <= 1 || nBlockId >= 22 && nBlockId <= 23) {
         pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::RED);
     }
-    else if (unBlocksID >= 8 && unBlocksID <= 9) {
-        pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::BLUE);
-    }
-    else if (unBlocksID >= 10 && unBlocksID <= 19) {
-        pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::RED);
-    }
-    else if (unBlocksID >= 20 && unBlocksID <= 21) {
-        pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::BLUE);
-    }
+    // else if (unBlocksID >= 8 && unBlocksID <= 9) {
+    //     pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::BLUE);
+    // }
+    // else if (unBlocksID >= 10 && unBlocksID <= 19) {
+    //     pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::RED);
+    // }
+    // else if (unBlocksID >= 20 && unBlocksID <= 21) {
+    //     pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::BLUE);
+    // }
 
     unBlocksID += 1;
   }
@@ -453,4 +478,4 @@ bool HabDecLoopFunction::IsEven(UInt32 unNumber) {
 /****************************************/
 /****************************************/
 
-REGISTER_LOOP_FUNCTIONS(HabDecLoopFunction, "hetero_ch_loop_function");
+REGISTER_LOOP_FUNCTIONS(HabDecLoopFunction, "memory_agg_loop_function");

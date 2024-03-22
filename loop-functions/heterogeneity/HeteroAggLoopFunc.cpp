@@ -375,20 +375,23 @@ void HabDecLoopFunction::InitMocaState() {
   UInt32 unBlocksID = 0;
   for (CSpace::TMapPerType::iterator it = tBlocksMap.begin(); it != tBlocksMap.end(); ++it) {
       CBlockEntity* pcBlock = any_cast<CBlockEntity*>(it->second);
+        std::string strBlockId = pcBlock->GetId().substr(6,2);
+        UInt32 nBlockId = std::stoi(strBlockId);
       pcBlock->GetLEDEquippedEntity().Enable();
       pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::BLACK);
-    // if (unBlocksID >= 0 && unBlocksID <= 1) {
-    //     pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::RED);
-    // }
-    if (unBlocksID >= 4 && unBlocksID <= 8) {
+      LOG << nBlockId << std::endl;
+    if (nBlockId >= 0 && nBlockId <= 1 || nBlockId >= 22 && nBlockId <= 23) {
+        pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::RED);
+    }
+    else if (unBlocksID >= 4 && unBlocksID <= 7) {
         pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::YELLOW);
     }
-    // else if (unBlocksID >= 2 && unBlocksID <= 2) {
-    //     pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::GREEN);
-    // }
-    // else if (unBlocksID >= 14 && unBlocksID <= 14) {
-    //     pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::BLUE);
-    // }
+    else if (unBlocksID >= 10 && unBlocksID <= 13) {
+        pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::GREEN);
+    }
+    else if (unBlocksID >= 16 && unBlocksID <= 19) {
+        pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::BLUE);
+    }
 
 
     unBlocksID += 1;

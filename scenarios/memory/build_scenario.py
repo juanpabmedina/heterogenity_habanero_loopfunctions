@@ -14,17 +14,18 @@ def generate_block(block_id, size, position, orientation):
     
     leds = ET.SubElement(block, "leds")
     leds.set("medium","leds")
+
     led_0 = ET.SubElement(leds, "led")
     led_0.set("id", "led_0")
     led_0.set("offset", " 0.0075, 0.0625, 0.067")
     led_0.set("anchor", "origin")
     led_0.set("color", "red")
     
-    led_1 = ET.SubElement(leds, "led")
-    led_1.set("id", "led_1")
-    led_1.set("offset", " 0.0075, -0.0625, 0.067")
-    led_1.set("anchor", "origin")
-    led_1.set("color", "green")
+    # led_1 = ET.SubElement(leds, "led")
+    # led_1.set("id", "led_1")
+    # led_1.set("offset", " 0.0075, -0.0625, 0.067")
+    # led_1.set("anchor", "origin")
+    # led_1.set("color", "green")
     
     return block
 
@@ -41,7 +42,7 @@ def generate_led(led_id, offset, color):
 def generate_blocks(number_edges,number_boxes_per_edge, lenght_boxes):
     blocks = []
 
-    initial_position_x = (number_boxes_per_edge/2)*lenght_boxes - 0.125
+    initial_position_x = (number_boxes_per_edge/2)*lenght_boxes - lenght_boxes/2
     initial_position_y = (number_boxes_per_edge/2)*lenght_boxes
 
     angle = -180*(number_edges-2)/number_edges
@@ -86,9 +87,9 @@ def generate_leds(x_size, y_size, led_size):
     leds = []
 
     id = 1000
-
-    x_leds_array = np.arange(-x_size,x_size,led_size)
-    y_leds_array = np.arange(-y_size,y_size,led_size)
+    a= 0
+    x_leds_array = np.arange(-x_size+a,x_size-a,led_size)
+    y_leds_array = np.arange(-y_size+a,y_size-a,led_size)
 
     for x_led in x_leds_array:
         for y_led in y_leds_array:
@@ -168,11 +169,11 @@ lenght_boxes=0.25
 
 blocks = generate_blocks(number_edges, number_boxes_per_edge, lenght_boxes)
 element_name="block"
-modify_arena_element("chain_robots.argos",element_name, blocks)
+modify_arena_element("prueba1.argos",element_name, blocks)
 
 led_size = 0.03
 x_size = lenght_boxes*number_boxes_per_edge/2 # Half of the total size to init in the center :)
 y_size = x_size
 leds = generate_leds(x_size, y_size, led_size)
 element_name="led"
-modify_phormica_element("chain_robots.argos",element_name, leds)
+modify_phormica_element("prueba1.argos",element_name, leds)

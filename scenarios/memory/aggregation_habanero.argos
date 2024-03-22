@@ -1,9 +1,9 @@
 <argos-configuration>
   <framework>
-    <experiment length="180" ticks_per_second="10" random_seed="0" />
+    <experiment length="120" ticks_per_second="10" random_seed="0" />
   </framework>
-  <loop_functions library="/home/robotmaster/argos3-installation/habanero/habanero-loopfunctions/build/loop-functions/heterogeneity/libhetero_ch_loopfunc.so" label="hetero_ch_loop_function">
-    <params number_robots="[25, 15, 10, 25, 15, 10, 25, 15, 10, 25, 15, 10]" dist_radius="1.0" maximization="false" />
+  <loop_functions library="/home/robotmaster/argos3-installation/habanero/habanero-loopfunctions/build/loop-functions/memory/libmemory_agg_loopfunc.so" label="memory_agg_loop_function">
+    <params number_robots="[10, 0, 0, 0]" dist_radius="1.0" maximization="false" />
   </loop_functions>
   <controllers>
     <automode_controller id="heterogeneity1" library="/home/robotmaster/argos3-installation/habanero/AutoMoDe-habanero/build/src/libautomode.so">
@@ -21,7 +21,7 @@
         <epuck_ground implementation="rot_z_only" noise_level="0.05" calibrated="true" />
         <epuck_omnidirectional_camera implementation="rot_z_only" medium="leds" show_rays="false" />
       </sensors>
-      <params readable="true" history="false" fsm-config="--nstates 1 --s0 3 --fov0 1 --vel0 1.0 --clr0 2 --phe0 1" />
+      <params readable="true" history="false" fsm-config="--nstates 3 --s0 0 --rwm0 5 --cle0 0 --phe0 0 --n0 2 --n0x0 0 --c0x0 5 --p0x0 0.9 --l0x0 1 --f0x0 1 --n0x1 1 --c0x1 5 --p0x1 0.8 --l0x1 5 --f0x1 1 --s1 2 --fov1 1 --vel1 1.0 --cle1 0 --clr1 1 --phe1 1 --n1 1 --n1x0 0 --c1x0 3 --p1x0 0.5 --s2 2 --fov2 1 --vel2 1.0 --cle2 0 --clr2 5 --phe2 1 --n2 1 --n2x0 0 --c2x0 3 --p2x0 0.5" />
     </automode_controller>
     <automode_controller id="heterogeneity2" library="/home/robotmaster/argos3-installation/habanero/AutoMoDe-habanero/build/src/libautomode.so">
       <actuators>
@@ -38,9 +38,26 @@
         <epuck_ground implementation="rot_z_only" noise_level="0.05" calibrated="true" />
         <epuck_omnidirectional_camera implementation="rot_z_only" medium="leds" show_rays="false" />
       </sensors>
-      <params readable="true" history="false" fsm-config="--nstates 1 --s0 3 --fov0 1 --vel0 1.0 --clr0 1 --phe0 1" />
+      <params readable="true" history="false" fsm-config="--nstates 3 --s0 0 --rwm0 5 --cle0 0 --phe0 0 --n0 2 --n0x0 0 --c0x0 5 --p0x0 0.8 --l0x0 1 --f0x0 1 --n0x1 1 --c0x1 5 --p0x1 0.8 --l0x1 5 --f0x1 1 --s1 2 --fov1 1 --vel1 1.0 --cle1 5 --clr1 1 --phe1 0 --n1 1 --n1x0 0 --c1x0 3 --p1x0 0.5 --s2 2 --fov2 1 --vel2 1.0 --cle2 5 --clr2 5 --phe2 0 --n2 1 --n2x0 0 --c2x0 3 --p2x0 0.5" />
     </automode_controller>
     <automode_controller id="heterogeneity3" library="/home/robotmaster/argos3-installation/habanero/AutoMoDe-habanero/build/src/libautomode.so">
+      <actuators>
+        <epuck_wheels implementation="default" noise_std_dev="0.05" />
+        <epuck_rgb_leds implementation="default" medium="leds" />
+        <epuck_range_and_bearing implementation="medium" medium="rab" data_size="4" range="0.5" />
+        <epuck_base_leds implementation="default" medium="leds" />
+        <epuck_ground_leds ground_led_pwm="10" implementation="default" medium="leds" />
+      </actuators>
+      <sensors>
+        <epuck_proximity implementation="default" show_rays="false" noise_level="0.05" calibrated="true" />
+        <epuck_range_and_bearing implementation="medium" medium="rab" data_size="4" noise_std_deviation="1.5" loss_probability="0.85" calibrated="true" />
+        <epuck_light implementation="default" show_rays="false" noise_level="0.05" calibrated="true" />
+        <epuck_ground implementation="rot_z_only" noise_level="0.05" calibrated="true" />
+        <epuck_omnidirectional_camera implementation="rot_z_only" medium="leds" show_rays="false" />
+      </sensors>
+      <params readable="true" history="false" fsm-config="--nstates 3 --s0 0 --rwm0 5 --cle0 0 --phe0 1 --n0 1 --n0x0 0 --c0x0 5 --p0x0 0.9 --l0x0 1 --f0x0 1 --s1 2 --fov1 1 --vel1 1.0 --cle1 0 --clr1 1 --phe1 1 --n1 1 --n1x0 1 --c1x0 5 --p1x0 0.5 --l1x0 5 --f1x0 1 --s2 2 --fov2 1 --vel2 1.0 --cle2 0 --clr2 5 --phe2 1" />
+    </automode_controller>
+    <automode_controller id="heterogeneity4" library="/home/robotmaster/argos3-installation/habanero/AutoMoDe-habanero/build/src/libautomode.so">
       <actuators>
         <epuck_wheels implementation="default" noise_std_dev="0.05" />
         <epuck_rgb_leds implementation="default" medium="leds" />
@@ -64,7 +81,7 @@
     <distribute id="swarm1">
       <position method="uniform" min="-1,-1,0" max="1,1,0" />
       <orientation method="gaussian" mean="0,0,0" std_dev="360,0,0" />
-      <entity quantity="25" max_trials="100">
+      <entity quantity="10" max_trials="100">
         <e-puck id="epuck1">
           <controller config="heterogeneity1" />
         </e-puck>
@@ -73,7 +90,7 @@
     <distribute id="swarm2">
       <position method="uniform" min="-1,-1,0" max="1,1,0" />
       <orientation method="gaussian" mean="0,0,0" std_dev="360,0,0" />
-      <entity quantity="15" max_trials="100">
+      <entity quantity="0" max_trials="100">
         <e-puck id="epuck2">
           <controller config="heterogeneity2" />
         </e-puck>
@@ -82,9 +99,18 @@
     <distribute id="swarm3">
       <position method="uniform" min="-1,-1,0" max="1,1,0" />
       <orientation method="gaussian" mean="0,0,0" std_dev="360,0,0" />
-      <entity quantity="10" max_trials="100">
+      <entity quantity="0" max_trials="100">
         <e-puck id="epuck3">
           <controller config="heterogeneity3" />
+        </e-puck>
+      </entity>
+    </distribute>
+    <distribute id="swarm4">
+      <position method="uniform" min="-1,-1,0" max="1,1,0" />
+      <orientation method="gaussian" mean="0,0,0" std_dev="360,0,0" />
+      <entity quantity="0" max_trials="100">
+        <e-puck id="epuck4">
+          <controller config="heterogeneity4" />
         </e-puck>
       </entity>
     </distribute>

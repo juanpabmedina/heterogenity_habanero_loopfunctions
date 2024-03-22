@@ -3,7 +3,7 @@
     <experiment length="180" ticks_per_second="10" random_seed="0" />
   </framework>
   <loop_functions library="/home/robotmaster/argos3-installation/habanero/habanero-loopfunctions/build/loop-functions/heterogeneity/libhetero_ch_loopfunc.so" label="hetero_ch_loop_function">
-    <params number_robots="[25, 15, 10, 25, 15, 10, 25, 15, 10, 25, 15, 10]" dist_radius="1.0" maximization="false" />
+    <params number_robots="[12, 0, 0, 0]" dist_radius="1.0" maximization="false" />
   </loop_functions>
   <controllers>
     <automode_controller id="heterogeneity1" library="/home/robotmaster/argos3-installation/habanero/AutoMoDe-habanero/build/src/libautomode.so">
@@ -21,7 +21,7 @@
         <epuck_ground implementation="rot_z_only" noise_level="0.05" calibrated="true" />
         <epuck_omnidirectional_camera implementation="rot_z_only" medium="leds" show_rays="false" />
       </sensors>
-      <params readable="true" history="false" fsm-config="--nstates 1 --s0 3 --fov0 1 --vel0 1.0 --clr0 2 --phe0 1" />
+      <params readable="true" history="false" fsm-config="--nstates 1 --s0 2 --fov0 1 --vel0 1.0 --cle0 2 --clr0 3 --phe0 1" />
     </automode_controller>
     <automode_controller id="heterogeneity2" library="/home/robotmaster/argos3-installation/habanero/AutoMoDe-habanero/build/src/libautomode.so">
       <actuators>
@@ -38,7 +38,7 @@
         <epuck_ground implementation="rot_z_only" noise_level="0.05" calibrated="true" />
         <epuck_omnidirectional_camera implementation="rot_z_only" medium="leds" show_rays="false" />
       </sensors>
-      <params readable="true" history="false" fsm-config="--nstates 1 --s0 3 --fov0 1 --vel0 1.0 --clr0 1 --phe0 1" />
+      <params readable="true" history="false" fsm-config="--nstates 1 --s0 4 --phe0 1" />
     </automode_controller>
     <automode_controller id="heterogeneity3" library="/home/robotmaster/argos3-installation/habanero/AutoMoDe-habanero/build/src/libautomode.so">
       <actuators>
@@ -55,7 +55,7 @@
         <epuck_ground implementation="rot_z_only" noise_level="0.05" calibrated="true" />
         <epuck_omnidirectional_camera implementation="rot_z_only" medium="leds" show_rays="false" />
       </sensors>
-      <params readable="true" history="false" fsm-config="--nstates 1 --s0 2 --fov0 1 --vel0 1.0 --clr0 3 --phe0 1" />
+      <params readable="true" history="false" fsm-config="--nstates 3 --s0 0 --rwm0 5 --phe0 0 --n0 1 --n0x0 0 --c0x0 5 --p0x0 0.9 --l0x0 3 --f0x0 1 --s1 2 --fov1 1 --vel1 1.0 --clr1 3 --phe1 1 --n1 1 --n1x0 1 --c1x0 1 --p1x0 0.9 --s2 4 --phe2 1" />
     </automode_controller>
   </controllers>
   <arena size="2, 2, 0.30" center="0,0,0">
@@ -64,7 +64,7 @@
     <distribute id="swarm1">
       <position method="uniform" min="-1,-1,0" max="1,1,0" />
       <orientation method="gaussian" mean="0,0,0" std_dev="360,0,0" />
-      <entity quantity="25" max_trials="100">
+      <entity quantity="12" max_trials="100">
         <e-puck id="epuck1">
           <controller config="heterogeneity1" />
         </e-puck>
@@ -73,7 +73,7 @@
     <distribute id="swarm2">
       <position method="uniform" min="-1,-1,0" max="1,1,0" />
       <orientation method="gaussian" mean="0,0,0" std_dev="360,0,0" />
-      <entity quantity="15" max_trials="100">
+      <entity quantity="0" max_trials="100">
         <e-puck id="epuck2">
           <controller config="heterogeneity2" />
         </e-puck>
@@ -82,7 +82,7 @@
     <distribute id="swarm3">
       <position method="uniform" min="-1,-1,0" max="1,1,0" />
       <orientation method="gaussian" mean="0,0,0" std_dev="360,0,0" />
-      <entity quantity="10" max_trials="100">
+      <entity quantity="0" max_trials="100">
         <e-puck id="epuck3">
           <controller config="heterogeneity3" />
         </e-puck>
@@ -2597,168 +2597,144 @@
       <body position="0.625,0.75,0" orientation="-90.0,0,0" />
       <leds medium="leds">
         <led id="led_0" offset=" 0.0075, 0.0625, 0.067" anchor="origin" color="red" />
-        <led id="led_1" offset=" 0.0075, -0.0625, 0.067" anchor="origin" color="green" />
       </leds>
     </block>
     <block id="block_01" size="0.01,0.25,0.1" movable="false">
       <body position="0.375,0.75,0" orientation="-90.0,0,0" />
       <leds medium="leds">
         <led id="led_0" offset=" 0.0075, 0.0625, 0.067" anchor="origin" color="red" />
-        <led id="led_1" offset=" 0.0075, -0.0625, 0.067" anchor="origin" color="green" />
       </leds>
     </block>
     <block id="block_02" size="0.01,0.25,0.1" movable="false">
       <body position="0.125,0.75,0" orientation="-90.0,0,0" />
       <leds medium="leds">
         <led id="led_0" offset=" 0.0075, 0.0625, 0.067" anchor="origin" color="red" />
-        <led id="led_1" offset=" 0.0075, -0.0625, 0.067" anchor="origin" color="green" />
       </leds>
     </block>
     <block id="block_03" size="0.01,0.25,0.1" movable="false">
       <body position="-0.125,0.75,0" orientation="-90.0,0,0" />
       <leds medium="leds">
         <led id="led_0" offset=" 0.0075, 0.0625, 0.067" anchor="origin" color="red" />
-        <led id="led_1" offset=" 0.0075, -0.0625, 0.067" anchor="origin" color="green" />
       </leds>
     </block>
     <block id="block_04" size="0.01,0.25,0.1" movable="false">
       <body position="-0.375,0.7499999999999999,0" orientation="-90.0,0,0" />
       <leds medium="leds">
         <led id="led_0" offset=" 0.0075, 0.0625, 0.067" anchor="origin" color="red" />
-        <led id="led_1" offset=" 0.0075, -0.0625, 0.067" anchor="origin" color="green" />
       </leds>
     </block>
     <block id="block_05" size="0.01,0.25,0.1" movable="false">
       <body position="-0.625,0.7499999999999999,0" orientation="-90.0,0,0" />
       <leds medium="leds">
         <led id="led_0" offset=" 0.0075, 0.0625, 0.067" anchor="origin" color="red" />
-        <led id="led_1" offset=" 0.0075, -0.0625, 0.067" anchor="origin" color="green" />
       </leds>
     </block>
     <block id="block_06" size="0.01,0.25,0.1" movable="false">
       <body position="-0.75,0.6249999999999999,0" orientation="0.0,0,0" />
       <leds medium="leds">
         <led id="led_0" offset=" 0.0075, 0.0625, 0.067" anchor="origin" color="red" />
-        <led id="led_1" offset=" 0.0075, -0.0625, 0.067" anchor="origin" color="green" />
       </leds>
     </block>
     <block id="block_07" size="0.01,0.25,0.1" movable="false">
       <body position="-0.75,0.3749999999999999,0" orientation="0.0,0,0" />
       <leds medium="leds">
         <led id="led_0" offset=" 0.0075, 0.0625, 0.067" anchor="origin" color="red" />
-        <led id="led_1" offset=" 0.0075, -0.0625, 0.067" anchor="origin" color="green" />
       </leds>
     </block>
     <block id="block_08" size="0.01,0.25,0.1" movable="false">
       <body position="-0.75,0.12499999999999989,0" orientation="0.0,0,0" />
       <leds medium="leds">
         <led id="led_0" offset=" 0.0075, 0.0625, 0.067" anchor="origin" color="red" />
-        <led id="led_1" offset=" 0.0075, -0.0625, 0.067" anchor="origin" color="green" />
       </leds>
     </block>
     <block id="block_09" size="0.01,0.25,0.1" movable="false">
       <body position="-0.75,-0.1250000000000001,0" orientation="0.0,0,0" />
       <leds medium="leds">
         <led id="led_0" offset=" 0.0075, 0.0625, 0.067" anchor="origin" color="red" />
-        <led id="led_1" offset=" 0.0075, -0.0625, 0.067" anchor="origin" color="green" />
       </leds>
     </block>
     <block id="block_10" size="0.01,0.25,0.1" movable="false">
       <body position="-0.75,-0.3750000000000001,0" orientation="0.0,0,0" />
       <leds medium="leds">
         <led id="led_0" offset=" 0.0075, 0.0625, 0.067" anchor="origin" color="red" />
-        <led id="led_1" offset=" 0.0075, -0.0625, 0.067" anchor="origin" color="green" />
       </leds>
     </block>
     <block id="block_11" size="0.01,0.25,0.1" movable="false">
       <body position="-0.75,-0.6250000000000001,0" orientation="0.0,0,0" />
       <leds medium="leds">
         <led id="led_0" offset=" 0.0075, 0.0625, 0.067" anchor="origin" color="red" />
-        <led id="led_1" offset=" 0.0075, -0.0625, 0.067" anchor="origin" color="green" />
       </leds>
     </block>
     <block id="block_12" size="0.01,0.25,0.1" movable="false">
       <body position="-0.625,-0.7500000000000001,0" orientation="90.0,0,0" />
       <leds medium="leds">
         <led id="led_0" offset=" 0.0075, 0.0625, 0.067" anchor="origin" color="red" />
-        <led id="led_1" offset=" 0.0075, -0.0625, 0.067" anchor="origin" color="green" />
       </leds>
     </block>
     <block id="block_13" size="0.01,0.25,0.1" movable="false">
       <body position="-0.375,-0.7500000000000001,0" orientation="90.0,0,0" />
       <leds medium="leds">
         <led id="led_0" offset=" 0.0075, 0.0625, 0.067" anchor="origin" color="red" />
-        <led id="led_1" offset=" 0.0075, -0.0625, 0.067" anchor="origin" color="green" />
       </leds>
     </block>
     <block id="block_14" size="0.01,0.25,0.1" movable="false">
       <body position="-0.125,-0.7500000000000001,0" orientation="90.0,0,0" />
       <leds medium="leds">
         <led id="led_0" offset=" 0.0075, 0.0625, 0.067" anchor="origin" color="red" />
-        <led id="led_1" offset=" 0.0075, -0.0625, 0.067" anchor="origin" color="green" />
       </leds>
     </block>
     <block id="block_15" size="0.01,0.25,0.1" movable="false">
       <body position="0.125,-0.7500000000000001,0" orientation="90.0,0,0" />
       <leds medium="leds">
         <led id="led_0" offset=" 0.0075, 0.0625, 0.067" anchor="origin" color="red" />
-        <led id="led_1" offset=" 0.0075, -0.0625, 0.067" anchor="origin" color="green" />
       </leds>
     </block>
     <block id="block_16" size="0.01,0.25,0.1" movable="false">
       <body position="0.375,-0.7500000000000002,0" orientation="90.0,0,0" />
       <leds medium="leds">
         <led id="led_0" offset=" 0.0075, 0.0625, 0.067" anchor="origin" color="red" />
-        <led id="led_1" offset=" 0.0075, -0.0625, 0.067" anchor="origin" color="green" />
       </leds>
     </block>
     <block id="block_17" size="0.01,0.25,0.1" movable="false">
       <body position="0.625,-0.7500000000000002,0" orientation="90.0,0,0" />
       <leds medium="leds">
         <led id="led_0" offset=" 0.0075, 0.0625, 0.067" anchor="origin" color="red" />
-        <led id="led_1" offset=" 0.0075, -0.0625, 0.067" anchor="origin" color="green" />
       </leds>
     </block>
     <block id="block_18" size="0.01,0.25,0.1" movable="false">
       <body position="0.75,-0.6250000000000002,0" orientation="180.0,0,0" />
       <leds medium="leds">
         <led id="led_0" offset=" 0.0075, 0.0625, 0.067" anchor="origin" color="red" />
-        <led id="led_1" offset=" 0.0075, -0.0625, 0.067" anchor="origin" color="green" />
       </leds>
     </block>
     <block id="block_19" size="0.01,0.25,0.1" movable="false">
       <body position="0.75,-0.3750000000000002,0" orientation="180.0,0,0" />
       <leds medium="leds">
         <led id="led_0" offset=" 0.0075, 0.0625, 0.067" anchor="origin" color="red" />
-        <led id="led_1" offset=" 0.0075, -0.0625, 0.067" anchor="origin" color="green" />
       </leds>
     </block>
     <block id="block_20" size="0.01,0.25,0.1" movable="false">
       <body position="0.7500000000000001,-0.12500000000000022,0" orientation="180.0,0,0" />
       <leds medium="leds">
         <led id="led_0" offset=" 0.0075, 0.0625, 0.067" anchor="origin" color="red" />
-        <led id="led_1" offset=" 0.0075, -0.0625, 0.067" anchor="origin" color="green" />
       </leds>
     </block>
     <block id="block_21" size="0.01,0.25,0.1" movable="false">
       <body position="0.7500000000000001,0.12499999999999978,0" orientation="180.0,0,0" />
       <leds medium="leds">
         <led id="led_0" offset=" 0.0075, 0.0625, 0.067" anchor="origin" color="red" />
-        <led id="led_1" offset=" 0.0075, -0.0625, 0.067" anchor="origin" color="green" />
       </leds>
     </block>
     <block id="block_22" size="0.01,0.25,0.1" movable="false">
       <body position="0.7500000000000001,0.3749999999999998,0" orientation="180.0,0,0" />
       <leds medium="leds">
         <led id="led_0" offset=" 0.0075, 0.0625, 0.067" anchor="origin" color="red" />
-        <led id="led_1" offset=" 0.0075, -0.0625, 0.067" anchor="origin" color="green" />
       </leds>
     </block>
     <block id="block_23" size="0.01,0.25,0.1" movable="false">
       <body position="0.7500000000000001,0.6249999999999998,0" orientation="180.0,0,0" />
       <leds medium="leds">
         <led id="led_0" offset=" 0.0075, 0.0625, 0.067" anchor="origin" color="red" />
-        <led id="led_1" offset=" 0.0075, -0.0625, 0.067" anchor="origin" color="green" />
       </leds>
     </block>
   </arena>

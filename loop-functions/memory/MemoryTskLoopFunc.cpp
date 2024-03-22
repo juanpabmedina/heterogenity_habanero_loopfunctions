@@ -6,7 +6,7 @@
   * @license MIT License
   */
 
-#include "HeteroChLoopFunc.h"
+#include "MemoryTskLoopFunc.h"
 
 /****************************************/
 /****************************************/
@@ -93,7 +93,6 @@ void HabDecLoopFunction::PostStep() {
     TimerControl();
     MocaControl();
     UpdatePhormicaState();
-    // LOG << m_fObjectiveFunction << std::endl;
 }
 
 /****************************************/
@@ -132,6 +131,7 @@ void HabDecLoopFunction::MocaControl() {
         UInt32 unBlocksID = 0;
         for (CSpace::TMapPerType::iterator it = tBlocksMap.begin(); it != tBlocksMap.end(); ++it) {
             CBlockEntity* pcBlock = any_cast<CBlockEntity*>(it->second);
+             pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::BLACK);
 
             switch (unBlocksID)
             {
@@ -163,7 +163,7 @@ void HabDecLoopFunction::MocaControl() {
                 break;
             }
 
-            // unBlocksID += 1;
+            unBlocksID += 1;
         }
     }
 }
@@ -172,10 +172,6 @@ void HabDecLoopFunction::MocaControl() {
 /****************************************/
 
 void HabDecLoopFunction::TimerControl(){
-
-    if (m_unClock == 1) {
-        m_unStopTime = GetRandomTime(850, 901);
-    }
 }
 
 /****************************************/
@@ -222,7 +218,13 @@ void HabDecLoopFunction::GetRobotScore() {
 
 argos::CColor HabDecLoopFunction::GetFloorColor(const argos::CVector2& c_position_on_plane) {
 
-    return CColor::WHITE;
+    // if (c_position_on_plane.GetX() <= -0.60){
+    //     return CColor::GRAY50;
+    // }
+    // else if (c_position_on_plane.GetX() >= 0.60){
+    //     return CColor::GRAY50;
+    // }
+    return CColor::GRAY50;
 }
 
 /****************************************/
@@ -317,7 +319,7 @@ void HabDecLoopFunction::UpdatePhormicaState() {
     TLEDStateMap::iterator itLED;
     TRobotStateMap::iterator it;
     for (itLED = m_tLEDStates.begin(); itLED != m_tLEDStates.end(); ++itLED) {
-
+        
         for (it = m_tRobotStates.begin(); it != m_tRobotStates.end(); ++it) {
             Real d = (itLED->second.cLEDPosition - it->second.cPosition).Length();
             Real fPheromone = 0;
@@ -332,30 +334,30 @@ void HabDecLoopFunction::UpdatePhormicaState() {
             else
                 fPheromone = 0.045;
             
- 
+            // fPheromone = 0.01;
            
             UInt32 swarmId = it->second.unId;
+            
             //if (d <= m_fPheromoneParameter) {
             if (d <= fPheromone) {
-                itLED->second.unTimer = 200; // Pheromone decay time
-                // m_pcPhormica->GetLEDEquippedEntity().SetLEDColor(itLED->second.unLEDIndex,CColor::RED);
-                if (swarmId == 1){
-                    m_pcPhormica->GetLEDEquippedEntity().SetLEDColor(itLED->second.unLEDIndex,CColor::RED);
-                }
-                if (swarmId == 2){
-                    m_pcPhormica->GetLEDEquippedEntity().SetLEDColor(itLED->second.unLEDIndex,CColor::GREEN);
-                }
-                if (swarmId == 3){
-                    m_pcPhormica->GetLEDEquippedEntity().SetLEDColor(itLED->second.unLEDIndex,CColor::GREEN);
-                }
-                
+                itLED->second.unTimer = 400; // Pheromone decay time
+
+                itLED->second.unCount = itLED->second.unCount + 1;// Pheromone intensity
             }
         }
         
 
         UInt32 unLEDTimer = itLED->second.unTimer;
+        UInt32 unLEDCount = itLED->second.unCount;
+        
+        // Pheromone intensity parameter
+        if (unLEDCount > 10){
+            m_pcPhormica->GetLEDEquippedEntity().SetLEDColor(itLED->second.unLEDIndex,CColor::MAGENTA);
+        }
+    
         if (unLEDTimer == 0){
-            m_pcPhormica->GetLEDEquippedEntity().SetLEDColor(itLED->second.unLEDIndex,CColor::BLACK);
+            m_pcPhormica->GetLEDEquippedEntity().SetLEDColor(itLED->second.unLEDIndex,CColor::GRAY70);
+            itLED->second.unCount = 0;
         }
         else {
             itLED->second.unTimer = unLEDTimer - 1;
@@ -376,16 +378,40 @@ void HabDecLoopFunction::InitMocaState() {
         UInt32 nBlockId = std::stoi(strBlockId);
       pcBlock->GetLEDEquippedEntity().Enable();
       pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::BLACK);
-    if (nBlockId >= 0 && nBlockId <= 7|| nBlockId >= 22 && nBlockId <= 23) {
-        pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::RED);
-    }
-    else if (unBlocksID >= 8 && unBlocksID <= 9) {
+    if (nBlockId == 1) {
         pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::BLUE);
     }
-    else if (unBlocksID >= 10 && unBlocksID <= 19) {
-        pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::RED);
+    else  if (nBlockId == 3) {
+        pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::BLUE);
     }
-    else if (unBlocksID >= 20 && unBlocksID <= 21) {
+    else  if (nBlockId == 5) {
+        pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::BLUE);
+    }
+    else  if (nBlockId == 7) {
+        pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::BLUE);
+    }
+    else  if (nBlockId == 9) {
+        pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::BLUE);
+    }
+    else  if (nBlockId == 11) {
+        pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::BLUE);
+    }
+    else  if (nBlockId == 13) {
+        pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::BLUE);
+    }
+    else  if (nBlockId == 15) {
+        pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::BLUE);
+    }
+    else  if (nBlockId == 17) {
+        pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::BLUE);
+    }
+    else  if (nBlockId == 19) {
+        pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::BLUE);
+    }
+    else  if (nBlockId == 21) {
+        pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::BLUE);
+    }
+    else  if (nBlockId == 23) {
         pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::BLUE);
     }
 
@@ -453,4 +479,4 @@ bool HabDecLoopFunction::IsEven(UInt32 unNumber) {
 /****************************************/
 /****************************************/
 
-REGISTER_LOOP_FUNCTIONS(HabDecLoopFunction, "hetero_ch_loop_function");
+REGISTER_LOOP_FUNCTIONS(HabDecLoopFunction, "memory_tsk_loop_function");
