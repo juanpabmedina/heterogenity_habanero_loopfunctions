@@ -1,2 +1,2 @@
 #!/usr/bin/env python
-argos3 -c aggregation_phormica.argos
+argos3 -c tasking.argos

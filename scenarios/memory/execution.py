@@ -78,14 +78,17 @@ p = 0.9
 # }
 # new_quantity = [10,0,0,0]
 
-# argos_file_path = 'tasking.argos'
-# fsm_config_dict = {
-#     1: '--nstates 2 --s0 0 --rwm0 5 --cle0 0 --phe0 0 --n0 1 --n0x0 0 --c0x0 5 --p0x0 0.9 --l0x0 3 --f0x0 1 --s1 2 --fov1 1 --vel1 1.0 --cle1 0 --clr1 3 --phe1 1 --n1 1 --n1x0 0 --c1x0 5 --p1x0 0.9 --l1x0 5 --f1x0 1',
-#     2: '--nstates 1 --s0 4 --phe0 1',
-#     3: '--nstates 3 --s0 0 --rwm0 5 --cle0 0 --phe0 0 --n0 1 --n0x0 0 --c0x0 5 --p0x0 0.9 --l0x0 3 --f0x0 1 --s1 2 --fov1 1 --vel1 1.0 --cle1 0 --clr1 3 --phe1 1 --n1 1 --n1x0 1 --c1x0 1 --p1x0 0.9 --s2 4 --phe2 1',
-#     4: '--nstates 1 --s0 2 --fov0 1 --vel0 1.0 --clr0 3 --phe0 1',
-# }
-# new_quantity = [0,0,12,0]
+
+####### Tasking #######
+
+argos_file_path = 'tasking.argos'
+fsm_config_dict = {
+    1: '--nstates 3 --s0 3 --fov0 1.6 --vel0 1.0 --cle0 0 --clr0 5 --phe0 0 --n0 1 --n0x0 0 --c0x0 5 --p0x0 0.5 --l0x0 3 --f0x0 1.6 --s1 2 --fov1 1.6 --vel1 1.0 --cle1 0 --clr1 3 --phe1 0 --n1 2 --n1x0 1 --c1x0 1 --p1x0 0.25 --n1x1 0 --c1x1 5 --p1x1 0.25 --l1x1 5 --f1x1 1.6 --s2 4 --phe2 1 --n2 1 --n2x0 0 --c2x0 4 --p2x0 0.05 ',
+    2: '--nstates 1 --s0 4 --phe0 1',
+    3: '--nstates 3 --s0 0 --rwm0 5 --cle0 0 --phe0 0 --n0 1 --n0x0 0 --c0x0 5 --p0x0 0.5 --l0x0 3 --f0x0 1.6 --s1 2 --fov1 1.6 --vel1 1.0 --cle1 0 --clr1 3 --phe1 0 --n1 1 --n1x0 1 --c1x0 1 --p1x0 0.25 --s2 4 --phe2 1 --n2 1 --n2x0 0 --c2x0 4 --p2x0 0.05 ',
+    4: '--nstates 1 --s0 2 --fov0 1 --vel0 1.0 --clr0 3 --phe0 1',
+}
+new_quantity = [3,0,0,0]
 
 # argos_file_path = 'prueba1.argos'
 # fsm_config_dict = {

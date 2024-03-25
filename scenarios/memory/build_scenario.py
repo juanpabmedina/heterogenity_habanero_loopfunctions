@@ -87,9 +87,9 @@ def generate_leds(x_size, y_size, led_size):
     leds = []
 
     id = 1000
-    a= 0
-    x_leds_array = np.arange(-x_size+a,x_size-a,led_size)
-    y_leds_array = np.arange(-y_size+a,y_size-a,led_size)
+    a= 0.06
+    x_leds_array = np.arange(-x_size+a,x_size+0.0125-a,led_size)
+    y_leds_array = np.arange(-y_size+a,y_size+0.0125-a,led_size)
 
     for x_led in x_leds_array:
         for y_led in y_leds_array:
@@ -169,11 +169,11 @@ lenght_boxes=0.25
 
 blocks = generate_blocks(number_edges, number_boxes_per_edge, lenght_boxes)
 element_name="block"
-modify_arena_element("prueba1.argos",element_name, blocks)
+modify_arena_element("tasking.argos",element_name, blocks)
 
 led_size = 0.03
 x_size = lenght_boxes*number_boxes_per_edge/2 # Half of the total size to init in the center :)
 y_size = x_size
 leds = generate_leds(x_size, y_size, led_size)
 element_name="led"
-modify_phormica_element("prueba1.argos",element_name, leds)
+modify_phormica_element("tasking.argos",element_name, leds)

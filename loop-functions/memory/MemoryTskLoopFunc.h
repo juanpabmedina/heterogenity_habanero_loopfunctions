@@ -19,11 +19,11 @@
 
 using namespace argos;
 
-class HabDecLoopFunction: public CoreLoopFunctions {
+class MemoryTskLoopFunction: public CoreLoopFunctions {
   public:
-    HabDecLoopFunction();
-    HabDecLoopFunction(const HabDecLoopFunction& orig);
-    virtual ~HabDecLoopFunction();
+    MemoryTskLoopFunction();
+    MemoryTskLoopFunction(const MemoryTskLoopFunction& orig);
+    virtual ~MemoryTskLoopFunction();
 
     virtual void Destroy();
 
@@ -47,8 +47,12 @@ class HabDecLoopFunction: public CoreLoopFunctions {
     void InitMocaState();
     void MocaControl();
 
+   std::pair<bool, int> IsRobotInStation(CVector2 tRobotPosition);
+
     void TimerControl();
     void GetRobotScore();
+
+  
 
 
   private:
@@ -83,19 +87,26 @@ class HabDecLoopFunction: public CoreLoopFunctions {
     UInt32 m_unStopBlock;
     UInt32 m_unNumberLEDs;
     Real m_fObjectiveFunction;
+    int id;
+  
 
     /*
     * Parameter to determine the width of pheromone trail based on the UV LEDs
     */
 
     Real m_fPheromoneParameter;
+    std::vector<int> visitedId;
+    std::vector<bool> revisitedId;
 
     struct RobotStateStruct {
         CVector2 cLastPosition;
         CVector2 cPosition;
         UInt32 unItem;
         UInt32 unPheromoneLEDs;
-        UInt32 unId;  
+        UInt32 unId;
+        UInt32 unTimer; 
+        bool visitedStation;
+        UInt32 idStation;
     };
 
     struct LEDStateStruct {

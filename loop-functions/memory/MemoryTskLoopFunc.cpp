@@ -11,7 +11,7 @@
 /****************************************/
 /****************************************/
 
-HabDecLoopFunction::HabDecLoopFunction() {
+MemoryTskLoopFunction::MemoryTskLoopFunction() {
     m_unClock = 0;
     m_unStopTime = 0;
     m_unStopBlock = 0;
@@ -22,18 +22,18 @@ HabDecLoopFunction::HabDecLoopFunction() {
 /****************************************/
 /****************************************/
 
-HabDecLoopFunction::HabDecLoopFunction(const HabDecLoopFunction& orig) {
+MemoryTskLoopFunction::MemoryTskLoopFunction(const MemoryTskLoopFunction& orig) {
 }
 
 /****************************************/
 /****************************************/
 
-HabDecLoopFunction::~HabDecLoopFunction() {}
+MemoryTskLoopFunction::~MemoryTskLoopFunction() {}
 
 /****************************************/
 /****************************************/
 
-void HabDecLoopFunction::Destroy() {
+void MemoryTskLoopFunction::Destroy() {
 
     m_tRobotStates.clear();
     m_tLEDStates.clear();
@@ -42,7 +42,7 @@ void HabDecLoopFunction::Destroy() {
 /****************************************/
 /****************************************/
 
-void HabDecLoopFunction::Init(TConfigurationNode& t_tree) {
+void MemoryTskLoopFunction::Init(TConfigurationNode& t_tree) {
 
     CoreLoopFunctions::Init(t_tree);
     TConfigurationNode cParametersNode;
@@ -57,6 +57,8 @@ void HabDecLoopFunction::Init(TConfigurationNode& t_tree) {
     m_cUVColor.SetGreen(0);
     m_cUVColor.SetBlue(128);
 
+    visitedId={0,0,0,0,0,0,0,0,0,0,0,0};
+    revisitedId={false,false,false,false,false,false,false,false,false,false,false,false,};
     InitRobotStates();
     InitPhormicaState();
     InitMocaState();
@@ -66,7 +68,7 @@ void HabDecLoopFunction::Init(TConfigurationNode& t_tree) {
 /****************************************/
 /****************************************/
 
-void HabDecLoopFunction::Reset() {
+void MemoryTskLoopFunction::Reset() {
     CoreLoopFunctions::Reset();
 
     m_pcPhormica->GetLEDEquippedEntity().SetAllLEDsColors(CColor::BLACK);
@@ -86,7 +88,7 @@ void HabDecLoopFunction::Reset() {
 /****************************************/
 /****************************************/
 
-void HabDecLoopFunction::PostStep() {
+void MemoryTskLoopFunction::PostStep() {
 
     m_unClock = GetSpace().GetSimulationClock();
     GetRobotScore();
@@ -98,7 +100,20 @@ void HabDecLoopFunction::PostStep() {
 /****************************************/
 /****************************************/
 
-void HabDecLoopFunction::PostExperiment() {
+void MemoryTskLoopFunction::PostExperiment() {  
+
+    UInt16 count1 = 0;
+    UInt16 count2 = 0;
+    for(std::size_t i = 0; i < visitedId.size(); i++){
+        if (visitedId[i]==1){
+            count1 += 1;
+        }
+        if (visitedId[i]>1){
+            count2 += 1;
+        }
+        LOG << visitedId[i] << std::endl;
+    }
+    m_fObjectiveFunction = count1 - count2;
 
     if (m_bMaximization == true){
         LOG << -m_fObjectiveFunction << std::endl;
@@ -112,7 +127,7 @@ void HabDecLoopFunction::PostExperiment() {
 /****************************************/
 /****************************************/
 
-Real HabDecLoopFunction::GetObjectiveFunction() {
+Real MemoryTskLoopFunction::GetObjectiveFunction() {
     if (m_bMaximization == true){
         return -m_fObjectiveFunction;
     }
@@ -124,7 +139,7 @@ Real HabDecLoopFunction::GetObjectiveFunction() {
 /****************************************/
 /****************************************/
 
-void HabDecLoopFunction::MocaControl() {
+void MemoryTskLoopFunction::MocaControl() {
 
     if (m_unClock == m_unStopTime) {
         CSpace::TMapPerType& tBlocksMap = GetSpace().GetEntitiesByType("block");
@@ -171,27 +186,54 @@ void HabDecLoopFunction::MocaControl() {
 /****************************************/
 /****************************************/
 
-void HabDecLoopFunction::TimerControl(){
+void MemoryTskLoopFunction::TimerControl(){
 }
 
 /****************************************/
 /****************************************/
 
-void HabDecLoopFunction::GetRobotScore() {
+void MemoryTskLoopFunction::GetRobotScore() {
 
   UpdateRobotPositions();
-
+  CVector2 robotInStation;
   Real unScore = 0;
+  int idStation;
+  bool isInStation;
   TRobotStateMap::iterator it;
   for (it = m_tRobotStates.begin(); it != m_tRobotStates.end(); ++it) {
-      if (it->second.cPosition.GetX() <= -0.125 && it->second.cPosition.GetY() <= -0.375){
-        unScore+=1;
-      }
-      else if(it->second.cPosition.GetX() >= 0.125 && it->second.cPosition.GetY() >= 0.375){
-        unScore+=2;
-      }
+    std::pair<bool, int> station = IsRobotInStation(it->second.cPosition);
+    isInStation = station.first;
+    idStation = station.second;
+    if (idStation != -1){
+        if (it->second.unTimer > 0){
+            it->second.unTimer = it->second.unTimer - 1;
+            it->second.visitedStation = false;
+        }
+        else if (it->second.unTimer == 0){
+            it->second.visitedStation = true;
+            
+        }
+       it->second.idStation = idStation;
+    //    LOG << it->second.unTimer << std::endl;
+    }
+    else {
+        it->second.unTimer = 20;
+  
+        if ( it->second.visitedStation == true){
+            visitedId[it->second.idStation] = visitedId[it->second.idStation] + 1;
+            it->second.visitedStation = false;
+            LOG << "Visited station: "<< it->second.idStation << std::endl;
+        }
+    }
+    // LOG << "Visited station: "<< visitedStation << std::endl;
 
+
+ 
+    
+    // LOG << id << std::endl;
+    
   }
+
 
   m_fObjectiveFunction += unScore;
 }
@@ -199,7 +241,7 @@ void HabDecLoopFunction::GetRobotScore() {
 /****************************************/
 /****************************************/
 
-// Real HabDecLoopFunction::GetRobotOutScore() {
+// Real MemoryTskLoopFunction::GetRobotOutScore() {
 //
 //     UpdateRobotPositions();
 //
@@ -216,21 +258,168 @@ void HabDecLoopFunction::GetRobotScore() {
 /****************************************/
 /****************************************/
 
-argos::CColor HabDecLoopFunction::GetFloorColor(const argos::CVector2& c_position_on_plane) {
+argos::CColor MemoryTskLoopFunction::GetFloorColor(const argos::CVector2& c_position_on_plane) {
+    float a = 0.06;
+    float b = 0.03;
+    float block = 0.125;
 
-    // if (c_position_on_plane.GetX() <= -0.60){
-    //     return CColor::GRAY50;
+    ///// Left side /////
+    if(c_position_on_plane.GetX() <= 0.75-block*2 -b && c_position_on_plane.GetX() >= 0.75 -block*3 +b && c_position_on_plane.GetY() >= 0.75 - a && c_position_on_plane.GetY() <= 0.75 ){
+        return CColor::GRAY50;
+    }
+
+    else if(c_position_on_plane.GetX() <= 0.75-block*6 - b && c_position_on_plane.GetX() >= 0.75 -block*7 +b && c_position_on_plane.GetY() >= 0.75 - a  && c_position_on_plane.GetY() <= 0.75){
+        return CColor::GRAY50;
+    }
+
+    else if(c_position_on_plane.GetX() <= 0.75-block*10 - b && c_position_on_plane.GetX() >= 0.75 -block*11 +b && c_position_on_plane.GetY() >= 0.75 - a && c_position_on_plane.GetY() <= 0.75 ){
+        return CColor::GRAY50;
+    }
+
+    ///// Right side /////
+    else if(c_position_on_plane.GetX() <= 0.75-block*1 -b && c_position_on_plane.GetX() >= 0.75 -block*2 +b && c_position_on_plane.GetY() <= -0.75 + a  && c_position_on_plane.GetY() >= -0.75){
+        return CColor::GRAY50;
+    }
+
+    else if(c_position_on_plane.GetX() <= 0.75-block*5 - b && c_position_on_plane.GetX() >= 0.75 -block*6 +b && c_position_on_plane.GetY() <= -0.75 + a  && c_position_on_plane.GetY() >= -0.75){
+        return CColor::GRAY50;
+    }
+
+    else if(c_position_on_plane.GetX() <= 0.75-block*9 - b && c_position_on_plane.GetX() >= 0.75 -block*10 +b && c_position_on_plane.GetY() <= -0.75 + a  && c_position_on_plane.GetY() >= -0.75){
+        return CColor::GRAY50;
+    }
+
+    ///// Top side /////
+    else if(c_position_on_plane.GetY() <= 0.75-block*1 - b && c_position_on_plane.GetY() >= 0.75 -block*2 +b && c_position_on_plane.GetX() >= 0.75 - a && c_position_on_plane.GetX() <= 0.75  ){
+        return CColor::GRAY50;
+    }
+
+    else if(c_position_on_plane.GetY() <= 0.75-block*5 - b && c_position_on_plane.GetY() >= 0.75 -block*6 +b && c_position_on_plane.GetX() >= 0.75 - a  && c_position_on_plane.GetX() <= 0.75 ){
+        return CColor::GRAY50;
+    }
+
+    else if(c_position_on_plane.GetY() <= 0.75-block*9 - b && c_position_on_plane.GetY() >= 0.75 -block*10 +b && c_position_on_plane.GetX() >= 0.75 - a  && c_position_on_plane.GetX() <= 0.75 ){
+        return CColor::GRAY50;
+    }
+
+    ///// Bottom side /////
+    else if(c_position_on_plane.GetY() <= 0.75-block*2 - b && c_position_on_plane.GetY() >= 0.75 -block*3 +b && c_position_on_plane.GetX() <= -0.75 + a  && c_position_on_plane.GetX() >= -0.75){
+        return CColor::GRAY50;
+    }
+
+    else if(c_position_on_plane.GetY() <= 0.75-block*6 - b && c_position_on_plane.GetY() >= 0.75 -block*7 +b && c_position_on_plane.GetX() <= -0.75 + a  && c_position_on_plane.GetX() >= -0.75){
+        return CColor::GRAY50;
+    }
+
+    else if(c_position_on_plane.GetY() <= 0.75-block*10 - b && c_position_on_plane.GetY() >= 0.75 -block*11 +b && c_position_on_plane.GetX() <= -0.75 + a  && c_position_on_plane.GetX() >= -0.75){
+        return CColor::GRAY50;
+    }
+    // else if(c_position_on_plane.GetX() <= -0.125 && c_position_on_plane.GetX() <= -0.375 && c_position_on_plane.GetY() > 0 ){
+    //     return CColor::WHITE;
     // }
-    // else if (c_position_on_plane.GetX() >= 0.60){
-    //     return CColor::GRAY50;
-    // }
-    return CColor::GRAY50;
+    else {
+        return CColor::WHITE;
+    }
+    
 }
 
+std::pair<bool, int> MemoryTskLoopFunction::IsRobotInStation(CVector2 c_position_on_plane) {
+
+    float a = 0.08;
+    float b = 0.03;
+    float block = 0.125;
+    int id;
+    bool inStation;
+
+
+ ///// Left side /////
+    if(c_position_on_plane.GetX() <= 0.75-block*2 -b && c_position_on_plane.GetX() >= 0.75 -block*3 +b && c_position_on_plane.GetY() >= 0.75 - a && c_position_on_plane.GetY() <= 0.75 ){
+        id = 0;
+        inStation = true;
+        return std::make_pair(inStation,id);
+    }
+
+    else if(c_position_on_plane.GetX() <= 0.75-block*6 - b && c_position_on_plane.GetX() >= 0.75 -block*7 +b && c_position_on_plane.GetY() >= 0.75 - a  && c_position_on_plane.GetY() <= 0.75){
+        id = 1;
+        inStation = true;
+        return std::make_pair(inStation,id);
+    }
+
+    else if(c_position_on_plane.GetX() <= 0.75-block*10 - b && c_position_on_plane.GetX() >= 0.75 -block*11 +b && c_position_on_plane.GetY() >= 0.75 - a && c_position_on_plane.GetY() <= 0.75 ){
+        id = 2;
+        inStation = true;
+        return std::make_pair(inStation,id);
+    }
+
+    ///// Right side /////
+    else if(c_position_on_plane.GetX() <= 0.75-block*1 -b && c_position_on_plane.GetX() >= 0.75 -block*2 +b && c_position_on_plane.GetY() <= -0.75 + a  && c_position_on_plane.GetY() >= -0.75){
+        id = 3;
+        inStation = true;
+        return std::make_pair(inStation,id);
+    }
+
+    else if(c_position_on_plane.GetX() <= 0.75-block*5 - b && c_position_on_plane.GetX() >= 0.75 -block*6 +b && c_position_on_plane.GetY() <= -0.75 + a  && c_position_on_plane.GetY() >= -0.75){
+        id = 4;
+        inStation = true;
+        return std::make_pair(inStation,id);
+    }
+
+    else if(c_position_on_plane.GetX() <= 0.75-block*9 - b && c_position_on_plane.GetX() >= 0.75 -block*10 +b && c_position_on_plane.GetY() <= -0.75 + a  && c_position_on_plane.GetY() >= -0.75){
+        id = 5;
+        inStation = true;
+        return std::make_pair(inStation,id);
+    }
+
+    ///// Top side /////
+    else if(c_position_on_plane.GetY() <= 0.75-block*1 - b && c_position_on_plane.GetY() >= 0.75 -block*2 +b && c_position_on_plane.GetX() >= 0.75 - a && c_position_on_plane.GetX() <= 0.75  ){
+        id = 6;
+        inStation = true;
+        return std::make_pair(inStation,id);
+    }
+
+    else if(c_position_on_plane.GetY() <= 0.75-block*5 - b && c_position_on_plane.GetY() >= 0.75 -block*6 +b && c_position_on_plane.GetX() >= 0.75 - a  && c_position_on_plane.GetX() <= 0.75 ){
+        id = 7;
+        inStation = true;
+        return std::make_pair(inStation,id);
+    }
+
+    else if(c_position_on_plane.GetY() <= 0.75-block*9 - b && c_position_on_plane.GetY() >= 0.75 -block*10 +b && c_position_on_plane.GetX() >= 0.75 - a  && c_position_on_plane.GetX() <= 0.75 ){
+        id = 8;
+        inStation = true;
+        return std::make_pair(inStation,id);
+    }
+
+    ///// Bottom side /////
+    else if(c_position_on_plane.GetY() <= 0.75-block*2 - b && c_position_on_plane.GetY() >= 0.75 -block*3 +b && c_position_on_plane.GetX() <= -0.75 + a  && c_position_on_plane.GetX() >= -0.75){
+        id = 9;
+        inStation = true;
+        return std::make_pair(inStation,id);
+    }
+
+    else if(c_position_on_plane.GetY() <= 0.75-block*6 - b && c_position_on_plane.GetY() >= 0.75 -block*7 +b && c_position_on_plane.GetX() <= -0.75 + a  && c_position_on_plane.GetX() >= -0.75){
+        id = 10;
+        inStation = true;
+        return std::make_pair(inStation,id);
+    }
+
+    else if(c_position_on_plane.GetY() <= 0.75-block*10 - b && c_position_on_plane.GetY() >= 0.75 -block*11 +b && c_position_on_plane.GetX() <= -0.75 + a  && c_position_on_plane.GetX() >= -0.75){
+        id = 11;
+        inStation = true;
+        return std::make_pair(inStation,id);
+    }
+    // else if(c_position_on_plane.GetX() <= -0.125 && c_position_on_plane.GetX() <=  -0.375 && c_position_on_plane.GetY() > 0 ){
+    //     return CColor::WHITE;
+    // }
+    else {
+        id = -1;
+        inStation = false;
+        return std::make_pair(inStation,id);
+    }
+}
 /****************************************/
 /****************************************/
 
-void HabDecLoopFunction::UpdateRobotPositions() {
+void MemoryTskLoopFunction::UpdateRobotPositions() {
     CSpace::TMapPerType& tEpuckMap = GetSpace().GetEntitiesByType("epuck");
     CVector2 cEpuckPosition(0,0);
     for (CSpace::TMapPerType::iterator it = tEpuckMap.begin(); it != tEpuckMap.end(); ++it) {
@@ -266,7 +455,7 @@ void HabDecLoopFunction::UpdateRobotPositions() {
 /****************************************/
 /****************************************/
 
-void HabDecLoopFunction::InitRobotStates() {
+void MemoryTskLoopFunction::InitRobotStates() {
 
     CSpace::TMapPerType& tEpuckMap = GetSpace().GetEntitiesByType("epuck");
     CVector2 cEpuckPosition(0,0);
@@ -282,13 +471,15 @@ void HabDecLoopFunction::InitRobotStates() {
         m_tRobotStates[pcEpuck].unPheromoneLEDs = 0;
         m_tRobotStates[pcEpuck].unItem = 0;
         m_tRobotStates[pcEpuck].unId = nRobotId;
+        m_tRobotStates[pcEpuck].unTimer = 20;
+        m_tRobotStates[pcEpuck].visitedStation = false;
     }
 }
 
 /****************************************/
 /****************************************/
 
-void HabDecLoopFunction::InitPhormicaState() {
+void MemoryTskLoopFunction::InitPhormicaState() {
 
     CSpace::TMapPerType& tPhormicaMap = GetSpace().GetEntitiesByType("phormica");
     CVector2 cLEDPosition(0,0);
@@ -311,7 +502,7 @@ void HabDecLoopFunction::InitPhormicaState() {
 /****************************************/
 /****************************************/
 
-void HabDecLoopFunction::UpdatePhormicaState() {
+void MemoryTskLoopFunction::UpdatePhormicaState() {
 
     CSpace::TMapPerType& tEpuckMap = GetSpace().GetEntitiesByType("epuck");
     CVector2 cEpuckPosition(0,0);
@@ -351,7 +542,7 @@ void HabDecLoopFunction::UpdatePhormicaState() {
         UInt32 unLEDCount = itLED->second.unCount;
         
         // Pheromone intensity parameter
-        if (unLEDCount > 10){
+        if (unLEDCount > 5){
             m_pcPhormica->GetLEDEquippedEntity().SetLEDColor(itLED->second.unLEDIndex,CColor::MAGENTA);
         }
     
@@ -368,7 +559,7 @@ void HabDecLoopFunction::UpdatePhormicaState() {
 /****************************************/
 /****************************************/
 
-void HabDecLoopFunction::InitMocaState() {
+void MemoryTskLoopFunction::InitMocaState() {
 
   CSpace::TMapPerType& tBlocksMap = GetSpace().GetEntitiesByType("block");
   UInt32 unBlocksID = 0;
@@ -422,7 +613,7 @@ void HabDecLoopFunction::InitMocaState() {
 /****************************************/
 /****************************************/
 
-// CVector3 HabDecLoopFunction::GetRandomPosition() {
+// CVector3 MemoryTskLoopFunction::GetRandomPosition() {
 //   Real temp;
 //   Real a = m_pcRng->Uniform(CRange<Real>(0.0f, 1.0f));
 //   Real b = m_pcRng->Uniform(CRange<Real>(0.0f, 1.0f));
@@ -440,7 +631,7 @@ void HabDecLoopFunction::InitMocaState() {
 //
 //   return CVector3(fPosX, fPosY, 0);
 // }
-CVector3 HabDecLoopFunction::GetRandomPosition() {
+CVector3 MemoryTskLoopFunction::GetRandomPosition() {
 
   Real a;
   Real b;
@@ -457,7 +648,7 @@ CVector3 HabDecLoopFunction::GetRandomPosition() {
 /****************************************/
 /****************************************/
 
-UInt32 HabDecLoopFunction::GetRandomTime(UInt32 unMin, UInt32 unMax) {
+UInt32 MemoryTskLoopFunction::GetRandomTime(UInt32 unMin, UInt32 unMax) {
   UInt32 unStopAt = m_pcRng->Uniform(CRange<UInt32>(unMin, unMax));
   return unStopAt;
 
@@ -466,7 +657,7 @@ UInt32 HabDecLoopFunction::GetRandomTime(UInt32 unMin, UInt32 unMax) {
 /****************************************/
 /****************************************/
 
-bool HabDecLoopFunction::IsEven(UInt32 unNumber) {
+bool MemoryTskLoopFunction::IsEven(UInt32 unNumber) {
     bool even;
     if((unNumber%2)==0)
        even = true;
@@ -479,4 +670,4 @@ bool HabDecLoopFunction::IsEven(UInt32 unNumber) {
 /****************************************/
 /****************************************/
 
-REGISTER_LOOP_FUNCTIONS(HabDecLoopFunction, "memory_tsk_loop_function");
+REGISTER_LOOP_FUNCTIONS(MemoryTskLoopFunction, "memory_tsk_loop_function");
