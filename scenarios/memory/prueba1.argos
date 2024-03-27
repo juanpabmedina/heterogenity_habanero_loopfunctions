@@ -3,7 +3,7 @@
     <experiment length="180" ticks_per_second="10" random_seed="0" />
   </framework>
   <loop_functions library="/home/robotmaster/argos3-installation/habanero/habanero-loopfunctions/build/loop-functions/heterogeneity/libhetero_ch_loopfunc.so" label="hetero_ch_loop_function">
-    <params number_robots="[12, 0, 0, 0]" dist_radius="1.0" maximization="false" />
+    <params number_robots="[0, 2, 0, 0]" dist_radius="1.0" maximization="false" />
   </loop_functions>
   <controllers>
     <automode_controller id="heterogeneity1" library="/home/robotmaster/argos3-installation/habanero/AutoMoDe-habanero/build/src/libautomode.so">
@@ -38,7 +38,7 @@
         <epuck_ground implementation="rot_z_only" noise_level="0.05" calibrated="true" />
         <epuck_omnidirectional_camera implementation="rot_z_only" medium="leds" show_rays="false" />
       </sensors>
-      <params readable="true" history="false" fsm-config="--nstates 1 --s0 4 --phe0 1" />
+      <params readable="true" history="false" fsm-config="--nstates 1 --s0 8 --cle0 1" />
     </automode_controller>
     <automode_controller id="heterogeneity3" library="/home/robotmaster/argos3-installation/habanero/AutoMoDe-habanero/build/src/libautomode.so">
       <actuators>
@@ -64,7 +64,7 @@
     <distribute id="swarm1">
       <position method="uniform" min="-1,-1,0" max="1,1,0" />
       <orientation method="gaussian" mean="0,0,0" std_dev="360,0,0" />
-      <entity quantity="12" max_trials="100">
+      <entity quantity="0" max_trials="100">
         <e-puck id="epuck1">
           <controller config="heterogeneity1" />
         </e-puck>
@@ -73,7 +73,7 @@
     <distribute id="swarm2">
       <position method="uniform" min="-1,-1,0" max="1,1,0" />
       <orientation method="gaussian" mean="0,0,0" std_dev="360,0,0" />
-      <entity quantity="0" max_trials="100">
+      <entity quantity="2" max_trials="100">
         <e-puck id="epuck2">
           <controller config="heterogeneity2" />
         </e-puck>

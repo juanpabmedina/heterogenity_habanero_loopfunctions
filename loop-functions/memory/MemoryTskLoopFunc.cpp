@@ -7,6 +7,9 @@
   */
 
 #include "MemoryTskLoopFunc.h"
+#include <fstream>
+#include <iostream>
+using namespace std;
 
 /****************************************/
 /****************************************/
@@ -57,7 +60,7 @@ void MemoryTskLoopFunction::Init(TConfigurationNode& t_tree) {
     m_cUVColor.SetGreen(0);
     m_cUVColor.SetBlue(128);
 
-    visitedId={0,0,0,0,0,0,0,0,0,0,0,0};
+    visitedId={0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
     revisitedId={false,false,false,false,false,false,false,false,false,false,false,false,};
     InitRobotStates();
     InitPhormicaState();
@@ -79,6 +82,8 @@ void MemoryTskLoopFunction::Reset() {
 
     m_tRobotStates.clear();
     m_tLEDStates.clear();
+
+    visitedId={0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 
     InitMocaState();
     InitRobotStates();
@@ -115,11 +120,16 @@ void MemoryTskLoopFunction::PostExperiment() {
     }
     m_fObjectiveFunction = count1 - count2;
 
+    ofstream score;
+    score.open("data/score_tasking.txt", ofstream::app);
+
     if (m_bMaximization == true){
         LOG << -m_fObjectiveFunction << std::endl;
+        score <<-m_fObjectiveFunction << std::endl;
     }
     else {
         LOG << m_fObjectiveFunction << std::endl;
+        score <<m_fObjectiveFunction << std::endl;
 
     }
 }
@@ -261,57 +271,81 @@ void MemoryTskLoopFunction::GetRobotScore() {
 argos::CColor MemoryTskLoopFunction::GetFloorColor(const argos::CVector2& c_position_on_plane) {
     float a = 0.06;
     float b = 0.03;
-    float block = 0.125;
+    float block = 0.175;
+    float separation = block*6;
+    float offset = 0.05;
 
     ///// Left side /////
-    if(c_position_on_plane.GetX() <= 0.75-block*2 -b && c_position_on_plane.GetX() >= 0.75 -block*3 +b && c_position_on_plane.GetY() >= 0.75 - a && c_position_on_plane.GetY() <= 0.75 ){
+    if(c_position_on_plane.GetX() <= separation-block*2 -b -offset && c_position_on_plane.GetX() >= separation -block*3 +b && c_position_on_plane.GetY() >= separation - a && c_position_on_plane.GetY() <= separation ){
         return CColor::GRAY50;
     }
-
-    else if(c_position_on_plane.GetX() <= 0.75-block*6 - b && c_position_on_plane.GetX() >= 0.75 -block*7 +b && c_position_on_plane.GetY() >= 0.75 - a  && c_position_on_plane.GetY() <= 0.75){
+    else if(c_position_on_plane.GetX() <= separation-block*4 - b -offset && c_position_on_plane.GetX() >= separation -block*5 +b && c_position_on_plane.GetY() >= separation - a  && c_position_on_plane.GetY() <= separation){
         return CColor::GRAY50;
     }
-
-    else if(c_position_on_plane.GetX() <= 0.75-block*10 - b && c_position_on_plane.GetX() >= 0.75 -block*11 +b && c_position_on_plane.GetY() >= 0.75 - a && c_position_on_plane.GetY() <= 0.75 ){
+    else if(c_position_on_plane.GetX() <= separation-block*6 - b -offset&& c_position_on_plane.GetX() >= separation -block*7 +b && c_position_on_plane.GetY() >= separation - a  && c_position_on_plane.GetY() <= separation){
+        return CColor::GRAY50;
+    }
+    else if(c_position_on_plane.GetX() <= separation-block*8 - b -offset&& c_position_on_plane.GetX() >= separation -block*9 +b && c_position_on_plane.GetY() >= separation - a && c_position_on_plane.GetY() <= separation ){
+        return CColor::GRAY50;
+    }
+    else if(c_position_on_plane.GetX() <= separation-block*10 - b -offset&& c_position_on_plane.GetX() >= separation -block*11 +b && c_position_on_plane.GetY() >= separation - a && c_position_on_plane.GetY() <= separation ){
         return CColor::GRAY50;
     }
 
     ///// Right side /////
-    else if(c_position_on_plane.GetX() <= 0.75-block*1 -b && c_position_on_plane.GetX() >= 0.75 -block*2 +b && c_position_on_plane.GetY() <= -0.75 + a  && c_position_on_plane.GetY() >= -0.75){
+    else if(c_position_on_plane.GetX() <= separation-block*1 -b && c_position_on_plane.GetX() >= separation -block*2 +b +offset&& c_position_on_plane.GetY() <= -separation + a  && c_position_on_plane.GetY() >= -separation){
         return CColor::GRAY50;
     }
 
-    else if(c_position_on_plane.GetX() <= 0.75-block*5 - b && c_position_on_plane.GetX() >= 0.75 -block*6 +b && c_position_on_plane.GetY() <= -0.75 + a  && c_position_on_plane.GetY() >= -0.75){
+    else if(c_position_on_plane.GetX() <= separation-block*3 - b && c_position_on_plane.GetX() >= separation -block*4 +b +offset&& c_position_on_plane.GetY() <= -separation + a  && c_position_on_plane.GetY() >= -separation){
         return CColor::GRAY50;
     }
 
-    else if(c_position_on_plane.GetX() <= 0.75-block*9 - b && c_position_on_plane.GetX() >= 0.75 -block*10 +b && c_position_on_plane.GetY() <= -0.75 + a  && c_position_on_plane.GetY() >= -0.75){
+    else if(c_position_on_plane.GetX() <= separation-block*5 - b && c_position_on_plane.GetX() >= separation -block*6 +b +offset&& c_position_on_plane.GetY() <= -separation + a  && c_position_on_plane.GetY() >= -separation){
+        return CColor::GRAY50;
+    }
+
+    else if(c_position_on_plane.GetX() <= separation-block*7 - b && c_position_on_plane.GetX() >= separation -block*8 +b +offset&& c_position_on_plane.GetY() <= -separation + a  && c_position_on_plane.GetY() >= -separation){
+        return CColor::GRAY50;
+    }
+    else if(c_position_on_plane.GetX() <= separation-block*9 - b && c_position_on_plane.GetX() >= separation -block*10 +b +offset&& c_position_on_plane.GetY() <= -separation + a  && c_position_on_plane.GetY() >= -separation){
         return CColor::GRAY50;
     }
 
     ///// Top side /////
-    else if(c_position_on_plane.GetY() <= 0.75-block*1 - b && c_position_on_plane.GetY() >= 0.75 -block*2 +b && c_position_on_plane.GetX() >= 0.75 - a && c_position_on_plane.GetX() <= 0.75  ){
+    else if(c_position_on_plane.GetY() <= separation-block*1 - b && c_position_on_plane.GetY() >= separation -block*2 +b +offset&& c_position_on_plane.GetX() >= separation - a && c_position_on_plane.GetX() <= separation  ){
         return CColor::GRAY50;
     }
 
-    else if(c_position_on_plane.GetY() <= 0.75-block*5 - b && c_position_on_plane.GetY() >= 0.75 -block*6 +b && c_position_on_plane.GetX() >= 0.75 - a  && c_position_on_plane.GetX() <= 0.75 ){
+    else if(c_position_on_plane.GetY() <= separation-block*3 - b && c_position_on_plane.GetY() >= separation -block*4 +b +offset&& c_position_on_plane.GetX() >= separation - a  && c_position_on_plane.GetX() <= separation ){
         return CColor::GRAY50;
     }
 
-    else if(c_position_on_plane.GetY() <= 0.75-block*9 - b && c_position_on_plane.GetY() >= 0.75 -block*10 +b && c_position_on_plane.GetX() >= 0.75 - a  && c_position_on_plane.GetX() <= 0.75 ){
+    else if(c_position_on_plane.GetY() <= separation-block*5 - b && c_position_on_plane.GetY() >= separation -block*6 +b +offset&& c_position_on_plane.GetX() >= separation - a  && c_position_on_plane.GetX() <= separation ){
         return CColor::GRAY50;
     }
+    else if(c_position_on_plane.GetY() <= separation-block*7 - b && c_position_on_plane.GetY() >= separation -block*8 +b +offset&& c_position_on_plane.GetX() >= separation - a  && c_position_on_plane.GetX() <= separation ){
+        return CColor::GRAY50;
+    }
+    else if(c_position_on_plane.GetY() <= separation-block*9 - b && c_position_on_plane.GetY() >= separation -block*10 +b +offset&& c_position_on_plane.GetX() >= separation - a  && c_position_on_plane.GetX() <= separation ){
+        return CColor::GRAY50;
+    }
+
 
     ///// Bottom side /////
-    else if(c_position_on_plane.GetY() <= 0.75-block*2 - b && c_position_on_plane.GetY() >= 0.75 -block*3 +b && c_position_on_plane.GetX() <= -0.75 + a  && c_position_on_plane.GetX() >= -0.75){
+    else if(c_position_on_plane.GetY() <= separation-block*2 - b -offset&& c_position_on_plane.GetY() >= separation -block*3 +b && c_position_on_plane.GetX() <= -separation + a  && c_position_on_plane.GetX() >= -separation){
         return CColor::GRAY50;
     }
-
-    else if(c_position_on_plane.GetY() <= 0.75-block*6 - b && c_position_on_plane.GetY() >= 0.75 -block*7 +b && c_position_on_plane.GetX() <= -0.75 + a  && c_position_on_plane.GetX() >= -0.75){
+     else if(c_position_on_plane.GetY() <= separation-block*4 - b -offset&& c_position_on_plane.GetY() >= separation -block*5 +b && c_position_on_plane.GetX() <= -separation + a  && c_position_on_plane.GetX() >= -separation){
         return CColor::GRAY50;
     }
-
-    else if(c_position_on_plane.GetY() <= 0.75-block*10 - b && c_position_on_plane.GetY() >= 0.75 -block*11 +b && c_position_on_plane.GetX() <= -0.75 + a  && c_position_on_plane.GetX() >= -0.75){
+    else if(c_position_on_plane.GetY() <= separation-block*6 - b -offset&& c_position_on_plane.GetY() >= separation -block*7 +b && c_position_on_plane.GetX() <= -separation + a  && c_position_on_plane.GetX() >= -separation){
+        return CColor::GRAY50;
+    }
+ else if(c_position_on_plane.GetY() <= separation-block*8 - b -offset&& c_position_on_plane.GetY() >= separation -block*9 +b && c_position_on_plane.GetX() <= -separation + a  && c_position_on_plane.GetX() >= -separation){
+        return CColor::GRAY50;
+    }
+    else if(c_position_on_plane.GetY() <= separation-block*10 - b -offset&& c_position_on_plane.GetY() >= separation -block*11 +b && c_position_on_plane.GetX() <= -separation + a  && c_position_on_plane.GetX() >= -separation){
         return CColor::GRAY50;
     }
     // else if(c_position_on_plane.GetX() <= -0.125 && c_position_on_plane.GetX() <= -0.375 && c_position_on_plane.GetY() > 0 ){
@@ -326,84 +360,126 @@ argos::CColor MemoryTskLoopFunction::GetFloorColor(const argos::CVector2& c_posi
 std::pair<bool, int> MemoryTskLoopFunction::IsRobotInStation(CVector2 c_position_on_plane) {
 
     float a = 0.08;
-    float b = 0.03;
-    float block = 0.125;
+    float b = 0.02;
+    float block = 0.175;
     int id;
     bool inStation;
-
+    float separation = block*6;
+    float offset = 0.05;
 
  ///// Left side /////
-    if(c_position_on_plane.GetX() <= 0.75-block*2 -b && c_position_on_plane.GetX() >= 0.75 -block*3 +b && c_position_on_plane.GetY() >= 0.75 - a && c_position_on_plane.GetY() <= 0.75 ){
+    if(c_position_on_plane.GetX() <= separation-block*2 -b -offset&& c_position_on_plane.GetX() >= separation -block*3 +b && c_position_on_plane.GetY() >= separation - a && c_position_on_plane.GetY() <= separation ){
         id = 0;
         inStation = true;
         return std::make_pair(inStation,id);
     }
 
-    else if(c_position_on_plane.GetX() <= 0.75-block*6 - b && c_position_on_plane.GetX() >= 0.75 -block*7 +b && c_position_on_plane.GetY() >= 0.75 - a  && c_position_on_plane.GetY() <= 0.75){
+    else if(c_position_on_plane.GetX() <= separation-block*4 - b -offset&& c_position_on_plane.GetX() >= separation -block*5 +b && c_position_on_plane.GetY() >= separation - a  && c_position_on_plane.GetY() <= separation){
         id = 1;
         inStation = true;
         return std::make_pair(inStation,id);
     }
 
-    else if(c_position_on_plane.GetX() <= 0.75-block*10 - b && c_position_on_plane.GetX() >= 0.75 -block*11 +b && c_position_on_plane.GetY() >= 0.75 - a && c_position_on_plane.GetY() <= 0.75 ){
+    else if(c_position_on_plane.GetX() <= separation-block*6 - b -offset&& c_position_on_plane.GetX() >= separation -block*7 +b && c_position_on_plane.GetY() >= separation - a  && c_position_on_plane.GetY() <= separation){
         id = 2;
         inStation = true;
         return std::make_pair(inStation,id);
     }
 
-    ///// Right side /////
-    else if(c_position_on_plane.GetX() <= 0.75-block*1 -b && c_position_on_plane.GetX() >= 0.75 -block*2 +b && c_position_on_plane.GetY() <= -0.75 + a  && c_position_on_plane.GetY() >= -0.75){
+        else if(c_position_on_plane.GetX() <= separation-block*8 - b -offset&& c_position_on_plane.GetX() >= separation -block*9 +b && c_position_on_plane.GetY() >= separation - a  && c_position_on_plane.GetY() <= separation){
         id = 3;
         inStation = true;
         return std::make_pair(inStation,id);
     }
 
-    else if(c_position_on_plane.GetX() <= 0.75-block*5 - b && c_position_on_plane.GetX() >= 0.75 -block*6 +b && c_position_on_plane.GetY() <= -0.75 + a  && c_position_on_plane.GetY() >= -0.75){
+    else if(c_position_on_plane.GetX() <= separation-block*10 - b -offset&& c_position_on_plane.GetX() >= separation -block*11 +b && c_position_on_plane.GetY() >= separation - a && c_position_on_plane.GetY() <= separation ){
         id = 4;
         inStation = true;
         return std::make_pair(inStation,id);
     }
 
-    else if(c_position_on_plane.GetX() <= 0.75-block*9 - b && c_position_on_plane.GetX() >= 0.75 -block*10 +b && c_position_on_plane.GetY() <= -0.75 + a  && c_position_on_plane.GetY() >= -0.75){
+    ///// Right side /////
+    else if(c_position_on_plane.GetX() <= separation-block*1 -b && c_position_on_plane.GetX() >= separation -block*2 +b +offset&& c_position_on_plane.GetY() <= -separation + a  && c_position_on_plane.GetY() >= -separation){
         id = 5;
         inStation = true;
         return std::make_pair(inStation,id);
     }
 
-    ///// Top side /////
-    else if(c_position_on_plane.GetY() <= 0.75-block*1 - b && c_position_on_plane.GetY() >= 0.75 -block*2 +b && c_position_on_plane.GetX() >= 0.75 - a && c_position_on_plane.GetX() <= 0.75  ){
+    else if(c_position_on_plane.GetX() <= separation-block*3 -b && c_position_on_plane.GetX() >= separation -block*4 +b +offset&& c_position_on_plane.GetY() <= -separation + a  && c_position_on_plane.GetY() >= -separation){
         id = 6;
         inStation = true;
         return std::make_pair(inStation,id);
     }
 
-    else if(c_position_on_plane.GetY() <= 0.75-block*5 - b && c_position_on_plane.GetY() >= 0.75 -block*6 +b && c_position_on_plane.GetX() >= 0.75 - a  && c_position_on_plane.GetX() <= 0.75 ){
+    else if(c_position_on_plane.GetX() <= separation-block*5 - b && c_position_on_plane.GetX() >= separation -block*6 +b +offset&& c_position_on_plane.GetY() <= -separation + a  && c_position_on_plane.GetY() >= -separation){
         id = 7;
         inStation = true;
         return std::make_pair(inStation,id);
     }
-
-    else if(c_position_on_plane.GetY() <= 0.75-block*9 - b && c_position_on_plane.GetY() >= 0.75 -block*10 +b && c_position_on_plane.GetX() >= 0.75 - a  && c_position_on_plane.GetX() <= 0.75 ){
+    else if(c_position_on_plane.GetX() <= separation-block*7 -b && c_position_on_plane.GetX() >= separation -block*8 +b +offset&& c_position_on_plane.GetY() <= -separation + a  && c_position_on_plane.GetY() >= -separation){
         id = 8;
         inStation = true;
         return std::make_pair(inStation,id);
     }
-
-    ///// Bottom side /////
-    else if(c_position_on_plane.GetY() <= 0.75-block*2 - b && c_position_on_plane.GetY() >= 0.75 -block*3 +b && c_position_on_plane.GetX() <= -0.75 + a  && c_position_on_plane.GetX() >= -0.75){
+    else if(c_position_on_plane.GetX() <= separation-block*9 - b && c_position_on_plane.GetX() >= separation -block*10 +b +offset&& c_position_on_plane.GetY() <= -separation + a  && c_position_on_plane.GetY() >= -separation){
         id = 9;
         inStation = true;
         return std::make_pair(inStation,id);
     }
 
-    else if(c_position_on_plane.GetY() <= 0.75-block*6 - b && c_position_on_plane.GetY() >= 0.75 -block*7 +b && c_position_on_plane.GetX() <= -0.75 + a  && c_position_on_plane.GetX() >= -0.75){
+    ///// Top side /////
+    else if(c_position_on_plane.GetY() <= separation-block*1 - b && c_position_on_plane.GetY() >= separation -block*2 +b +offset&& c_position_on_plane.GetX() >= separation - a && c_position_on_plane.GetX() <= separation  ){
         id = 10;
         inStation = true;
         return std::make_pair(inStation,id);
     }
-
-    else if(c_position_on_plane.GetY() <= 0.75-block*10 - b && c_position_on_plane.GetY() >= 0.75 -block*11 +b && c_position_on_plane.GetX() <= -0.75 + a  && c_position_on_plane.GetX() >= -0.75){
+    else if(c_position_on_plane.GetY() <= separation-block*3 - b && c_position_on_plane.GetY() >= separation -block*4 +b +offset&& c_position_on_plane.GetX() >= separation - a && c_position_on_plane.GetX() <= separation  ){
         id = 11;
+        inStation = true;
+        return std::make_pair(inStation,id);
+    }
+    else if(c_position_on_plane.GetY() <= separation-block*5 - b && c_position_on_plane.GetY() >= separation -block*6 +b +offset&& c_position_on_plane.GetX() >= separation - a  && c_position_on_plane.GetX() <= separation ){
+        id = 12;
+        inStation = true;
+        return std::make_pair(inStation,id);
+    }
+    else if(c_position_on_plane.GetY() <= separation-block*7 - b && c_position_on_plane.GetY() >= separation -block*8 +b +offset&& c_position_on_plane.GetX() >= separation - a && c_position_on_plane.GetX() <= separation  ){
+        id = 13;
+        inStation = true;
+        return std::make_pair(inStation,id);
+    }
+    else if(c_position_on_plane.GetY() <= separation-block*9 - b && c_position_on_plane.GetY() >= separation -block*10 +b +offset&& c_position_on_plane.GetX() >= separation - a  && c_position_on_plane.GetX() <= separation ){
+        id = 14;
+        inStation = true;
+        return std::make_pair(inStation,id);
+    }
+
+    ///// Bottom side /////
+    else if(c_position_on_plane.GetY() <= separation-block*2 - b -offset&& c_position_on_plane.GetY() >= separation -block*3 +b && c_position_on_plane.GetX() <= -separation + a  && c_position_on_plane.GetX() >= -separation){
+        id = 15;
+        inStation = true;
+        return std::make_pair(inStation,id);
+    }
+
+    else if(c_position_on_plane.GetY() <= separation-block*4 - b -offset&& c_position_on_plane.GetY() >= separation -block*5 +b && c_position_on_plane.GetX() <= -separation + a  && c_position_on_plane.GetX() >= -separation){
+        id = 16;
+        inStation = true;
+        return std::make_pair(inStation,id);
+    }
+
+    else if(c_position_on_plane.GetY() <= separation-block*6 - b -offset&& c_position_on_plane.GetY() >= separation -block*7 +b && c_position_on_plane.GetX() <= -separation + a  && c_position_on_plane.GetX() >= -separation){
+        id = 17;
+        inStation = true;
+        return std::make_pair(inStation,id);
+    }
+
+    else if(c_position_on_plane.GetY() <= separation-block*8 - b -offset&& c_position_on_plane.GetY() >= separation -block*9 +b && c_position_on_plane.GetX() <= -separation + a  && c_position_on_plane.GetX() >= -separation){
+        id = 18;
+        inStation = true;
+        return std::make_pair(inStation,id);
+    }
+    else if(c_position_on_plane.GetY() <= separation-block*10 - b -offset&& c_position_on_plane.GetY() >= separation -block*11 +b && c_position_on_plane.GetX() <= -separation + a  && c_position_on_plane.GetX() >= -separation){
+        id = 19;
         inStation = true;
         return std::make_pair(inStation,id);
     }
@@ -542,7 +618,7 @@ void MemoryTskLoopFunction::UpdatePhormicaState() {
         UInt32 unLEDCount = itLED->second.unCount;
         
         // Pheromone intensity parameter
-        if (unLEDCount > 5){
+        if (unLEDCount > 20){
             m_pcPhormica->GetLEDEquippedEntity().SetLEDColor(itLED->second.unLEDIndex,CColor::MAGENTA);
         }
     
@@ -568,45 +644,45 @@ void MemoryTskLoopFunction::InitMocaState() {
       std::string strBlockId = pcBlock->GetId().substr(6,2);
         UInt32 nBlockId = std::stoi(strBlockId);
       pcBlock->GetLEDEquippedEntity().Enable();
-      pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::BLACK);
-    if (nBlockId == 1) {
-        pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::BLUE);
-    }
-    else  if (nBlockId == 3) {
-        pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::BLUE);
-    }
-    else  if (nBlockId == 5) {
-        pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::BLUE);
-    }
-    else  if (nBlockId == 7) {
-        pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::BLUE);
-    }
-    else  if (nBlockId == 9) {
-        pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::BLUE);
-    }
-    else  if (nBlockId == 11) {
-        pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::BLUE);
-    }
-    else  if (nBlockId == 13) {
-        pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::BLUE);
-    }
-    else  if (nBlockId == 15) {
-        pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::BLUE);
-    }
-    else  if (nBlockId == 17) {
-        pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::BLUE);
-    }
-    else  if (nBlockId == 19) {
-        pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::BLUE);
-    }
-    else  if (nBlockId == 21) {
-        pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::BLUE);
-    }
-    else  if (nBlockId == 23) {
-        pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::BLUE);
-    }
+      pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::GREEN);
+//     if (nBlockId == 1) {
+//         pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::BLUE);
+//     }
+//     else  if (nBlockId == 3) {
+//         pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::BLUE);
+//     }
+//     else  if (nBlockId == 5) {
+//         pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::BLUE);
+//     }
+//     else  if (nBlockId == 7) {
+//         pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::BLUE);
+//     }
+//     else  if (nBlockId == 9) {
+//         pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::BLUE);
+//     }
+//     else  if (nBlockId == 11) {
+//         pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::BLUE);
+//     }
+//     else  if (nBlockId == 13) {
+//         pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::BLUE);
+//     }
+//     else  if (nBlockId == 15) {
+//         pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::BLUE);
+//     }
+//     else  if (nBlockId == 17) {
+//         pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::BLUE);
+//     }
+//     else  if (nBlockId == 19) {
+//         pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::BLUE);
+//     }
+//     else  if (nBlockId == 21) {
+//         pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::BLUE);
+//     }
+//     else  if (nBlockId == 23) {
+//         pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::BLUE);
+//     }
 
-    unBlocksID += 1;
+//     unBlocksID += 1;
   }
 }
 

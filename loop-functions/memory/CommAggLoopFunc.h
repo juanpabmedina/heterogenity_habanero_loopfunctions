@@ -8,22 +8,23 @@
   * @license MIT License
   */
 
-#ifndef HAB_DEC_LOOP_FUNC
-#define HAB_DEC_LOOP_FUNC
+#ifndef COMM_AGG_LOOP_FUNC
+#define COMM_AGG_LOOP_FUNC
 
 #include <argos3/core/simulator/space/space.h>
 #include <argos3/plugins/robots/e-puck/simulator/epuck_entity.h>
 #include <argos3/plugins/robots/phormica/simulator/block_entity.h>
+// #include <argos3/plugins/robots/phormica/simulator/cylinder_entity.h>
 #include <argos3/plugins/robots/phormica/simulator/phormica_entity.h>
 #include "../../src/CoreLoopFunctions.h"
 
 using namespace argos;
 
-class HabDecLoopFunction: public CoreLoopFunctions {
+class CommAggLoopFunction: public CoreLoopFunctions {
   public:
-    HabDecLoopFunction();
-    HabDecLoopFunction(const HabDecLoopFunction& orig);
-    virtual ~HabDecLoopFunction();
+    CommAggLoopFunction();
+    CommAggLoopFunction(const CommAggLoopFunction& orig);
+    virtual ~CommAggLoopFunction();
 
     virtual void Destroy();
 

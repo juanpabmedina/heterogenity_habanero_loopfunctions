@@ -165,7 +165,7 @@ def modify_phormica_element(xml_file, element_name, new_element):
 
 number_edges=4
 number_boxes_per_edge=6
-lenght_boxes=0.25
+lenght_boxes=0.35
 
 blocks = generate_blocks(number_edges, number_boxes_per_edge, lenght_boxes)
 element_name="block"
