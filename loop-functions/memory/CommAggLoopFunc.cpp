@@ -9,6 +9,7 @@
 #include "CommAggLoopFunc.h"
 #include <fstream>
 #include <iostream>
+#include <numeric>
 using namespace std;
 /****************************************/
 /****************************************/
@@ -311,6 +312,8 @@ void CommAggLoopFunction::InitPhormicaState() {
 
     CSpace::TMapPerType& tPhormicaMap = GetSpace().GetEntitiesByType("phormica");
     CVector2 cLEDPosition(0,0);
+    // Change the first argument to change the quantity of layers of pheromone
+    std::vector<int> pheromoneLayers(20,0);
     for (CSpace::TMapPerType::iterator it = tPhormicaMap.begin(); it != tPhormicaMap.end(); ++it) {
         CPhormicaEntity* pcPhormica = any_cast<CPhormicaEntity*>(it->second);
         m_pcPhormica = pcPhormica;
@@ -323,6 +326,8 @@ void CommAggLoopFunction::InitPhormicaState() {
             m_tLEDStates[i].unLEDIndex = i;
             m_tLEDStates[i].cLEDPosition = cLEDPosition;
             m_tLEDStates[i].unTimer = 0;
+            m_tLEDStates[i].pheromoneLayers = pheromoneLayers;
+            m_tLEDStates[i].layersEmpty = true;
         }
     }
 }
@@ -359,27 +364,75 @@ void CommAggLoopFunction::UpdatePhormicaState() {
             if (d <= fPheromone) {
                 itLED->second.unTimer = 400; // Pheromone decay time
 
-
+                if (itLED->second.pheromoneLayers[itLED->second.pheromoneLayers.size() - 1] == 0)
+                    // Find the first empty layer
+                    for (UInt16 i = 0; i <  itLED->second.pheromoneLayers.size(); ++i) {
+                        
+                        if (itLED->second.pheromoneLayers[i] == 0) {
+                            itLED->second.pheromoneLayers[i] = itLED->second.unTimer;
+                            itLED->second.layersEmpty = false;
+                            break;
+                        } 
+                    }
+                // If the vector is full shift layers down adn assign to the last position a new counter
+                else {
+                    for (UInt16 i = 1; i < itLED->second.pheromoneLayers.size(); ++i) {
+                        itLED->second.pheromoneLayers[i - 1] = itLED->second.pheromoneLayers[i];
+                        //  LOG << "SHIFT" << std::endl;
+                    }
+                    itLED->second.pheromoneLayers[itLED->second.pheromoneLayers.size() - 2] = itLED->second.unTimer;
+                }
+                // LOG << pheromoneLayers[1] << std::endl;
                 itLED->second.unCount = itLED->second.unCount + 1;
             }
         }
         
-
-        UInt32 unLEDTimer = itLED->second.unTimer;
-        UInt32 unLEDCount = itLED->second.unCount;
-        
-
-        if (unLEDCount > 20){
-            m_pcPhormica->GetLEDEquippedEntity().SetLEDColor(itLED->second.unLEDIndex,CColor::MAGENTA);
+        // Decrease decay time for non-empty layers
+        for (UInt16 i = 0; i < itLED->second.pheromoneLayers.size(); ++i) {
+            if (itLED->second.pheromoneLayers[i] != 0) {
+                itLED->second.pheromoneLayers[i] = itLED->second.pheromoneLayers[i] - 1;
+            }
         }
 
-        if (unLEDTimer == 0){
-            m_pcPhormica->GetLEDEquippedEntity().SetLEDColor(itLED->second.unLEDIndex,CColor::BLACK);
-            itLED->second.unCount = 0;
+        // Shift layers down if first is empty and a robot passed before
+        if (itLED->second.pheromoneLayers[0] == 0 && itLED-> second.layersEmpty  == false) {
+            for (UInt16 i = 1; i < itLED->second.pheromoneLayers.size(); ++i) {
+                itLED->second.pheromoneLayers[i - 1] = itLED->second.pheromoneLayers[i];
+                //  LOG << "SHIFT" << std::endl;
+            }
+        }
+
+         // Reset if all layers are empty
+        if (accumulate(itLED->second.pheromoneLayers.begin(), itLED->second.pheromoneLayers.end(), 0) == 0) {
+            itLED-> second.layersEmpty  = true;
+        }
+        // LOG << pheromoneLayers[1] << std::endl;
+        // Check for active pheromone (optional)
+        // pheromoneLayers.size() - 2
+        if (itLED->second.pheromoneLayers[itLED->second.pheromoneLayers.size() - 1] != 0) {
+            m_pcPhormica->GetLEDEquippedEntity().SetLEDColor(itLED->second.unLEDIndex,CColor::MAGENTA);
+            // LOG << "SHIFT" << std::endl;
         }
         else {
-            itLED->second.unTimer = unLEDTimer - 1;
+            m_pcPhormica->GetLEDEquippedEntity().SetLEDColor(itLED->second.unLEDIndex,CColor::BLACK);
+            // LOG << "BLACK" << std::endl;
         }
+
+    //     UInt32 unLEDTimer = itLED->second.unTimer;
+    //     UInt32 unLEDCount = itLED->second.unCount;
+        
+
+    //     if (unLEDCount > 20){
+    //         m_pcPhormica->GetLEDEquippedEntity().SetLEDColor(itLED->second.unLEDIndex,CColor::MAGENTA);
+    //     }
+
+    //     if (unLEDTimer == 0){
+    //         m_pcPhormica->GetLEDEquippedEntity().SetLEDColor(itLED->second.unLEDIndex,CColor::BLACK);
+    //         itLED->second.unCount = 0;
+    //     }
+    //     else {
+    //         itLED->second.unTimer = unLEDTimer - 1;
+    //     }
     }
 }
 

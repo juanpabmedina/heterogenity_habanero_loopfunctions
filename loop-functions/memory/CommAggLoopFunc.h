@@ -104,6 +104,8 @@ class CommAggLoopFunction: public CoreLoopFunctions {
         UInt32 unLEDIndex;
         UInt32 unTimer;
         UInt32 unCount;
+        std::vector<int> pheromoneLayers;
+        bool layersEmpty;
     };
 
     typedef std::map<CEPuckEntity*, RobotStateStruct> TRobotStateMap;

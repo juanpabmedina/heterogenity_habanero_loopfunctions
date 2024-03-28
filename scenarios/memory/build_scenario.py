@@ -21,11 +21,11 @@ def generate_block(block_id, size, position, orientation):
     led_0.set("anchor", "origin")
     led_0.set("color", "red")
     
-    # led_1 = ET.SubElement(leds, "led")
-    # led_1.set("id", "led_1")
-    # led_1.set("offset", " 0.0075, -0.0625, 0.067")
-    # led_1.set("anchor", "origin")
-    # led_1.set("color", "green")
+    led_1 = ET.SubElement(leds, "led")
+    led_1.set("id", "led_1")
+    led_1.set("offset", " 0.0075, -0.0625, 0.067")
+    led_1.set("anchor", "origin")
+    led_1.set("color", "green")
     
     return block
 
@@ -164,8 +164,8 @@ def modify_phormica_element(xml_file, element_name, new_element):
 
 
 number_edges=4
-number_boxes_per_edge=6
-lenght_boxes=0.35
+number_boxes_per_edge=8
+lenght_boxes=0.25
 
 blocks = generate_blocks(number_edges, number_boxes_per_edge, lenght_boxes)
 element_name="block"

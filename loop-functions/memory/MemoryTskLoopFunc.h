@@ -104,7 +104,7 @@ class MemoryTskLoopFunction: public CoreLoopFunctions {
         UInt32 unItem;
         UInt32 unPheromoneLEDs;
         UInt32 unId;
-        UInt32 unTimer; 
+        int unTimer; 
         bool visitedStation;
         UInt32 idStation;
     };
@@ -114,6 +114,8 @@ class MemoryTskLoopFunction: public CoreLoopFunctions {
         UInt32 unLEDIndex;
         UInt32 unTimer;
         UInt32 unCount;
+        std::vector<int> pheromoneLayers;
+        bool layersEmpty;
     };
 
     typedef std::map<CEPuckEntity*, RobotStateStruct> TRobotStateMap;

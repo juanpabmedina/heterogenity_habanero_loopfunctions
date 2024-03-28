@@ -2718,10 +2718,6 @@
     <range_and_bearing id="rab" grid_size="20,20,1" />
   </media>
   <visualization>
-    <qt-opengl>
-      <camera>
-        <placement idx="0" position="0,0,2.7" look_at="0,0,0" lens_focal_length="30" />
-      </camera>
-    </qt-opengl>
+
   </visualization>
 </argos-configuration>

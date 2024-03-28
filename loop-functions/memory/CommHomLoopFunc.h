@@ -83,6 +83,7 @@ class CommHomAggLoopFunction: public CoreLoopFunctions {
     UInt32 m_unStopBlock;
     UInt32 m_unNumberLEDs;
     Real m_fObjectiveFunction;
+    UInt32 randNum;
 
     /*
     * Parameter to determine the width of pheromone trail based on the UV LEDs
@@ -103,6 +104,8 @@ class CommHomAggLoopFunction: public CoreLoopFunctions {
         UInt32 unLEDIndex;
         UInt32 unTimer;
         UInt32 unCount;
+        std::vector<int> pheromoneLayers;
+        bool layersEmpty;
     };
 
     typedef std::map<CEPuckEntity*, RobotStateStruct> TRobotStateMap;
