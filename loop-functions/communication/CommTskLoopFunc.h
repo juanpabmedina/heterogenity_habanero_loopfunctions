@@ -19,11 +19,11 @@
 
 using namespace argos;
 
-class MemoryTskLoopFunction: public CoreLoopFunctions {
+class CommTskLoopFunction: public CoreLoopFunctions {
   public:
-    MemoryTskLoopFunction();
-    MemoryTskLoopFunction(const MemoryTskLoopFunction& orig);
-    virtual ~MemoryTskLoopFunction();
+    CommTskLoopFunction();
+    CommTskLoopFunction(const CommTskLoopFunction& orig);
+    virtual ~CommTskLoopFunction();
 
     virtual void Destroy();
 

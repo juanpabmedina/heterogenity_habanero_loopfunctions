@@ -6,7 +6,7 @@
   * @license MIT License
   */
 
-#include "MemoryTskLoopFunc.h"
+#include "CommTskLoopFunc.h"
 #include <fstream>
 #include <iostream>
 #include <numeric>
@@ -15,7 +15,7 @@ using namespace std;
 /****************************************/
 /****************************************/
 
-MemoryTskLoopFunction::MemoryTskLoopFunction() {
+CommTskLoopFunction::CommTskLoopFunction() {
     m_unClock = 0;
     m_unStopTime = 0;
     m_unStopBlock = 0;
@@ -26,18 +26,18 @@ MemoryTskLoopFunction::MemoryTskLoopFunction() {
 /****************************************/
 /****************************************/
 
-MemoryTskLoopFunction::MemoryTskLoopFunction(const MemoryTskLoopFunction& orig) {
+CommTskLoopFunction::CommTskLoopFunction(const CommTskLoopFunction& orig) {
 }
 
 /****************************************/
 /****************************************/
 
-MemoryTskLoopFunction::~MemoryTskLoopFunction() {}
+CommTskLoopFunction::~CommTskLoopFunction() {}
 
 /****************************************/
 /****************************************/
 
-void MemoryTskLoopFunction::Destroy() {
+void CommTskLoopFunction::Destroy() {
 
     m_tRobotStates.clear();
     m_tLEDStates.clear();
@@ -46,7 +46,7 @@ void MemoryTskLoopFunction::Destroy() {
 /****************************************/
 /****************************************/
 
-void MemoryTskLoopFunction::Init(TConfigurationNode& t_tree) {
+void CommTskLoopFunction::Init(TConfigurationNode& t_tree) {
 
     CoreLoopFunctions::Init(t_tree);
     TConfigurationNode cParametersNode;
@@ -72,7 +72,7 @@ void MemoryTskLoopFunction::Init(TConfigurationNode& t_tree) {
 /****************************************/
 /****************************************/
 
-void MemoryTskLoopFunction::Reset() {
+void CommTskLoopFunction::Reset() {
     CoreLoopFunctions::Reset();
 
     m_pcPhormica->GetLEDEquippedEntity().SetAllLEDsColors(CColor::BLACK);
@@ -94,7 +94,7 @@ void MemoryTskLoopFunction::Reset() {
 /****************************************/
 /****************************************/
 
-void MemoryTskLoopFunction::PostStep() {
+void CommTskLoopFunction::PostStep() {
 
     m_unClock = GetSpace().GetSimulationClock();
     GetRobotScore();
@@ -106,7 +106,7 @@ void MemoryTskLoopFunction::PostStep() {
 /****************************************/
 /****************************************/
 
-void MemoryTskLoopFunction::PostExperiment() {  
+void CommTskLoopFunction::PostExperiment() {  
 
     UInt16 count1 = 0;
     UInt16 count2 = 0;
@@ -138,7 +138,7 @@ void MemoryTskLoopFunction::PostExperiment() {
 /****************************************/
 /****************************************/
 
-Real MemoryTskLoopFunction::GetObjectiveFunction() {
+Real CommTskLoopFunction::GetObjectiveFunction() {
     if (m_bMaximization == true){
         return -m_fObjectiveFunction;
     }
@@ -150,7 +150,7 @@ Real MemoryTskLoopFunction::GetObjectiveFunction() {
 /****************************************/
 /****************************************/
 
-void MemoryTskLoopFunction::MocaControl() {
+void CommTskLoopFunction::MocaControl() {
 
     if (m_unClock == m_unStopTime) {
         CSpace::TMapPerType& tBlocksMap = GetSpace().GetEntitiesByType("block");
@@ -197,13 +197,13 @@ void MemoryTskLoopFunction::MocaControl() {
 /****************************************/
 /****************************************/
 
-void MemoryTskLoopFunction::TimerControl(){
+void CommTskLoopFunction::TimerControl(){
 }
 
 /****************************************/
 /****************************************/
 
-void MemoryTskLoopFunction::GetRobotScore() {
+void CommTskLoopFunction::GetRobotScore() {
 
   UpdateRobotPositions();
   CVector2 robotInStation;
@@ -229,7 +229,7 @@ void MemoryTskLoopFunction::GetRobotScore() {
     //    LOG << it->second.unTimer << std::endl;
     }
     else {
-        it->second.unTimer = 50;
+        it->second.unTimer = 30;
   
         if ( it->second.visitedStation == true){
             it->second.visitedStation = false;
@@ -251,7 +251,7 @@ void MemoryTskLoopFunction::GetRobotScore() {
 /****************************************/
 /****************************************/
 
-// Real MemoryTskLoopFunction::GetRobotOutScore() {
+// Real CommTskLoopFunction::GetRobotOutScore() {
 //
 //     UpdateRobotPositions();
 //
@@ -268,7 +268,7 @@ void MemoryTskLoopFunction::GetRobotScore() {
 /****************************************/
 /****************************************/
 
-argos::CColor MemoryTskLoopFunction::GetFloorColor(const argos::CVector2& c_position_on_plane) {
+argos::CColor CommTskLoopFunction::GetFloorColor(const argos::CVector2& c_position_on_plane) {
     float a = 0.06;
     float b = 0.03;
     float block = 0.125;
@@ -348,7 +348,7 @@ argos::CColor MemoryTskLoopFunction::GetFloorColor(const argos::CVector2& c_posi
     
 }
 
-std::pair<bool, int> MemoryTskLoopFunction::IsRobotInStation(CVector2 c_position_on_plane) {
+std::pair<bool, int> CommTskLoopFunction::IsRobotInStation(CVector2 c_position_on_plane) {
 
     float a = 0.1;
     float b = -0.01;
@@ -467,7 +467,7 @@ std::pair<bool, int> MemoryTskLoopFunction::IsRobotInStation(CVector2 c_position
 /****************************************/
 /****************************************/
 
-void MemoryTskLoopFunction::UpdateRobotPositions() {
+void CommTskLoopFunction::UpdateRobotPositions() {
     CSpace::TMapPerType& tEpuckMap = GetSpace().GetEntitiesByType("epuck");
     CVector2 cEpuckPosition(0,0);
     for (CSpace::TMapPerType::iterator it = tEpuckMap.begin(); it != tEpuckMap.end(); ++it) {
@@ -503,7 +503,7 @@ void MemoryTskLoopFunction::UpdateRobotPositions() {
 /****************************************/
 /****************************************/
 
-void MemoryTskLoopFunction::InitRobotStates() {
+void CommTskLoopFunction::InitRobotStates() {
 
     CSpace::TMapPerType& tEpuckMap = GetSpace().GetEntitiesByType("epuck");
     CVector2 cEpuckPosition(0,0);
@@ -527,12 +527,12 @@ void MemoryTskLoopFunction::InitRobotStates() {
 /****************************************/
 /****************************************/
 
-void MemoryTskLoopFunction::InitPhormicaState() {
+void CommTskLoopFunction::InitPhormicaState() {
 
     CSpace::TMapPerType& tPhormicaMap = GetSpace().GetEntitiesByType("phormica");
     CVector2 cLEDPosition(0,0);
     // Change the first argument to change the quantity of layers of pheromone
-    std::vector<int> pheromoneLayers(50,0);
+    std::vector<int> pheromoneLayers(30,0);
     for (CSpace::TMapPerType::iterator it = tPhormicaMap.begin(); it != tPhormicaMap.end(); ++it) {
         CPhormicaEntity* pcPhormica = any_cast<CPhormicaEntity*>(it->second);
         m_pcPhormica = pcPhormica;
@@ -554,7 +554,7 @@ void MemoryTskLoopFunction::InitPhormicaState() {
 /****************************************/
 /****************************************/
 
-void MemoryTskLoopFunction::UpdatePhormicaState() {
+void CommTskLoopFunction::UpdatePhormicaState() {
 
     CSpace::TMapPerType& tEpuckMap = GetSpace().GetEntitiesByType("epuck");
     CVector2 cEpuckPosition(0,0);
@@ -583,7 +583,7 @@ void MemoryTskLoopFunction::UpdatePhormicaState() {
             
             //if (d <= m_fPheromoneParameter) {
             if (d <= fPheromone) {
-                itLED->second.unTimer = 400; // Pheromone decay time
+                itLED->second.unTimer = 500; // Pheromone decay time
                 if (itLED->second.pheromoneLayers[itLED->second.pheromoneLayers.size() - 1] == 0)
                     // Find the first empty layer
                     for (UInt16 i = 0; i <  itLED->second.pheromoneLayers.size(); ++i) {
@@ -658,7 +658,7 @@ void MemoryTskLoopFunction::UpdatePhormicaState() {
 /****************************************/
 /****************************************/
 
-void MemoryTskLoopFunction::InitMocaState() {
+void CommTskLoopFunction::InitMocaState() {
 
   CSpace::TMapPerType& tBlocksMap = GetSpace().GetEntitiesByType("block");
   UInt32 unBlocksID = 0;
@@ -730,7 +730,7 @@ void MemoryTskLoopFunction::InitMocaState() {
 /****************************************/
 /****************************************/
 
-// CVector3 MemoryTskLoopFunction::GetRandomPosition() {
+// CVector3 CommTskLoopFunction::GetRandomPosition() {
 //   Real temp;
 //   Real a = m_pcRng->Uniform(CRange<Real>(0.0f, 1.0f));
 //   Real b = m_pcRng->Uniform(CRange<Real>(0.0f, 1.0f));
@@ -748,7 +748,7 @@ void MemoryTskLoopFunction::InitMocaState() {
 //
 //   return CVector3(fPosX, fPosY, 0);
 // }
-CVector3 MemoryTskLoopFunction::GetRandomPosition() {
+CVector3 CommTskLoopFunction::GetRandomPosition() {
 
   Real a;
   Real b;
@@ -765,7 +765,7 @@ CVector3 MemoryTskLoopFunction::GetRandomPosition() {
 /****************************************/
 /****************************************/
 
-UInt32 MemoryTskLoopFunction::GetRandomTime(UInt32 unMin, UInt32 unMax) {
+UInt32 CommTskLoopFunction::GetRandomTime(UInt32 unMin, UInt32 unMax) {
   UInt32 unStopAt = m_pcRng->Uniform(CRange<UInt32>(unMin, unMax));
   return unStopAt;
 
@@ -774,7 +774,7 @@ UInt32 MemoryTskLoopFunction::GetRandomTime(UInt32 unMin, UInt32 unMax) {
 /****************************************/
 /****************************************/
 
-bool MemoryTskLoopFunction::IsEven(UInt32 unNumber) {
+bool CommTskLoopFunction::IsEven(UInt32 unNumber) {
     bool even;
     if((unNumber%2)==0)
        even = true;
@@ -787,4 +787,4 @@ bool MemoryTskLoopFunction::IsEven(UInt32 unNumber) {
 /****************************************/
 /****************************************/
 
-REGISTER_LOOP_FUNCTIONS(MemoryTskLoopFunction, "memory_tsk_loop_function");
+REGISTER_LOOP_FUNCTIONS(CommTskLoopFunction, "communication_tsk_loop_function");

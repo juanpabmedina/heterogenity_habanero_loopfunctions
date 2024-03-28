@@ -67,12 +67,12 @@ p = 0.9
 
 # ####### HOMING #######
 
-# argos_file_path = 'homing.argos'
-# fsm_config_dict = {
-#     # 1: '--nstates 3 --s0 0 --rwm0 5 --cle0 0 --phe0 0 --n0 2 --n0x0 0 --c0x0 5 --p0x0 0.9 --l0x0 1 --f0x0 1 --n0x1 1 --c0x1 5 --p0x1 0.8 --l0x1 5 --f0x1 1 --s1 2 --fov1 1 --vel1 1.0 --cle1 0 --clr1 1 --phe1 1 --n1 1 --n1x0 0 --c1x0 3 --p1x0 0.5 --s2 2 --fov2 1 --vel2 1.0 --cle2 0 --clr2 5 --phe2 1 --n2 1 --n2x0 0 --c2x0 3 --p2x0 0.5',
-#     1: '--nstates 3 --s0 7 --rwm0 5 --cle0 0 --phe0 0 --n0 2 --n0x0 0 --c0x0 5 --p0x0 0.9 --l0x0 1 --f0x0 1 --n0x1 1 --c0x1 5 --p0x1 0.8 --l0x1 6 --f0x1 1 --s1 9 --fov1 1 --vel1 1.0 --cle1 6 --clr1 1 --phe1 0 --n1 1 --n1x0 0 --c1x0 3 --p1x0 0.5 --s2 9 --fov2 1 --vel2 1.0 --cle2 6 --clr2 6 --phe2 0 --n2 1 --n2x0 0 --c2x0 3 --p2x0 0.5',
-# }
-# new_quantity = [10]
+argos_file_path = 'homing.argos'
+fsm_config_dict = {
+    1: '--nstates 3 --s0 0 --rwm0 5 --cle0 0 --phe0 0 --n0 2 --n0x0 0 --c0x0 5 --p0x0 0.9 --l0x0 1 --f0x0 1 --n0x1 1 --c0x1 5 --p0x1 0.8 --l0x1 5 --f0x1 1 --s1 2 --fov1 1 --vel1 1.0 --cle1 0 --clr1 1 --phe1 1 --n1 1 --n1x0 0 --c1x0 3 --p1x0 0.5 --s2 2 --fov2 1 --vel2 1.0 --cle2 0 --clr2 5 --phe2 1 --n2 1 --n2x0 0 --c2x0 3 --p2x0 0.5',
+    # 1: '--nstates 3 --s0 7 --rwm0 5 --cle0 0 --phe0 0 --n0 2 --n0x0 0 --c0x0 5 --p0x0 0.9 --l0x0 1 --f0x0 1 --n0x1 1 --c0x1 5 --p0x1 0.8 --l0x1 6 --f0x1 1 --s1 9 --fov1 1 --vel1 1.0 --cle1 6 --clr1 1 --phe1 0 --n1 1 --n1x0 0 --c1x0 3 --p1x0 0.5 --s2 9 --fov2 1 --vel2 1.0 --cle2 6 --clr2 6 --phe2 0 --n2 1 --n2x0 0 --c2x0 3 --p2x0 0.5',
+}
+new_quantity = [10]
 
 ####### aggregation #######
 
@@ -80,21 +80,21 @@ p = 0.9
 # 1: '--nstates 3 --s0 0 --rwm0 5 --cle0 0 --phe0 0 --n0 2 --n0x0 0 --c0x0 5 --p0x0 0.9 --l0x0 6 --f0x0 1 --n0x1 1 --c0x1 5 --p0x1 0.8 --l0x1 5 --f0x1 1 --s1 2 --fov1 1 --vel1 1.0 --cle1 0 --clr1 6 --phe1 1 --n1 1 --n1x0 0 --c1x0 3 --p1x0 0.5 --s2 2 --fov2 1 --vel2 1.0 --cle2 0 --clr2 5 --phe2 1 --n2 1 --n2x0 0 --c2x0 3 --p2x0 0.5',
 
 ### tutti ######
-argos_file_path = 'aggregation.argos'
-fsm_config_dict = {
-    1: '--nstates 2 --s0 7 --rwm0 5 --cle0 0 --phe0 0 --n0 1 --n0x0 0 --c0x0 5 --p0x0 0.9 --l0x0 6 --f0x0 1 --s1 9 --fov1 1 --vel1 1.0 --cle1 6 --clr1 6 --phe1 0 --n1 1 --n1x0 0 --c1x0 3 --p1x0 0.5',
-    # 1: '--nstates 3 --s0 0 --rwm0 5 --cle0 0 --phe0 0 --n0 2 --n0x0 0 --c0x0 5 --p0x0 0.9 --l0x0 5 --f0x0 1 --n0x1 1 --c0x1 5 --p0x1 0.3 --l0x1 6 --f0x1 1 --s1 2 --fov1 1 --vel1 1.0 --cle1 0 --clr1 5 --phe1 1 --n1 1 --n1x0 0 --c1x0 3 --p1x0 0.5 --s2 2 --fov2 1 --vel2 1.0 --cle2 0 --clr2 6 --phe2 1 --n2 1 --n2x0 0 --c2x0 3 --p2x0 0.5',
-    # 1: '--nstates 2 --s0 0 --rwm0 5 --cle0 0 --phe0 0 --n0 1 --n0x0 0 --c0x0 4 --p0x0 0.8 --s1 2 --fov1 1 --vel1 1.0 --cle1 0 --clr1 5 --phe1 2 --n1 1 --n1x0 0 --c1x0 4 --p1x0 0.9',
-}
-new_quantity = [10]
+# argos_file_path = 'aggregation.argos'
+# fsm_config_dict = {
+#     1: '--nstates 2 --s0 7 --rwm0 5 --cle0 0 --phe0 0 --n0 1 --n0x0 0 --c0x0 5 --p0x0 0.9 --l0x0 6 --f0x0 1 --s1 9 --fov1 1 --vel1 1.0 --cle1 6 --clr1 6 --phe1 0 --n1 1 --n1x0 0 --c1x0 3 --p1x0 0.5',
+#     # 1: '--nstates 3 --s0 0 --rwm0 5 --cle0 0 --phe0 0 --n0 2 --n0x0 0 --c0x0 5 --p0x0 0.9 --l0x0 5 --f0x0 1 --n0x1 1 --c0x1 5 --p0x1 0.3 --l0x1 6 --f0x1 1 --s1 2 --fov1 1 --vel1 1.0 --cle1 0 --clr1 5 --phe1 1 --n1 1 --n1x0 0 --c1x0 3 --p1x0 0.5 --s2 2 --fov2 1 --vel2 1.0 --cle2 0 --clr2 6 --phe2 1 --n2 1 --n2x0 0 --c2x0 3 --p2x0 0.5',
+#     # 1: '--nstates 2 --s0 0 --rwm0 5 --cle0 0 --phe0 0 --n0 1 --n0x0 0 --c0x0 4 --p0x0 0.8 --s1 2 --fov1 1 --vel1 1.0 --cle1 0 --clr1 5 --phe1 2 --n1 1 --n1x0 0 --c1x0 4 --p1x0 0.9',
+# }
+# new_quantity = [10]
 
 
 ####### Tasking #######
 
-# argos_file_path = 'tasking.argos'
+# argos_file_path = '/home/robotmaster/argos3-installation/habanero/habanero-loopfunctions/scenarios/communication/tasking.argos'
 # fsm_config_dict = {
-#     1: '--nstates 3 --s0 10 --fov0 1.6 --vel0 1.0 --clr0 2 --cle0 0 --phe0 0 --n0 1 --n0x0 0 --c0x0 5 --p0x0 0.5 --l0x0 2 --f0x0 1.6 --s1 9 --fov1 1.6 --vel1 1.0 --clr1 2 --cle1 0 --phe1 0 --n1 2 --n1x0 1 --c1x0 1 --p1x0 0.8 --n1x1 0 --c1x1 5 --p1x1 1 --l1x1 6 --f1x1 1.6 --s2 11 --phe2 0 --cle2 6 --n2 1 --n2x0 0 --c2x0 4 --p2x0 0 ',
-#     # 1: '--nstates 3 --s0 3 --fov0 2.1 --vel0 1.0 --clr0 2 --phe0 0 --n0 1 --n0x0 0 --c0x0 5 --p0x0 0.5 --l0x0 2 --f0x0 2.1 --s1 2 --fov1 2.1 --vel1 1.0 --clr1 2 --phe1 0 --n1 2 --n1x0 1 --c1x0 1 --p1x0 0.8 --n1x1 0 --c1x1 5 --p1x1 1 --l1x1 5 --f1x1 2.1 --s2 4 --phe2 2 --n2 1 --n2x0 0 --c2x0 4 --p2x0 0.05 ',
+#     # 1: '--nstates 3 --s0 10 --fov0 1.6 --vel0 1.0 --clr0 2 --cle0 0 --phe0 0 --n0 1 --n0x0 0 --c0x0 5 --p0x0 0.5 --l0x0 2 --f0x0 1.6 --s1 9 --fov1 1.6 --vel1 1.0 --clr1 2 --cle1 0 --phe1 0 --n1 2 --n1x0 1 --c1x0 1 --p1x0 0.8 --n1x1 0 --c1x1 5 --p1x1 1 --l1x1 6 --f1x1 1.6 --s2 11 --phe2 0 --cle2 6 --n2 1 --n2x0 0 --c2x0 4 --p2x0 0 ',
+#     1: '--nstates 3 --s0 3 --fov0 2.1 --vel0 1.0 --clr0 2 --phe0 0 --n0 1 --n0x0 0 --c0x0 5 --p0x0 0.5 --l0x0 2 --f0x0 2.1 --s1 2 --fov1 2.1 --vel1 1.0 --clr1 2 --phe1 0 --n1 2 --n1x0 1 --c1x0 1 --p1x0 0.8 --n1x1 0 --c1x1 5 --p1x1 1 --l1x1 5 --f1x1 2.1 --s2 4 --phe2 2 --n2 1 --n2x0 0 --c2x0 4 --p2x0 0.05 ',
 #     # 1: '--nstates 3 --s0 0 --rwm0 5 --cle0 0 --phe0 0 --n0 1 --n0x0 0 --c0x0 5 --p0x0 0.5 --l0x0 3 --f0x0 1.6 --s1 2 --fov1 1.6 --vel1 1.0 --cle1 0 --clr1 3 --phe1 0 --n1 1 --n1x0 1 --c1x0 1 --p1x0 0.25 --s2 4 --phe2 1 --n2 1 --n2x0 0 --c2x0 4 --p2x0 0.05 ',
 # }
 # new_quantity = [16]
@@ -118,7 +118,7 @@ for n in range(1,len(new_quantity)+1):
     modify_quantity(argos_file_path, distribute_id, new_quantity[n-1], total_robots)
 
 n_exp = 10
-file_path = 'data/score_aggregation.txt'
+file_path = '/home/robotmaster/argos3-installation/habanero/habanero-loopfunctions/scenarios/communication/data/score_homing.txt'
 os.remove(file_path)
 data_score = []
 for _ in range(n_exp):
@@ -133,13 +133,13 @@ with open(file_path, 'r') as f:
 
 print(data_score)
 
-exp_name = 'aggregation2_tutti_100%'
+exp_name = 'homing3_habanero_100%'
 
 # Example data to append
 new_data = {'name': exp_name, 'fsm': fsm_config_dict, 'swarm': new_quantity,'iteraciones':n_exp, 'score': data_score}
 
 # Path to the CSV file
-csv_file_path = 'data/score.csv'
+csv_file_path = '/home/robotmaster/argos3-installation/habanero/habanero-loopfunctions/scenarios/communication/data/score.csv'
 
 # Try to read the existing CSV file, or create a new DataFrame if the file doesn't exist
 try:
