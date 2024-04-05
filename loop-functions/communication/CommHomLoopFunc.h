@@ -88,8 +88,19 @@ class CommHomAggLoopFunction: public CoreLoopFunctions {
     /*
     * Parameter to determine the width of pheromone trail based on the UV LEDs
     */
-
     Real m_fPheromoneParameter;
+
+    /* 
+     * Number of timesteps the stimulous is active
+     */
+    UInt32 m_uStmSteps;
+
+
+    /* 
+     * Parameter to determine which corner the robots aggregate
+     */
+    UInt32 m_uAggCorner;
+
 
     struct RobotStateStruct {
         CVector2 cLastPosition;

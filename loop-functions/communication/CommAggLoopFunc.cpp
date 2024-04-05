@@ -104,15 +104,15 @@ void CommAggLoopFunction::PostStep() {
 /****************************************/
 
 void CommAggLoopFunction::PostExperiment() {
-    ofstream score;
-    score.open("data/score_aggregation.txt", ofstream::app);
+    // ofstream score;
+    // score.open("data/score_aggregation.txt", ofstream::app);
     if (m_bMaximization == true){
         LOG << -m_fObjectiveFunction << std::endl;
-        score <<-m_fObjectiveFunction << std::endl;
+        // score <<-m_fObjectiveFunction << std::endl;
     }
     else {
         LOG << m_fObjectiveFunction << std::endl;
-        score <<m_fObjectiveFunction << std::endl;
+        // score <<m_fObjectiveFunction << std::endl;
 
     }
 }
@@ -215,7 +215,7 @@ void CommAggLoopFunction::GetRobotScore() {
     }
   }
 
-  m_fObjectiveFunction = distRobots/count;
+  m_fObjectiveFunction += distRobots/count;
 //   LOG<< "Mean: "<<m_fObjectiveFunction<< std::endl;
 }
 

@@ -61,8 +61,7 @@ void CommTskLoopFunction::Init(TConfigurationNode& t_tree) {
     m_cUVColor.SetGreen(0);
     m_cUVColor.SetBlue(128);
 
-    visitedId={0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
-    revisitedId={false,false,false,false,false,false,false,false,false,false,false,false,};
+    visitedId={0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
     InitRobotStates();
     InitPhormicaState();
     InitMocaState();
@@ -117,20 +116,20 @@ void CommTskLoopFunction::PostExperiment() {
         if (visitedId[i]>1){
             count2 += 1;
         }
-        LOG << visitedId[i] << std::endl;
+       // LOG << visitedId[i] << std::endl;
     }
     m_fObjectiveFunction = count1 - count2;
 
-    ofstream score;
-    score.open("data/score_tasking.txt", ofstream::app);
+    // ofstream score;
+    // score.open("data/score_tasking.txt", ofstream::app);
 
     if (m_bMaximization == true){
         LOG << -m_fObjectiveFunction << std::endl;
-        score <<-m_fObjectiveFunction << std::endl;
+        // score <<-m_fObjectiveFunction << std::endl;
     }
     else {
         LOG << m_fObjectiveFunction << std::endl;
-        score <<m_fObjectiveFunction << std::endl;
+        // score <<m_fObjectiveFunction << std::endl;
 
     }
 }
@@ -223,7 +222,7 @@ void CommTskLoopFunction::GetRobotScore() {
         else if (it->second.unTimer == 0){
             it->second.visitedStation = true;
             visitedId[it->second.idStation] = visitedId[it->second.idStation] + 1;
-            LOG << "Visited station: "<< it->second.idStation << std::endl;
+        //    LOG << "Visited station: "<< it->second.idStation << std::endl;
         }
        it->second.idStation = idStation;
     //    LOG << it->second.unTimer << std::endl;
@@ -270,7 +269,7 @@ void CommTskLoopFunction::GetRobotScore() {
 
 argos::CColor CommTskLoopFunction::GetFloorColor(const argos::CVector2& c_position_on_plane) {
     float a = 0.06;
-    float b = 0.03;
+    float b = 0;
     float block = 0.125;
     float separation = block*8;
     float offset = 0;
@@ -386,46 +385,46 @@ std::pair<bool, int> CommTskLoopFunction::IsRobotInStation(CVector2 c_position_o
 
     ///// Right side /////
     else if(c_position_on_plane.GetX() <= separation-block*(interSpace[0]) -b && c_position_on_plane.GetX() >= separation -block*(interSpace[0]+1) +b +offset&& c_position_on_plane.GetY() <= -separation + a  && c_position_on_plane.GetY() >= -separation){
-        id = 5;
+        id = 4;
         inStation = true;
         return std::make_pair(inStation,id);
     }
 
     else if(c_position_on_plane.GetX() <= separation-block*(interSpace[1]) -b && c_position_on_plane.GetX() >= separation -block*(interSpace[1]+1) +b +offset&& c_position_on_plane.GetY() <= -separation + a  && c_position_on_plane.GetY() >= -separation){
-        id = 6;
+        id = 5;
         inStation = true;
         return std::make_pair(inStation,id);
     }
 
     else if(c_position_on_plane.GetX() <= separation-block*(interSpace[2]) - b && c_position_on_plane.GetX() >= separation -block*(interSpace[2]+1) +b +offset&& c_position_on_plane.GetY() <= -separation + a  && c_position_on_plane.GetY() >= -separation){
-        id = 7;
+        id = 6;
         inStation = true;
         return std::make_pair(inStation,id);
     }
     else if(c_position_on_plane.GetX() <= separation-block*(interSpace[3]) -b && c_position_on_plane.GetX() >= separation -block*(interSpace[3]+1) +b +offset&& c_position_on_plane.GetY() <= -separation + a  && c_position_on_plane.GetY() >= -separation){
-        id = 8;
+        id = 7;
         inStation = true;
         return std::make_pair(inStation,id);
     }
 
     ///// Top side /////
     else if(c_position_on_plane.GetY() <= separation-block*(interSpace[0]) - b && c_position_on_plane.GetY() >= separation -block*(interSpace[0]+1) +b +offset&& c_position_on_plane.GetX() >= separation - a && c_position_on_plane.GetX() <= separation  ){
-        id = 10;
+        id = 8;
         inStation = true;
         return std::make_pair(inStation,id);
     }
     else if(c_position_on_plane.GetY() <= separation-block*(interSpace[1]) - b && c_position_on_plane.GetY() >= separation -block*(interSpace[1]+1) +b +offset&& c_position_on_plane.GetX() >= separation - a && c_position_on_plane.GetX() <= separation  ){
-        id = 11;
+        id = 9;
         inStation = true;
         return std::make_pair(inStation,id);
     }
     else if(c_position_on_plane.GetY() <= separation-block*(interSpace[2]) - b && c_position_on_plane.GetY() >= separation -block*(interSpace[2]+1) +b +offset&& c_position_on_plane.GetX() >= separation - a  && c_position_on_plane.GetX() <= separation ){
-        id = 12;
+        id = 10;
         inStation = true;
         return std::make_pair(inStation,id);
     }
     else if(c_position_on_plane.GetY() <= separation-block*(interSpace[3]) - b && c_position_on_plane.GetY() >= separation -block*(interSpace[3]+1) +b +offset&& c_position_on_plane.GetX() >= separation - a && c_position_on_plane.GetX() <= separation  ){
-        id = 13;
+        id = 11;
         inStation = true;
         return std::make_pair(inStation,id);
     }
@@ -433,25 +432,25 @@ std::pair<bool, int> CommTskLoopFunction::IsRobotInStation(CVector2 c_position_o
 
     ///// Bottom side /////
     else if(c_position_on_plane.GetY() <= separation-block*(interSpace[0]) - b -offset&& c_position_on_plane.GetY() >= separation -block*(interSpace[0]+1) +b && c_position_on_plane.GetX() <= -separation + a  && c_position_on_plane.GetX() >= -separation){
-        id = 15;
+        id = 12;
         inStation = true;
         return std::make_pair(inStation,id);
     }
 
     else if(c_position_on_plane.GetY() <= separation-block*(interSpace[1]) - b -offset&& c_position_on_plane.GetY() >= separation -block*(interSpace[1]+1) +b && c_position_on_plane.GetX() <= -separation + a  && c_position_on_plane.GetX() >= -separation){
-        id = 16;
+        id = 13;
         inStation = true;
         return std::make_pair(inStation,id);
     }
 
     else if(c_position_on_plane.GetY() <= separation-block*(interSpace[2]) - b -offset&& c_position_on_plane.GetY() >= separation -block*(interSpace[2]+1)+b && c_position_on_plane.GetX() <= -separation + a  && c_position_on_plane.GetX() >= -separation){
-        id = 17;
+        id = 14;
         inStation = true;
         return std::make_pair(inStation,id);
     }
 
     else if(c_position_on_plane.GetY() <= separation-block*(interSpace[3]) - b -offset&& c_position_on_plane.GetY() >= separation -block*(interSpace[3]+1) +b && c_position_on_plane.GetX() <= -separation + a  && c_position_on_plane.GetX() >= -separation){
-        id = 18;
+        id = 15;
         inStation = true;
         return std::make_pair(inStation,id);
     }

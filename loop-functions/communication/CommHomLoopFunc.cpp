@@ -52,6 +52,8 @@ void CommHomAggLoopFunction::Init(TConfigurationNode& t_tree) {
     try {
       cParametersNode = GetNode(t_tree, "params");
       GetNodeAttributeOrDefault(cParametersNode, "maximization", m_bMaximization, (bool) false);
+      GetNodeAttributeOrDefault(cParametersNode, "stm_steps", m_uStmSteps, (UInt32) 1200);
+      GetNodeAttributeOrDefault(cParametersNode, "agg_corner", m_uAggCorner, (UInt32) 0);
       // m_bMaximization = true;
     } catch(std::exception e) {
     }
@@ -59,7 +61,6 @@ void CommHomAggLoopFunction::Init(TConfigurationNode& t_tree) {
     m_cUVColor.SetRed(128);
     m_cUVColor.SetGreen(0);
     m_cUVColor.SetBlue(128);
-    randNum = GetRandomTime(0,4);
 
     InitRobotStates();
     InitPhormicaState();
@@ -81,8 +82,6 @@ void CommHomAggLoopFunction::Reset() {
 
     m_tRobotStates.clear(); 
     m_tLEDStates.clear();
-    
-    randNum = GetRandomTime(0,4);
 
     InitMocaState();
     InitRobotStates();
@@ -110,15 +109,15 @@ void CommHomAggLoopFunction::PostStep() {
 
 void CommHomAggLoopFunction::PostExperiment() {
 
-    ofstream score;
-    score.open("data/score_homing.txt", ofstream::app);
+    // ofstream score;
+    // score.open("data/score_homing.txt", ofstream::app);
     if (m_bMaximization == true){
         LOG << -m_fObjectiveFunction << std::endl;
-        score <<-m_fObjectiveFunction << std::endl;
+        // score <<-m_fObjectiveFunction << std::endl;
     }
     else {
         LOG << m_fObjectiveFunction << std::endl;
-        score <<m_fObjectiveFunction << std::endl;
+        // score <<m_fObjectiveFunction << std::endl;
 
     }
 }
@@ -188,10 +187,9 @@ void CommHomAggLoopFunction::MocaControl() {
 void CommHomAggLoopFunction::TimerControl(){
 
     if (m_unClock == 1) {
-        m_unStopTime = 1200;
+        m_unStopTime = m_uStmSteps;
     }
 }
-
 /****************************************/
 /****************************************/
 
@@ -201,24 +199,24 @@ void CommHomAggLoopFunction::GetRobotScore() {
     
     Real unScore = 0;
     TRobotStateMap::iterator it;
-    LOG << randNum << std::endl;
+    //LOG << m_uAggCorner << std::endl;
     for (it = m_tRobotStates.begin(); it != m_tRobotStates.end(); ++it) {
         
-        if ((it->second.cPosition.GetY() >= 0.25 && it->second.cPosition.GetY() <= 0.75 && it->second.cPosition.GetX() >= 0.25 && it->second.cPosition.GetX() <= 0.75) && randNum == 0){
+        if ((it->second.cPosition.GetY() >= 0.25 && it->second.cPosition.GetY() <= 0.75 && it->second.cPosition.GetX() >= 0.25 && it->second.cPosition.GetX() <= 0.75) && m_uAggCorner == 0){
             unScore+=1;
-            LOG << "Estacion 0" << std::endl;
+            //LOG << "Estacion 0" << std::endl;
         } 
-        else if ((it->second.cPosition.GetY() >= 0.25 && it->second.cPosition.GetY() <= 0.75 && it->second.cPosition.GetX() <= -0.25 && it->second.cPosition.GetX() >= -0.75)  && randNum == 1){
+        else if ((it->second.cPosition.GetY() >= 0.25 && it->second.cPosition.GetY() <= 0.75 && it->second.cPosition.GetX() <= -0.25 && it->second.cPosition.GetX() >= -0.75)  && m_uAggCorner == 1){
             unScore+=1;
-            LOG << "Estacion 1" << std::endl;
+            //LOG << "Estacion 1" << std::endl;
         } 
-        else if ((it->second.cPosition.GetY()<= -0.25 && it->second.cPosition.GetY() >= -0.75 && it->second.cPosition.GetX() <= -0.25 && it->second.cPosition.GetX() >= -0.75)  && randNum == 2){
+        else if ((it->second.cPosition.GetY()<= -0.25 && it->second.cPosition.GetY() >= -0.75 && it->second.cPosition.GetX() <= -0.25 && it->second.cPosition.GetX() >= -0.75)  && m_uAggCorner == 2){
             unScore+=1;
-            LOG << "Estacion 2" << std::endl;
+            //LOG << "Estacion 2" << std::endl;
         }
-        else if ((it->second.cPosition.GetY() <= -0.25 && it->second.cPosition.GetY() >= -0.75 && it->second.cPosition.GetX() >= 0.25 && it->second.cPosition.GetX() <= 0.75) && randNum == 3){
+        else if ((it->second.cPosition.GetY() <= -0.25 && it->second.cPosition.GetY() >= -0.75 && it->second.cPosition.GetX() >= 0.25 && it->second.cPosition.GetX() <= 0.75) && m_uAggCorner == 3){
             unScore+=1;
-            LOG << "Estacion 3" << std::endl;
+            //LOG << "Estacion 3" << std::endl;
         } 
 
     }
@@ -249,16 +247,16 @@ void CommHomAggLoopFunction::GetRobotScore() {
 /****************************************/
 
 argos::CColor CommHomAggLoopFunction::GetFloorColor(const argos::CVector2& c_position_on_plane) {
-    // if (c_position_on_plane.GetY() >= 0.25 && c_position_on_plane.GetY() <= 0.75+0.1 && c_position_on_plane.GetX() >= 0.25 && c_position_on_plane.GetX() <= 0.75+0.1 && randNum == 0){
+    // if (c_position_on_plane.GetY() >= 0.25 && c_position_on_plane.GetY() <= 0.75+0.1 && c_position_on_plane.GetX() >= 0.25 && c_position_on_plane.GetX() <= 0.75+0.1 && m_uAggCorner == 0){
     //     return CColor::RED;
     // } 
-    // else if (c_position_on_plane.GetY() >= 0.25 && c_position_on_plane.GetY() <= 0.75+0.1 && c_position_on_plane.GetX() <= -0.25 && c_position_on_plane.GetX() >= -0.75-0.1&& randNum == 1){
+    // else if (c_position_on_plane.GetY() >= 0.25 && c_position_on_plane.GetY() <= 0.75+0.1 && c_position_on_plane.GetX() <= -0.25 && c_position_on_plane.GetX() >= -0.75-0.1&& m_uAggCorner == 1){
     //     return CColor::GREEN;
     // } 
-    // else if (c_position_on_plane.GetY() <= -0.25 && c_position_on_plane.GetY() >= -0.75-0.1 && c_position_on_plane.GetX() <= -0.25 && c_position_on_plane.GetX() >= -0.75-0.1&& randNum == 2){
+    // else if (c_position_on_plane.GetY() <= -0.25 && c_position_on_plane.GetY() >= -0.75-0.1 && c_position_on_plane.GetX() <= -0.25 && c_position_on_plane.GetX() >= -0.75-0.1&& m_uAggCorner == 2){
     //     return CColor::BLUE;
     // }
-    // else if (c_position_on_plane.GetY() <= -0.25 && c_position_on_plane.GetY() >= -0.75-0.1 && c_position_on_plane.GetX() >= 0.25 && c_position_on_plane.GetX() <= 0.75+0.1&& randNum == 3){
+    // else if (c_position_on_plane.GetY() <= -0.25 && c_position_on_plane.GetY() >= -0.75-0.1 && c_position_on_plane.GetX() >= 0.25 && c_position_on_plane.GetX() <= 0.75+0.1&& m_uAggCorner == 3){
     //     return CColor::YELLOW;
     // } 
 
@@ -468,16 +466,16 @@ void CommHomAggLoopFunction::InitMocaState() {
       pcBlock->GetLEDEquippedEntity().Enable();
       pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::BLACK);
 
-    if (((nBlockId >= 0 && nBlockId <= 1) || (nBlockId >= 22 && nBlockId <= 23)) && randNum == 0) {
+    if (((nBlockId >= 0 && nBlockId <= 1) || (nBlockId >= 22 && nBlockId <= 23)) && m_uAggCorner == 0) {
         pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::RED);
     }
-    else if ((nBlockId >= 4 && nBlockId <= 7 && randNum == 1)) {
+    else if ((nBlockId >= 4 && nBlockId <= 7 && m_uAggCorner == 1)) {
         pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::RED);
     }
-    else if ((nBlockId >= 10 && nBlockId <= 13) && randNum == 2) {
+    else if ((nBlockId >= 10 && nBlockId <= 13) && m_uAggCorner == 2) {
         pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::RED);
     }
-    else if ((nBlockId >= 16 && nBlockId <= 19) && randNum == 3) {
+    else if ((nBlockId >= 16 && nBlockId <= 19) && m_uAggCorner == 3) {
         pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::RED);
     }
 
