@@ -1,12 +1,15 @@
+<?xml version="1.0" ?>
 <argos-configuration>
   <framework>
     <experiment length="120" ticks_per_second="10" random_seed="0" />
   </framework>
-  <loop_functions library="/home/robotmaster/argos3-installation/habanero/habanero-loopfunctions/build/loop-functions/communication/libcommunication_tsk_loopfunc.so" label="communication_tsk_loop_function">
-    <params number_robots="[16]" dist_radius="1.0" maximization="true" />
+  <!-- <loop_functions library="/home/robotmaster/argos3-installation/habanero/habanero-loopfunctions/build/loop-functions/communication/libcommunication_tsk_loopfunc.so" label="communication_tsk_loop_function"> -->
+  <loop_functions library="/home/dgarzon/communication/habanero-loopfunctions/build/loop-functions/communication/libcommunication_tsk_loopfunc.so" label="communication_tsk_loop_function">
+    <params number_robots="16" dist_radius="1.0" maximization="true" />
   </loop_functions>
   <controllers>
-    <automode_controller id="heterogeneity1" library="/home/robotmaster/argos3-installation/habanero/AutoMoDe-habanero/build/src/libautomode.so">
+    <!-- <automode_controller id="heterogeneity1" library="/home/robotmaster/argos3-installation/habanero/AutoMoDe-habanero/build/src/libautomode.so"> -->
+	  <automode_controller id="heterogeneity1" library="/home/dgarzon/communication/AutoMoDe-habanero/build/src/libautomode.so">
       <actuators>
         <epuck_wheels implementation="default" noise_std_dev="0.05" />
         <epuck_rgb_leds implementation="default" medium="leds" />
@@ -21,7 +24,7 @@
         <epuck_ground implementation="rot_z_only" noise_level="0.05" calibrated="true" />
         <epuck_omnidirectional_camera implementation="rot_z_only" medium="leds" show_rays="false" />
       </sensors>
-      <params readable="true" history="false" fsm-config="--nstates 3 --s0 10 --fov0 1.6 --vel0 1.0 --clr0 2 --cle0 0 --phe0 0 --n0 1 --n0x0 0 --c0x0 5 --p0x0 0.5 --l0x0 2 --f0x0 1.6 --s1 9 --fov1 1.6 --vel1 1.0 --clr1 2 --cle1 0 --phe1 0 --n1 2 --n1x0 1 --c1x0 1 --p1x0 0.8 --n1x1 0 --c1x1 5 --p1x1 1 --l1x1 6 --f1x1 1.6 --s2 11 --phe2 0 --cle2 6 --n2 1 --n2x0 0 --c2x0 4 --p2x0 0 " />
+      <params readable="false" history="false" fsm-config="--nstates 3 --s0 3 --fov0 2.1 --vel0 1.0 --clr0 2 --phe0 0 --n0 1 --n0x0 0 --c0x0 5 --p0x0 0.5 --l0x0 2 --f0x0 2.1 --s1 2 --fov1 2.1 --vel1 1.0 --clr1 2 --phe1 0 --n1 2 --n1x0 1 --c1x0 1 --p1x0 0.8 --n1x1 0 --c1x1 5 --p1x1 1 --l1x1 5 --f1x1 2.1 --s2 4 --phe2 2 --n2 1 --n2x0 0 --c2x0 4 --p2x0 0.05 " />
     </automode_controller>
   </controllers>
   <arena size="2.5, 2.5, 0.30" center="0,0,0">
