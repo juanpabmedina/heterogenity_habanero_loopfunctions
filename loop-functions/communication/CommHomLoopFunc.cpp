@@ -58,6 +58,10 @@ void CommHomAggLoopFunction::Init(TConfigurationNode& t_tree) {
     } catch(std::exception e) {
     }
 
+    if (m_uAggCorner == 0){
+        m_uAggCorner = GetRandomTime(1,5);
+    }
+
     m_cUVColor.SetRed(128);
     m_cUVColor.SetGreen(0);
     m_cUVColor.SetBlue(128);
@@ -73,6 +77,10 @@ void CommHomAggLoopFunction::Init(TConfigurationNode& t_tree) {
 
 void CommHomAggLoopFunction::Reset() {
     CoreLoopFunctions::Reset();
+
+    if (m_uAggCorner == 0){
+        m_uAggCorner = GetRandomTime(1,5);
+    }
 
     m_pcPhormica->GetLEDEquippedEntity().SetAllLEDsColors(CColor::BLACK);
     m_unClock = 0;
@@ -202,19 +210,19 @@ void CommHomAggLoopFunction::GetRobotScore() {
     //LOG << m_uAggCorner << std::endl;
     for (it = m_tRobotStates.begin(); it != m_tRobotStates.end(); ++it) {
         
-        if ((it->second.cPosition.GetY() >= 0.25 && it->second.cPosition.GetY() <= 0.75 && it->second.cPosition.GetX() >= 0.25 && it->second.cPosition.GetX() <= 0.75) && m_uAggCorner == 0){
+        if ((it->second.cPosition.GetY() >= 0.25 && it->second.cPosition.GetY() <= 0.75 && it->second.cPosition.GetX() >= 0.25 && it->second.cPosition.GetX() <= 0.75) && m_uAggCorner == 1){
             unScore+=1;
             //LOG << "Estacion 0" << std::endl;
         } 
-        else if ((it->second.cPosition.GetY() >= 0.25 && it->second.cPosition.GetY() <= 0.75 && it->second.cPosition.GetX() <= -0.25 && it->second.cPosition.GetX() >= -0.75)  && m_uAggCorner == 1){
+        else if ((it->second.cPosition.GetY() >= 0.25 && it->second.cPosition.GetY() <= 0.75 && it->second.cPosition.GetX() <= -0.25 && it->second.cPosition.GetX() >= -0.75)  && m_uAggCorner == 2){
             unScore+=1;
             //LOG << "Estacion 1" << std::endl;
         } 
-        else if ((it->second.cPosition.GetY()<= -0.25 && it->second.cPosition.GetY() >= -0.75 && it->second.cPosition.GetX() <= -0.25 && it->second.cPosition.GetX() >= -0.75)  && m_uAggCorner == 2){
+        else if ((it->second.cPosition.GetY()<= -0.25 && it->second.cPosition.GetY() >= -0.75 && it->second.cPosition.GetX() <= -0.25 && it->second.cPosition.GetX() >= -0.75)  && m_uAggCorner == 3){
             unScore+=1;
             //LOG << "Estacion 2" << std::endl;
         }
-        else if ((it->second.cPosition.GetY() <= -0.25 && it->second.cPosition.GetY() >= -0.75 && it->second.cPosition.GetX() >= 0.25 && it->second.cPosition.GetX() <= 0.75) && m_uAggCorner == 3){
+        else if ((it->second.cPosition.GetY() <= -0.25 && it->second.cPosition.GetY() >= -0.75 && it->second.cPosition.GetX() >= 0.25 && it->second.cPosition.GetX() <= 0.75) && m_uAggCorner == 4){
             unScore+=1;
             //LOG << "Estacion 3" << std::endl;
         } 
