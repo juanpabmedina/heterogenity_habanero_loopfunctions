@@ -350,7 +350,7 @@ argos::CColor CommTskLoopFunction::GetFloorColor(const argos::CVector2& c_positi
 std::pair<bool, int> CommTskLoopFunction::IsRobotInStation(CVector2 c_position_on_plane) {
 
     float a = 0.1;
-    float b = -0.01;
+    float b = -0.02;
     float block = 0.125;
     int id;
     bool inStation;

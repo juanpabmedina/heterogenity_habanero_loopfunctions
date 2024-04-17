@@ -24,7 +24,7 @@
         <epuck_ground implementation="rot_z_only" noise_level="0.05" calibrated="true" />
         <epuck_omnidirectional_camera implementation="rot_z_only" medium="leds" show_rays="false" />
       </sensors>
-      <params readable="false" history="false" fsm-config="--nstates 3 --s0 3 --fov0 2.1 --vel0 1.0 --clr0 2 --phe0 0 --n0 1 --n0x0 0 --c0x0 5 --p0x0 0.5 --l0x0 2 --f0x0 2.1 --s1 2 --fov1 2.1 --vel1 1.0 --clr1 2 --phe1 0 --n1 2 --n1x0 1 --c1x0 1 --p1x0 0.8 --n1x1 0 --c1x1 5 --p1x1 1 --l1x1 5 --f1x1 2.1 --s2 4 --phe2 2 --n2 1 --n2x0 0 --c2x0 4 --p2x0 0.05 " />
+      <params readable="false" history="false" fsm-config='--nstates 3 --s0 3 --fov0 2.1 --vel0 1.0 --clr0 2 --phe0 0 --n0 1 --n0x0 0 --c0x0 5 --p0x0 0.5 --l0x0 2 --f0x0 2.1 --s1 2 --fov1 2.1 --vel1 1.0 --clr1 2 --phe1 0 --n1 2 --n1x0 1 --c1x0 1 --p1x0 0.8 --n1x1 0 --c1x1 5 --p1x1 1 --l1x1 5 --f1x1 2.1 --s2 4 --phe2 2 --n2 1 --n2x0 0 --c2x0 4 --p2x0 0.05 ' />
     </automode_controller>
   </controllers>
   <arena size="2.5, 2.5, 0.30" center="0,0,0">
@@ -4372,7 +4372,14 @@
     <led id="leds" grid_size="20,20,1" />
     <range_and_bearing id="rab" grid_size="20,20,1" />
   </media>
-  <visualization>
-
-  </visualization>
+  <!-- <visualization>
+    <qt-opengl>
+      <camera>
+        <placement idx="0"
+                   position="0,0,2.7"
+                   look_at="0,0,0"
+                   lens_focal_length="30" />
+      </camera>
+    </qt-opengl>
+  </visualization> -->
 </argos-configuration>

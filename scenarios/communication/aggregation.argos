@@ -3,14 +3,14 @@
   <framework>
     <experiment length="120" ticks_per_second="10" random_seed="0" />
   </framework>
-  <!-- <loop_functions library="/home/robotmaster/argos3-installation/habanero/habanero-loopfunctions/build/loop-functions/communication/libcommunication_aggregation_loopfunc.so" label="comm_agg_loop_function"> -->
-  <loop_functions library="/home/dgarzon/communication/habanero-loopfunctions/build/loop-functions/communication/libcommunication_aggregation_loopfunc.so" label="comm_agg_loop_function">
+  <loop_functions library="/home/robotmaster/argos3-installation/habanero/habanero-loopfunctions/build/loop-functions/communication/libcommunication_aggregation_loopfunc.so" label="comm_agg_loop_function">
+  <!-- <loop_functions library="/home/dgarzon/communication/habanero-loopfunctions/build/loop-functions/communication/libcommunication_aggregation_loopfunc.so" label="comm_agg_loop_function"> -->
     <params number_robots="16" dist_radius="1.0" maximization="false" />
   </loop_functions>
 
   <controllers>
-    <!-- <automode_controller id="heterogeneity1" library="/home/robotmaster/argos3-installation/habanero/AutoMoDe-habanero/build/src/libautomode.so"> -->
-	  <automode_controller id="heterogeneity1" library="/home/dgarzon/communication/AutoMoDe-habanero/build/src/libautomode.so">
+    <automode_controller id="heterogeneity1" library="/home/robotmaster/argos3-installation/habanero/AutoMoDe-habanero/build/src/libautomode.so">
+	  <!-- <automode_controller id="heterogeneity1" library="/home/dgarzon/communication/AutoMoDe-habanero/build/src/libautomode.so"> -->
       <actuators>
         <epuck_wheels implementation="default" noise_std_dev="0.05" />
         <epuck_rgb_leds implementation="default" medium="leds" />
@@ -40,6 +40,43 @@
         </e-puck>
       </entity>
     </distribute>
+
+      <cylinder id="c1" height="0.1" radius="0.03" mass="0.1" movable="false">
+      <body position="0.5,0,0" orientation="0,0,0" />
+      <leds medium="leds">
+        <led id="led_0" offset=" 0, 0,0.11" anchor="origin" color="cyan" />
+      </leds>
+    </cylinder>
+
+    <cylinder id="c2" height="0.1" radius="0.03" mass="0.1" movable="false">
+      <body position="-0.5,0,0" orientation="0,0,0" />
+      <leds medium="leds">
+        <led id="led_0" offset=" 0, 0,0.11" anchor="origin" color="cyan" />
+      </leds>
+    </cylinder>
+
+    <cylinder id="c3" height="0.1" radius="0.03" mass="0.1" movable="false">
+      <body position="0,0.5,0" orientation="0,0,0" />
+      <leds medium="leds">
+        <led id="led_0" offset=" 0, 0,0.11" anchor="origin" color="cyan" />
+      </leds>
+    </cylinder>
+
+    <cylinder id="c4" height="0.1" radius="0.03" mass="0.1" movable="false">
+      <body position="0,-0.5,0" orientation="0,0,0" />
+      <leds medium="leds">
+        <led id="led_0" offset=" 0, 0,0.11" anchor="origin" color="cyan" />
+      </leds>
+    </cylinder>
+
+    <cylinder id="c5" height="0.1" radius="0.03" mass="0.1" movable="false">
+      <body position="0,0,0" orientation="0,0,0" />
+      <leds medium="leds">
+        <led id="led_0" offset=" 0, 0,0.11" anchor="origin" color="cyan" />
+      </leds>
+    </cylinder>
+
+
     <phormica id="phormica" size="0,0,0" movable="false">
       <body position="0,0,0" orientation="0,0,0" />
       <leds medium="leds">
@@ -2545,43 +2582,6 @@
         <led id="led_3499" offset="0.7200000000000013,0.7200000000000013,0.0001" anchor="origin" color="white" />
       </leds>
     </phormica>
-
-    <cylinder id="c1" height="0.1" radius="0.03" mass="0.1" movable="false">
-      <body position="0.5,0,0" orientation="0,0,0" />
-      <leds medium="leds">
-        <led id="led_0" offset=" 0, 0,0.11" anchor="origin" color="cyan" />
-      </leds>
-    </cylinder>
-
-    <cylinder id="c2" height="0.1" radius="0.03" mass="0.1" movable="false">
-      <body position="-0.5,0,0" orientation="0,0,0" />
-      <leds medium="leds">
-        <led id="led_0" offset=" 0, 0,0.11" anchor="origin" color="cyan" />
-      </leds>
-    </cylinder>
-
-    <cylinder id="c3" height="0.1" radius="0.03" mass="0.1" movable="false">
-      <body position="0,0.5,0" orientation="0,0,0" />
-      <leds medium="leds">
-        <led id="led_0" offset=" 0, 0,0.11" anchor="origin" color="cyan" />
-      </leds>
-    </cylinder>
-
-    <cylinder id="c4" height="0.1" radius="0.03" mass="0.1" movable="false">
-      <body position="0,-0.5,0" orientation="0,0,0" />
-      <leds medium="leds">
-        <led id="led_0" offset=" 0, 0,0.11" anchor="origin" color="cyan" />
-      </leds>
-    </cylinder>
-
-    
-
-    <cylinder id="c5" height="0.1" radius="0.03" mass="0.1" movable="false">
-      <body position="0,0,0" orientation="0,0,0" />
-      <leds medium="leds">
-        <led id="led_0" offset=" 0, 0,0.11" anchor="origin" color="cyan" />
-      </leds>
-    </cylinder>
 
     <block id="block_00" size="0.01,0.25,0.1" movable="false">
       <body position="0.625,0.75,0" orientation="-90.0,0,0" />

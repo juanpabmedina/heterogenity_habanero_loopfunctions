@@ -232,6 +232,7 @@ void CommHomAggLoopFunction::GetRobotScore() {
     
 
   m_fObjectiveFunction += unScore;
+//   LOG<< m_fObjectiveFunction << std::endl;
 }
 
 /****************************************/
@@ -255,16 +256,16 @@ void CommHomAggLoopFunction::GetRobotScore() {
 /****************************************/
 
 argos::CColor CommHomAggLoopFunction::GetFloorColor(const argos::CVector2& c_position_on_plane) {
-    // if (c_position_on_plane.GetY() >= 0.25 && c_position_on_plane.GetY() <= 0.75+0.1 && c_position_on_plane.GetX() >= 0.25 && c_position_on_plane.GetX() <= 0.75+0.1 && m_uAggCorner == 0){
+    // if (c_position_on_plane.GetY() >= 0.25 && c_position_on_plane.GetY() <= 0.75+0.1 && c_position_on_plane.GetX() >= 0.25 && c_position_on_plane.GetX() <= 0.75+0.1 && m_uAggCorner == 1){
     //     return CColor::RED;
     // } 
-    // else if (c_position_on_plane.GetY() >= 0.25 && c_position_on_plane.GetY() <= 0.75+0.1 && c_position_on_plane.GetX() <= -0.25 && c_position_on_plane.GetX() >= -0.75-0.1&& m_uAggCorner == 1){
+    // else if (c_position_on_plane.GetY() >= 0.25 && c_position_on_plane.GetY() <= 0.75+0.1 && c_position_on_plane.GetX() <= -0.25 && c_position_on_plane.GetX() >= -0.75-0.1&& m_uAggCorner == 2){
     //     return CColor::GREEN;
     // } 
-    // else if (c_position_on_plane.GetY() <= -0.25 && c_position_on_plane.GetY() >= -0.75-0.1 && c_position_on_plane.GetX() <= -0.25 && c_position_on_plane.GetX() >= -0.75-0.1&& m_uAggCorner == 2){
+    // else if (c_position_on_plane.GetY() <= -0.25 && c_position_on_plane.GetY() >= -0.75-0.1 && c_position_on_plane.GetX() <= -0.25 && c_position_on_plane.GetX() >= -0.75-0.1&& m_uAggCorner == 3){
     //     return CColor::BLUE;
     // }
-    // else if (c_position_on_plane.GetY() <= -0.25 && c_position_on_plane.GetY() >= -0.75-0.1 && c_position_on_plane.GetX() >= 0.25 && c_position_on_plane.GetX() <= 0.75+0.1&& m_uAggCorner == 3){
+    // else if (c_position_on_plane.GetY() <= -0.25 && c_position_on_plane.GetY() >= -0.75-0.1 && c_position_on_plane.GetX() >= 0.25 && c_position_on_plane.GetX() <= 0.75+0.1&& m_uAggCorner == 4){
     //     return CColor::YELLOW;
     // } 
 
@@ -474,16 +475,16 @@ void CommHomAggLoopFunction::InitMocaState() {
       pcBlock->GetLEDEquippedEntity().Enable();
       pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::BLACK);
 
-    if (((nBlockId >= 0 && nBlockId <= 1) || (nBlockId >= 22 && nBlockId <= 23)) && m_uAggCorner == 0) {
+    if (((nBlockId >= 0 && nBlockId <= 1) || (nBlockId >= 22 && nBlockId <= 23)) && m_uAggCorner == 1) {
         pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::RED);
     }
-    else if ((nBlockId >= 4 && nBlockId <= 7 && m_uAggCorner == 1)) {
+    else if ((nBlockId >= 4 && nBlockId <= 7 && m_uAggCorner == 2)) {
         pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::RED);
     }
-    else if ((nBlockId >= 10 && nBlockId <= 13) && m_uAggCorner == 2) {
+    else if ((nBlockId >= 10 && nBlockId <= 13) && m_uAggCorner == 3) {
         pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::RED);
     }
-    else if ((nBlockId >= 16 && nBlockId <= 19) && m_uAggCorner == 3) {
+    else if ((nBlockId >= 16 && nBlockId <= 19) && m_uAggCorner == 4) {
         pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::RED);
     }
 
