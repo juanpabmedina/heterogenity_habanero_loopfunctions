@@ -50,10 +50,16 @@ void CommAggLoopFunction::Init(TConfigurationNode& t_tree) {
     CoreLoopFunctions::Init(t_tree);
     TConfigurationNode cParametersNode;
     try {
-      cParametersNode = GetNode(t_tree, "params");
-      GetNodeAttributeOrDefault(cParametersNode, "maximization", m_bMaximization, (bool) false);
+    cParametersNode = GetNode(t_tree, "params");
+    GetNodeAttributeOrDefault(cParametersNode, "maximization", m_bMaximization, (bool) false);
+    GetNodeAttributeOrDefault(cParametersNode, "agg_corner", m_uAggCorner, (UInt32) 0);
       // m_bMaximization = true;
     } catch(std::exception e) {
+    }
+
+
+    if (m_uAggCorner == 1){
+        m_uAggCorner = GetRandomTime(1,5);
     }
 
     m_cUVColor.SetRed(128);
@@ -71,6 +77,10 @@ void CommAggLoopFunction::Init(TConfigurationNode& t_tree) {
 
 void CommAggLoopFunction::Reset() {
     CoreLoopFunctions::Reset();
+
+    if (m_uAggCorner == 1){
+        m_uAggCorner = GetRandomTime(1,5);
+    }
 
     m_pcPhormica->GetLEDEquippedEntity().SetAllLEDsColors(CColor::BLACK);
     m_unClock = 0;
@@ -92,10 +102,12 @@ void CommAggLoopFunction::Reset() {
 void CommAggLoopFunction::PostStep() {
 
     m_unClock = GetSpace().GetSimulationClock();
-    TimerControl();
+    // TimerControl();
+     UpdateRobotPositions();
     MocaControl();
     UpdatePhormicaState();
-    GetRobotScore();
+   
+    
     
     // LOG << m_fObjectiveFunction << std::endl;
 }
@@ -104,8 +116,9 @@ void CommAggLoopFunction::PostStep() {
 /****************************************/
 
 void CommAggLoopFunction::PostExperiment() {
+    GetRobotScore();
     // ofstream score;
-    // score.open("data/score_aggregation.txt", ofstream::app);
+    // score.open("/home/robotmaster/argos3-installation/habanero/habanero-loopfunctions/data/score_aggregation.txt", ofstream::app);
     if (m_bMaximization == true){
         LOG << -m_fObjectiveFunction << std::endl;
         // score <<-m_fObjectiveFunction << std::endl;
@@ -196,27 +209,34 @@ void CommAggLoopFunction::GetRobotScore() {
   Real unScore = 0;
   TRobotStateMap::iterator it1;
   TRobotStateMap::iterator it2;
-  float distX;
-  float distY;
-  float distRobots=0;
+  float distX=0;
+  float distY=0;
+  float centerX;
+  float centerY;
+  float sumX=0;
+  float sumY=0;
   int count=0;
-  for (it1 = m_tRobotStates.begin(); it1 != m_tRobotStates.end(); ++it1) {
-    for (it2 = m_tRobotStates.begin(); it2 != m_tRobotStates.end(); ++it2){
 
-        if (it1!=it2){
-            distX = it1->second.cPosition.GetX() - it2->second.cPosition.GetX();
-            distY = it1->second.cPosition.GetY() - it2->second.cPosition.GetY();
-            distRobots = distRobots + sqrt(pow(distX,2) + pow(distY,2));
-            count = count + 1; 
-            // LOG<< sqrt(pow(distX,2) + pow(distY,2))<< std::endl;
-        }
-        
-
+    for (it1 = m_tRobotStates.begin(); it1 != m_tRobotStates.end(); ++it1) {
+        sumX += it1->second.cPosition.GetX();
+        sumY += it1->second.cPosition.GetY();
+        count += 1; 
     }
-  }
+    centerX = sumX/count;
+    centerY = sumY/count;
+    // LOG<< "center x: "<<centerX<< std::endl;
 
-  m_fObjectiveFunction += distRobots/count;
-//   LOG<< "Mean: "<<m_fObjectiveFunction<< std::endl;
+    // LOG<< "center y: "<<centerY<< std::endl;
+
+    for (it1 = m_tRobotStates.begin(); it1 != m_tRobotStates.end(); ++it1) {
+        distX += abs(it1->second.cPosition.GetX() - centerX);
+        distY += abs(it1->second.cPosition.GetY() - centerY);
+    }
+    // LOG<< "Total: "<<sqrt(pow(distX/count,2) + pow(distY/count,2))<< std::endl;
+
+  m_fObjectiveFunction = sqrt(pow(distX/count,2) + pow(distY/count,2));
+
+  
 }
 
 /****************************************/
@@ -360,10 +380,11 @@ void CommAggLoopFunction::UpdatePhormicaState() {
             
             // fPheromone = 0.01;
            
+            UInt32 swarmId = it->second.unId;
+            
             //if (d <= m_fPheromoneParameter) {
             if (d <= fPheromone) {
                 itLED->second.unTimer = 500; // Pheromone decay time
-
                 if (itLED->second.pheromoneLayers[itLED->second.pheromoneLayers.size() - 1] == 0)
                     // Find the first empty layer
                     for (UInt16 i = 0; i <  itLED->second.pheromoneLayers.size(); ++i) {
@@ -386,7 +407,6 @@ void CommAggLoopFunction::UpdatePhormicaState() {
                 itLED->second.unCount = itLED->second.unCount + 1;
             }
         }
-        
         // Decrease decay time for non-empty layers
         for (UInt16 i = 0; i < itLED->second.pheromoneLayers.size(); ++i) {
             if (itLED->second.pheromoneLayers[i] != 0) {
@@ -449,9 +469,32 @@ void CommAggLoopFunction::InitMocaState() {
         UInt32 nBlockId = std::stoi(strBlockId);
       pcBlock->GetLEDEquippedEntity().Enable();
       pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::BLACK);
-    // if ((nBlockId >= 0 && nBlockId <= 1) || (nBlockId >= 22 && nBlockId <= 23)) {
-    //     pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::RED);
+
+    if ((nBlockId >= 0 && nBlockId <= 23) && m_uAggCorner == 0) {
+        pcBlock->GetLEDEquippedEntity().SetLEDColor(0,CColor::CYAN);
+    }
+    
+    // else if ((nBlockId >= 0 && nBlockId <= 23) && m_uAggCorner == 1) {
+        
+    //     if (nBlockId % 3 == 0){
+    //         LOG << "Bloque encendido: "<<nBlockId<< std::endl;
+    //         pcBlock->GetLEDEquippedEntity().SetLEDColor(0,CColor::RED);
+    //     }
     // }
+        
+
+    else if (((nBlockId >= 0 && nBlockId <= 1) || (nBlockId >= 22 && nBlockId <= 23)) && m_uAggCorner == 1) {
+        pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::CYAN);
+    }
+    else if ((nBlockId >= 4 && nBlockId <= 7 && m_uAggCorner == 2)) {
+        pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::CYAN);
+    }
+    else if ((nBlockId >= 10 && nBlockId <= 13) && m_uAggCorner == 3) {
+        pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::CYAN);
+    }
+    else if ((nBlockId >= 16 && nBlockId <= 19) && m_uAggCorner == 4) {
+        pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::CYAN);
+    }
 
     unBlocksID += 1;
   }

@@ -3,10 +3,11 @@
   <framework>
     <experiment length="120" ticks_per_second="10" random_seed="0" />
   </framework>
-  <!-- <loop_functions library="/home/robotmaster/argos3-installation/habanero/habanero-loopfunctions/build/loop-functions/communication/libcommunication_homing_loopfunc.so" label="comm_hom_loop_function"> -->
-  <loop_functions library="/home/dgarzon/communication/habanero-loopfunctions/build/loop-functions/communication/libcommunication_homing_loopfunc.so" label="comm_hom_loop_function">
-    <params number_robots="16" dist_radius="1.0" maximization="true" stm_steps="1200" agg_corner="0"/>
+  <!-- <loop_functions library="/home/robotmaster/argos3-installation/habanero/habanero-loopfunctions/build/loop-functions/communication/libcommunication_aggregation_loopfunc.so" label="comm_agg_loop_function"> -->
+  <loop_functions library="/home/dgarzon/communication/habanero-loopfunctions/build/loop-functions/communication/libcommunication_aggregation_loopfunc.so" label="comm_agg_loop_function">
+    <params number_robots="16" dist_radius="1.0" maximization="false" agg_corner="0"/>
   </loop_functions>
+
   <controllers>
     <!-- <automode_controller id="heterogeneity1" library="/home/robotmaster/argos3-installation/habanero/AutoMoDe-habanero/build/src/libautomode.so"> -->
 	  <automode_controller id="heterogeneity1" library="/home/dgarzon/communication/AutoMoDe-habanero/build/src/libautomode.so">
@@ -24,7 +25,7 @@
         <epuck_ground implementation="rot_z_only" noise_level="0.05" calibrated="true" />
         <epuck_omnidirectional_camera implementation="rot_z_only" medium="leds" show_rays="false" />
       </sensors>
-      <params readable="false" history="false" fsm-config='--nstates 1 --s0 9 --fov0 1 --vel0 1.0 --cle0 6 --clr0 1 --phe0 0' />
+      <params readable="false" history="false" fsm-config='--nstates 2 --s0 0 --rwm0 5 --cle0 0 --phe0 0 --n0 1 --n0x0 0 --c0x0 4 --p0x0 0.8 --s1 2 --fov1 1 --vel1 1.0 --cle1 0 --clr1 5 --phe1 2 --n1 1 --n1x0 0 --c1x0 4 --p1x0 0.9' />
     </automode_controller>
   </controllers>
   <arena size="2, 2, 0.30" center="0,0,0">
@@ -39,6 +40,8 @@
         </e-puck>
       </entity>
     </distribute>
+
+
     <phormica id="phormica" size="0,0,0" movable="false">
       <body position="0,0,0" orientation="0,0,0" />
       <leds medium="leds">
@@ -2544,6 +2547,7 @@
         <led id="led_3499" offset="0.7200000000000013,0.7200000000000013,0.0001" anchor="origin" color="white" />
       </leds>
     </phormica>
+
     <block id="block_00" size="0.01,0.25,0.1" movable="false">
       <body position="0.625,0.75,0" orientation="-90.0,0,0" />
       <leds medium="leds">
@@ -2721,7 +2725,7 @@
     <range_and_bearing id="rab" grid_size="20,20,1" />
   </media>
   <visualization>
-    <!-- <qt-opengl>
+      <!-- <qt-opengl>
       <camera>
         <placement idx="0"
                    position="0,0,2.7"

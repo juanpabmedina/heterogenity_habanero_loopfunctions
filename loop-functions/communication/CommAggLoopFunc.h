@@ -79,6 +79,11 @@ class CommAggLoopFunction: public CoreLoopFunctions {
      */
     bool m_bMaximization;
 
+    /* 
+     * Parameter to determine which corner the robots aggregate
+     */
+    UInt32 m_uAggCorner;
+
     UInt32 m_unClock;
     UInt32 m_unStopTime;
     UInt32 m_unStopBlock;

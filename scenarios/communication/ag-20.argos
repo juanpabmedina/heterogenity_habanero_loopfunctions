@@ -3,14 +3,14 @@
   <framework>
     <experiment length="120" ticks_per_second="10" random_seed="0" />
   </framework>
-  <loop_functions library="/home/robotmaster/argos3-installation/habanero/habanero-loopfunctions/build/loop-functions/communication/libcommunication_aggregation_loopfunc.so" label="comm_agg_loop_function">
-  <!-- <loop_functions library="/home/dgarzon/communication/habanero-loopfunctions/build/loop-functions/communication/libcommunication_aggregation_loopfunc.so" label="comm_agg_loop_function"> -->
-    <params number_robots="16" dist_radius="1.0" maximization="false" />
+  <!-- <loop_functions library="/home/robotmaster/argos3-installation/habanero/habanero-loopfunctions/build/loop-functions/communication/libcommunication_aggregation_loopfunc.so" label="comm_agg_loop_function"> -->
+  <loop_functions library="/home/dgarzon/communication/habanero-loopfunctions/build/loop-functions/communication/libcommunication_aggregation_loopfunc.so" label="comm_agg_loop_function">
+    <params number_robots="16" dist_radius="1.0" maximization="false" agg_corner="1"/>
   </loop_functions>
 
   <controllers>
-    <automode_controller id="heterogeneity1" library="/home/robotmaster/argos3-installation/habanero/AutoMoDe-habanero/build/src/libautomode.so">
-	  <!-- <automode_controller id="heterogeneity1" library="/home/dgarzon/communication/AutoMoDe-habanero/build/src/libautomode.so"> -->
+    <!-- <automode_controller id="heterogeneity1" library="/home/robotmaster/argos3-installation/habanero/AutoMoDe-habanero/build/src/libautomode.so"> -->
+	  <automode_controller id="heterogeneity1" library="/home/dgarzon/communication/AutoMoDe-habanero/build/src/libautomode.so">
       <actuators>
         <epuck_wheels implementation="default" noise_std_dev="0.05" />
         <epuck_rgb_leds implementation="default" medium="leds" />
@@ -25,7 +25,7 @@
         <epuck_ground implementation="rot_z_only" noise_level="0.05" calibrated="true" />
         <epuck_omnidirectional_camera implementation="rot_z_only" medium="leds" show_rays="false" />
       </sensors>
-      <params readable="false" history="false" fsm-config="--nstates 2 --s0 7 --rwm0 5 --cle0 0 --phe0 0 --n0 1 --n0x0 0 --c0x0 5 --p0x0 0.9 --l0x0 6 --f0x0 1 --s1 9 --fov1 1 --vel1 1.0 --cle1 6 --clr1 6 --phe1 0 --n1 1 --n1x0 0 --c1x0 3 --p1x0 0.5" />
+      <params readable="false" history="false" fsm-config='--nstates 1 --s0 2 --fov0 1 --vel0 1.0 --clr0 6 --phe0 1' />
     </automode_controller>
   </controllers>
   <arena size="2, 2, 0.30" center="0,0,0">
@@ -40,41 +40,6 @@
         </e-puck>
       </entity>
     </distribute>
-
-      <cylinder id="c1" height="0.1" radius="0.03" mass="0.1" movable="false">
-      <body position="0.5,0,0" orientation="0,0,0" />
-      <leds medium="leds">
-        <led id="led_0" offset=" 0, 0,0.11" anchor="origin" color="cyan" />
-      </leds>
-    </cylinder>
-
-    <cylinder id="c2" height="0.1" radius="0.03" mass="0.1" movable="false">
-      <body position="-0.5,0,0" orientation="0,0,0" />
-      <leds medium="leds">
-        <led id="led_0" offset=" 0, 0,0.11" anchor="origin" color="cyan" />
-      </leds>
-    </cylinder>
-
-    <cylinder id="c3" height="0.1" radius="0.03" mass="0.1" movable="false">
-      <body position="0,0.5,0" orientation="0,0,0" />
-      <leds medium="leds">
-        <led id="led_0" offset=" 0, 0,0.11" anchor="origin" color="cyan" />
-      </leds>
-    </cylinder>
-
-    <cylinder id="c4" height="0.1" radius="0.03" mass="0.1" movable="false">
-      <body position="0,-0.5,0" orientation="0,0,0" />
-      <leds medium="leds">
-        <led id="led_0" offset=" 0, 0,0.11" anchor="origin" color="cyan" />
-      </leds>
-    </cylinder>
-
-    <cylinder id="c5" height="0.1" radius="0.03" mass="0.1" movable="false">
-      <body position="0,0,0" orientation="0,0,0" />
-      <leds medium="leds">
-        <led id="led_0" offset=" 0, 0,0.11" anchor="origin" color="cyan" />
-      </leds>
-    </cylinder>
 
 
     <phormica id="phormica" size="0,0,0" movable="false">
@@ -2759,6 +2724,14 @@
     <led id="leds" grid_size="20,20,1" />
     <range_and_bearing id="rab" grid_size="20,20,1" />
   </media>
-  <visualization>
-  </visualization>
+  <!-- <visualization>
+      <qt-opengl>
+      <camera>
+        <placement idx="0"
+                   position="0,0,2.7"
+                   look_at="0,0,0"
+                   lens_focal_length="30" />
+      </camera>
+    </qt-opengl>
+  </visualization> -->
 </argos-configuration>
