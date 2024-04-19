@@ -25,7 +25,7 @@
         <epuck_ground implementation="rot_z_only" noise_level="0.05" calibrated="true" />
         <epuck_omnidirectional_camera implementation="rot_z_only" medium="leds" show_rays="false" />
       </sensors>
-      <params readable="false" history="false" fsm-config='--nstates 1 --s0 2 --fov0 1 --vel0 1.0 --clr0 6 --phe0 1' />
+      <params readable="false" history="false" fsm-config='  --nstates 1 --s0 9 --fov0 1 --vel0 1.0 --clr0 6 --cle0 0 --phe0 0' />
     </automode_controller>
   </controllers>
   <arena size="2, 2, 0.30" center="0,0,0">

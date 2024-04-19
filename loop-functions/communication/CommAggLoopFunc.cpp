@@ -52,14 +52,20 @@ void CommAggLoopFunction::Init(TConfigurationNode& t_tree) {
     try {
     cParametersNode = GetNode(t_tree, "params");
     GetNodeAttributeOrDefault(cParametersNode, "maximization", m_bMaximization, (bool) false);
-    GetNodeAttributeOrDefault(cParametersNode, "agg_corner", m_uAggCorner, (UInt32) 0);
+    GetNodeAttributeOrDefault(cParametersNode, "agg_corner", m_uAggCorner, (int) 0);
       // m_bMaximization = true;
     } catch(std::exception e) {
     }
 
 
-    if (m_uAggCorner == 1){
-        m_uAggCorner = GetRandomTime(1,5);
+    if (m_uAggCorner == 0){
+        agg_number = GetRandomTime(1,3);
+    }
+    else if (m_uAggCorner == 1){
+        agg_number = GetRandomTime(10,14);
+    }
+    else if (m_uAggCorner < 0){
+        agg_number = -m_uAggCorner;
     }
 
     m_cUVColor.SetRed(128);
@@ -78,10 +84,16 @@ void CommAggLoopFunction::Init(TConfigurationNode& t_tree) {
 void CommAggLoopFunction::Reset() {
     CoreLoopFunctions::Reset();
 
-    if (m_uAggCorner == 1){
-        m_uAggCorner = GetRandomTime(1,5);
+    if (m_uAggCorner == 0){
+        agg_number = GetRandomTime(1,3);
     }
-
+    else if (m_uAggCorner == 1){
+        agg_number = GetRandomTime(10,14);
+    }
+    else if (m_uAggCorner < 0){
+        agg_number = -m_uAggCorner;
+    }
+    
     m_pcPhormica->GetLEDEquippedEntity().SetAllLEDsColors(CColor::BLACK);
     m_unClock = 0;
     m_unStopBlock = 0;
@@ -103,7 +115,8 @@ void CommAggLoopFunction::PostStep() {
 
     m_unClock = GetSpace().GetSimulationClock();
     // TimerControl();
-     UpdateRobotPositions();
+    //  UpdateRobotPositions();
+    GetRobotScore();
     MocaControl();
     UpdatePhormicaState();
    
@@ -116,7 +129,7 @@ void CommAggLoopFunction::PostStep() {
 /****************************************/
 
 void CommAggLoopFunction::PostExperiment() {
-    GetRobotScore();
+    
     // ofstream score;
     // score.open("/home/robotmaster/argos3-installation/habanero/habanero-loopfunctions/data/score_aggregation.txt", ofstream::app);
     if (m_bMaximization == true){
@@ -234,7 +247,7 @@ void CommAggLoopFunction::GetRobotScore() {
     }
     // LOG<< "Total: "<<sqrt(pow(distX/count,2) + pow(distY/count,2))<< std::endl;
 
-  m_fObjectiveFunction = sqrt(pow(distX/count,2) + pow(distY/count,2));
+  m_fObjectiveFunction += sqrt(pow(distX/count,2) + pow(distY/count,2));
 
   
 }
@@ -469,30 +482,29 @@ void CommAggLoopFunction::InitMocaState() {
         UInt32 nBlockId = std::stoi(strBlockId);
       pcBlock->GetLEDEquippedEntity().Enable();
       pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::BLACK);
+    if (((nBlockId >= 0 && nBlockId <= 1) || (nBlockId >= 22 && nBlockId <= 23)) && agg_number == 10) {
+        pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::CYAN);
+    }
+    else if ((nBlockId >= 4 && nBlockId <= 7 && agg_number == 11)) {
+        pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::CYAN);
+    }
+    else if ((nBlockId >= 10 && nBlockId <= 13) && agg_number == 12) {
+        pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::CYAN);
+    }
+    else if ((nBlockId >= 16 && nBlockId <= 19) && agg_number == 13) {
+        pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::CYAN);
+    }
 
-    if ((nBlockId >= 0 && nBlockId <= 23) && m_uAggCorner == 0) {
-        pcBlock->GetLEDEquippedEntity().SetLEDColor(0,CColor::CYAN);
-    }
-    
-    // else if ((nBlockId >= 0 && nBlockId <= 23) && m_uAggCorner == 1) {
-        
-    //     if (nBlockId % 3 == 0){
-    //         LOG << "Bloque encendido: "<<nBlockId<< std::endl;
-    //         pcBlock->GetLEDEquippedEntity().SetLEDColor(0,CColor::RED);
-    //     }
-    // }
-        
-
-    else if (((nBlockId >= 0 && nBlockId <= 1) || (nBlockId >= 22 && nBlockId <= 23)) && m_uAggCorner == 1) {
+    else if (((nBlockId >= 0 && nBlockId <= 1) || (nBlockId >= 22 && nBlockId <= 23)) && agg_number == 1) {
         pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::CYAN);
     }
-    else if ((nBlockId >= 4 && nBlockId <= 7 && m_uAggCorner == 2)) {
+    else if ((nBlockId >= 4 && nBlockId <= 7 && agg_number == 2)) {
         pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::CYAN);
     }
-    else if ((nBlockId >= 10 && nBlockId <= 13) && m_uAggCorner == 3) {
+    else if ((nBlockId >= 10 && nBlockId <= 13) && agg_number == 1) {
         pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::CYAN);
     }
-    else if ((nBlockId >= 16 && nBlockId <= 19) && m_uAggCorner == 4) {
+    else if ((nBlockId >= 16 && nBlockId <= 19) && agg_number == 2) {
         pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::CYAN);
     }
 

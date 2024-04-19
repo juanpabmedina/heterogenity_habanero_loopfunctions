@@ -82,7 +82,9 @@ class CommAggLoopFunction: public CoreLoopFunctions {
     /* 
      * Parameter to determine which corner the robots aggregate
      */
-    UInt32 m_uAggCorner;
+    int m_uAggCorner;
+
+    UInt32 agg_number;
 
     UInt32 m_unClock;
     UInt32 m_unStopTime;

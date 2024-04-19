@@ -19,7 +19,7 @@ def run_Argos(argos):
 
     subprocess.run(["bash", 'argos.sh'], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
-argos_file_path = '/home/robotmaster/argos3-installation/habanero/habanero-loopfunctions/scenarios/communication/aggregation.argos'
+argos_file_path = '/home/robotmaster/argos3-installation/habanero/habanero-loopfunctions/scenarios/communication/ag-100.argos'
 n_exp = 10
 file_path = '/home/robotmaster/argos3-installation/habanero/habanero-loopfunctions/data/score_aggregation.txt'
 
@@ -40,7 +40,7 @@ with open(file_path, 'r') as f:
 
 print(data_score)
 
-exp_name = 'aggregation6_habanero_100%'
+exp_name = 'aggregation7_tutti_100%'
 
 # Example data to append
 new_data = {'name': exp_name, 'fsm': fsm_config_dict, 'swarm': new_quantity,'iteraciones':n_exp, 'score': data_score}
