@@ -3,14 +3,14 @@
   <framework>
     <experiment length="120" ticks_per_second="10" random_seed="0" />
   </framework>
-  <!-- <loop_functions library="/home/robotmaster/argos3-installation/habanero/habanero-loopfunctions/build/loop-functions/communication/libcommunication_aggregation_loopfunc.so" label="comm_agg_loop_function"> -->
-  <loop_functions library="/home/dgarzon/communication/habanero-loopfunctions/build/loop-functions/communication/libcommunication_aggregation_loopfunc.so" label="comm_agg_loop_function">
+  <loop_functions library="/home/robotmaster/argos3-installation/habanero/habanero-loopfunctions/build/loop-functions/communication/libcommunication_aggregation_loopfunc.so" label="comm_agg_loop_function">
+  <!-- <loop_functions library="/home/dgarzon/communication/habanero-loopfunctions/build/loop-functions/communication/libcommunication_aggregation_loopfunc.so" label="comm_agg_loop_function"> -->
     <params number_robots="16" dist_radius="1.0" maximization="false" agg_corner="0"/>
   </loop_functions>
 
   <controllers>
-    <!-- <automode_controller id="heterogeneity1" library="/home/robotmaster/argos3-installation/habanero/AutoMoDe-habanero/build/src/libautomode.so"> -->
-	  <automode_controller id="heterogeneity1" library="/home/dgarzon/communication/AutoMoDe-habanero/build/src/libautomode.so">
+    <automode_controller id="heterogeneity1" library="/home/robotmaster/argos3-installation/habanero/AutoMoDe-habanero/build/src/libautomode.so">
+	  <!-- <automode_controller id="heterogeneity1" library="/home/dgarzon/communication/AutoMoDe-habanero/build/src/libautomode.so"> -->
       <actuators>
         <epuck_wheels implementation="default" noise_std_dev="0.05" />
         <epuck_rgb_leds implementation="default" medium="leds" />
@@ -25,7 +25,7 @@
         <epuck_ground implementation="rot_z_only" noise_level="0.05" calibrated="true" />
         <epuck_omnidirectional_camera implementation="rot_z_only" medium="leds" show_rays="false" />
       </sensors>
-      <params readable="false" history="false" fsm-config='  --com1 --nstates 2 --s0 9 --fov0 1 --vel0 1.0 --clr0 2 --cle0 6 --phe0 0 --n0 3 --n0x0 0 --c0x0 5 --p0x0 0.24 --f0x0 1 --l0x0 5 --n0x1 0 --c0x1 5 --p0x1 0.19 --f0x1 0 --l0x1 1 --n0x2 0 --c0x2 2 --p0x2 0.71 --s1 9 --fov1 1 --vel1 1.0 --clr1 6 --cle1 6 --phe1 0 --n1 2 --n1x0 0 --c1x0 0 --p1x0 0.89 --n1x1 0 --c1x1 4 --p1x1 0.65'  />
+      <params readable="false" history="false" fsm-config=' --com1 --nstates 2 --s0 9 --fov0 1 --vel0 1.0 --clr0 2 --cle0 6 --phe0 0 --n0 3 --n0x0 0 --c0x0 5 --p0x0 0.24 --f0x0 1 --l0x0 5 --n0x1 0 --c0x1 5 --p0x1 0.19 --f0x1 0 --l0x1 1 --n0x2 0 --c0x2 2 --p0x2 0.71 --s1 9 --fov1 1 --vel1 1.0 --clr1 6 --cle1 6 --phe1 0 --n1 2 --n1x0 0 --c1x0 0 --p1x0 0.89 --n1x1 0 --c1x1 4 --p1x1 0.65'  />
     </automode_controller>
   </controllers>
   <arena size="2, 2, 0.30" center="0,0,0">
@@ -2725,13 +2725,13 @@
     <range_and_bearing id="rab" grid_size="20,20,1" />
   </media>
   <visualization>
-      <!-- <qt-opengl>
+      <qt-opengl>
       <camera>
         <placement idx="0"
                    position="0,0,2.7"
                    look_at="0,0,0"
                    lens_focal_length="30" />
       </camera>
-    </qt-opengl> -->
+    </qt-opengl>
   </visualization>
 </argos-configuration>

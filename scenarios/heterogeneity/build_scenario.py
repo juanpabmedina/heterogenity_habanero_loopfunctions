@@ -166,13 +166,13 @@ number_edges=4
 number_boxes_per_edge=6
 lenght_boxes=0.25
 
-blocks = generate_blocks(number_edges, number_boxes_per_edge, lenght_boxes)
-element_name="block"
-modify_arena_element("chain_robots.argos",element_name, blocks)
+# blocks = generate_blocks(number_edges, number_boxes_per_edge, lenght_boxes)
+# element_name="block"
+# modify_arena_element("chain_robots.argos",element_name, blocks)
 
 led_size = 0.03
 x_size = lenght_boxes*number_boxes_per_edge/2 # Half of the total size to init in the center :)
 y_size = x_size
-leds = generate_leds(x_size, y_size, led_size)
+leds = generate_leds(1, 1, led_size)
 element_name="led"
-modify_phormica_element("chain_robots.argos",element_name, leds)
+modify_phormica_element("/home/robotmaster/argos3-installation/habanero/habanero-loopfunctions/scenarios/heterogeneity/chain_robots.argos",element_name, leds)

@@ -40,7 +40,7 @@ with open(file_path, 'r') as f:
 
 print(data_score)
 
-exp_name = 'aggregation7_tutti_100%'
+exp_name = 'aggregation8_habanero_100%'
 
 # Example data to append
 new_data = {'name': exp_name, 'fsm': fsm_config_dict, 'swarm': new_quantity,'iteraciones':n_exp, 'score': data_score}
