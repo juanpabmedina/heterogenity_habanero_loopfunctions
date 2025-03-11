@@ -118,7 +118,7 @@ void CommHomAggLoopFunction::PostStep() {
 void CommHomAggLoopFunction::PostExperiment() {
 
     // ofstream score;
-    // score.open("data/score_homing.txt", ofstream::app);
+    // score.open("/home/robotmaster/argos3-installation/habanero/habanero-loopfunctions/data/score_homing.txt", ofstream::app);
     if (m_bMaximization == true){
         LOG << -m_fObjectiveFunction << std::endl;
         // score <<-m_fObjectiveFunction << std::endl;
@@ -487,16 +487,16 @@ void CommHomAggLoopFunction::InitMocaState() {
       pcBlock->GetLEDEquippedEntity().Enable();
       pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::BLACK);
 
-    if (((nBlockId == 0 ) || (nBlockId == 31)) && m_uAggCorner == 1) {
+    if (((nBlockId == 0 ) || (nBlockId == 31) || (nBlockId == 1 ) || (nBlockId == 30)) && m_uAggCorner == 1) {
         pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::RED);
     }
-    else if ((nBlockId >= 7 && nBlockId <= 8) && m_uAggCorner == 2) {
+    else if ((nBlockId >= 6 && nBlockId <= 9) && m_uAggCorner == 2) {
         pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::RED);
     }
-    else if ((nBlockId >= 15 && nBlockId <= 16) && m_uAggCorner == 3) {
+    else if ((nBlockId >= 14 && nBlockId <= 17) && m_uAggCorner == 3) {
         pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::RED);
     }
-    else if ((nBlockId >= 23 && nBlockId <= 24) && m_uAggCorner == 4) {
+    else if ((nBlockId >= 22 && nBlockId <= 25) && m_uAggCorner == 4) {
         pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::RED);
     }
 
