@@ -52,20 +52,9 @@ void CommAggLoopFunction::Init(TConfigurationNode& t_tree) {
     try {
     cParametersNode = GetNode(t_tree, "params");
     GetNodeAttributeOrDefault(cParametersNode, "maximization", m_bMaximization, (bool) false);
-    GetNodeAttributeOrDefault(cParametersNode, "agg_corner", m_uAggCorner, (int) 0);
+    GetNodeAttributeOrDefault(cParametersNode, "scenario_case", m_scenarioCase, (int) 0);
       // m_bMaximization = true;
     } catch(std::exception e) {
-    }
-
-
-    if (m_uAggCorner == 0){
-        agg_number = GetRandomTime(1,3);
-    }
-    else if (m_uAggCorner == 1){
-        agg_number = GetRandomTime(10,14);
-    }
-    else if (m_uAggCorner < 0){
-        agg_number = -m_uAggCorner;
     }
 
     m_cUVColor.SetRed(128);
@@ -83,16 +72,6 @@ void CommAggLoopFunction::Init(TConfigurationNode& t_tree) {
 
 void CommAggLoopFunction::Reset() {
     CoreLoopFunctions::Reset();
-
-    if (m_uAggCorner == 0){
-        agg_number = GetRandomTime(1,3);
-    }
-    else if (m_uAggCorner == 1){
-        agg_number = GetRandomTime(10,14);
-    }
-    else if (m_uAggCorner < 0){
-        agg_number = -m_uAggCorner;
-    }
     
     m_pcPhormica->GetLEDEquippedEntity().SetAllLEDsColors(CColor::BLACK);
     m_unClock = 0;
@@ -219,7 +198,6 @@ void CommAggLoopFunction::GetRobotScore() {
 
     UpdateRobotPositions();
 
-  Real unScore = 0;
   TRobotStateMap::iterator it1;
   TRobotStateMap::iterator it2;
   float distX=0;
@@ -346,7 +324,7 @@ void CommAggLoopFunction::InitPhormicaState() {
     CSpace::TMapPerType& tPhormicaMap = GetSpace().GetEntitiesByType("phormica");
     CVector2 cLEDPosition(0,0);
     // Change the first argument to change the quantity of layers of pheromone
-    std::vector<int> pheromoneLayers(30,0);
+    std::vector<int> pheromoneLayers(150,0);
     for (CSpace::TMapPerType::iterator it = tPhormicaMap.begin(); it != tPhormicaMap.end(); ++it) {
         CPhormicaEntity* pcPhormica = any_cast<CPhormicaEntity*>(it->second);
         m_pcPhormica = pcPhormica;
@@ -371,11 +349,14 @@ void CommAggLoopFunction::InitPhormicaState() {
 void CommAggLoopFunction::UpdatePhormicaState() {
 
     CSpace::TMapPerType& tEpuckMap = GetSpace().GetEntitiesByType("epuck");
-    CVector2 cEpuckPosition(0,0);
+
 
     TLEDStateMap::iterator itLED;
     TRobotStateMap::iterator it;
     for (itLED = m_tLEDStates.begin(); itLED != m_tLEDStates.end(); ++itLED) {
+
+        Real dCylinder1 = (itLED->second.cLEDPosition - CVector2(0,-0.34)).Length();
+        Real dCylinder2 = (itLED->second.cLEDPosition - CVector2(0,0.34)).Length();
         
         for (it = m_tRobotStates.begin(); it != m_tRobotStates.end(); ++it) {
             Real d = (itLED->second.cLEDPosition - it->second.cPosition).Length();
@@ -392,12 +373,10 @@ void CommAggLoopFunction::UpdatePhormicaState() {
                 fPheromone = 0.045;
             
             // fPheromone = 0.01;
-           
-            UInt32 swarmId = it->second.unId;
             
             //if (d <= m_fPheromoneParameter) {
             if (d <= fPheromone) {
-                itLED->second.unTimer = 500; // Pheromone decay time
+                itLED->second.unTimer = 750; // Pheromone decay time
                 if (itLED->second.pheromoneLayers[itLED->second.pheromoneLayers.size() - 1] == 0)
                     // Find the first empty layer
                     for (UInt16 i = 0; i <  itLED->second.pheromoneLayers.size(); ++i) {
@@ -446,6 +425,15 @@ void CommAggLoopFunction::UpdatePhormicaState() {
             m_pcPhormica->GetLEDEquippedEntity().SetLEDColor(itLED->second.unLEDIndex,CColor::MAGENTA);
             // LOG << "SHIFT" << std::endl;
         }
+        else if ((dCylinder1 <= 0.1) && (m_scenarioCase == 3)){
+            m_pcPhormica->GetLEDEquippedEntity().SetLEDColor(itLED->second.unLEDIndex,CColor::MAGENTA);
+        }
+        else if (((dCylinder1 <= 0.1) || (dCylinder2 <= 0.1)) && (m_scenarioCase == 4)){
+            m_pcPhormica->GetLEDEquippedEntity().SetLEDColor(itLED->second.unLEDIndex,CColor::MAGENTA);
+        }
+        else if ((dCylinder2 <= 0.1) && (m_scenarioCase == 5)){
+            m_pcPhormica->GetLEDEquippedEntity().SetLEDColor(itLED->second.unLEDIndex,CColor::MAGENTA);
+        }
         else {
             m_pcPhormica->GetLEDEquippedEntity().SetLEDColor(itLED->second.unLEDIndex,CColor::BLACK);
             // LOG << "BLACK" << std::endl;
@@ -482,39 +470,39 @@ void CommAggLoopFunction::InitMocaState() {
         UInt32 nBlockId = std::stoi(strBlockId);
       pcBlock->GetLEDEquippedEntity().Enable();
       pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::BLACK);
-    if (((nBlockId >= 0 && nBlockId <= 1) || (nBlockId >= 22 && nBlockId <= 23)) && agg_number == 10) {
-        pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::CYAN);
-    }
-    else if ((nBlockId >= 4 && nBlockId <= 7 && agg_number == 11)) {
-        pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::CYAN);
-    }
-    else if ((nBlockId >= 10 && nBlockId <= 13) && agg_number == 12) {
-        pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::CYAN);
-    }
-    else if ((nBlockId >= 16 && nBlockId <= 19) && agg_number == 13) {
-        pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::CYAN);
-    }
+    // if (((nBlockId >= 0 && nBlockId <= 1) || (nBlockId >= 22 && nBlockId <= 23)) && agg_number == 10) {
+    //     pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::CYAN);
+    // }
+    // else if ((nBlockId >= 4 && nBlockId <= 7 && agg_number == 11)) {
+    //     pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::CYAN);
+    // }
+    // else if ((nBlockId >= 10 && nBlockId <= 13) && agg_number == 12) {
+    //     pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::CYAN);
+    // }
+    // else if ((nBlockId >= 16 && nBlockId <= 19) && agg_number == 13) {
+    //     pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::CYAN);
+    // }
 
-    else if (((nBlockId >= 0 && nBlockId <= 1) || (nBlockId >= 22 && nBlockId <= 23)) && agg_number == 1) {
-        pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::CYAN);
-    }
-    else if ((nBlockId >= 4 && nBlockId <= 7 && agg_number == 2)) {
-        pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::CYAN);
-    }
-    else if ((nBlockId >= 10 && nBlockId <= 13) && agg_number == 1) {
-        pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::CYAN);
-    }
-    else if ((nBlockId >= 16 && nBlockId <= 19) && agg_number == 2) {
-        pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::CYAN);
-    }
+    // else if (((nBlockId >= 0 && nBlockId <= 1) || (nBlockId >= 22 && nBlockId <= 23)) && agg_number == 1) {
+    //     pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::CYAN);
+    // }
+    // else if ((nBlockId >= 4 && nBlockId <= 7 && agg_number == 2)) {
+    //     pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::CYAN);
+    // }
+    // else if ((nBlockId >= 10 && nBlockId <= 13) && agg_number == 1) {
+    //     pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::CYAN);
+    // }
+    // else if ((nBlockId >= 16 && nBlockId <= 19) && agg_number == 2) {
+    //     pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::CYAN);
+    // }
 
-    unBlocksID += 1;
+    // unBlocksID += 1;
   }
 
 
-//     CSpace::TMapPerType& tBlocksMap = GetSpace().GetEntitiesByType("cylinder");
-//     UInt32 unBlocksID = 0;
-//     for (CSpace::TMapPerType::iterator it = tBlocksMap.begin(); it != tBlocksMap.end(); ++it) {
+//     CSpace::TMapPerType& tCylinderMap = GetSpace().GetEntitiesByType("cylinder");
+//     UInt32 unCylinderID = 0;
+//     for (CSpace::TMapPerType::iterator it = tCylinderMap.begin(); it != tBlocksMap.end(); ++it) {
 //       CCylinderEntity* pcBlock = any_cast<CBlockEntity*>(it->second);
 //       std::string strBlockId = pcBlock->GetId().substr(6,2);
 //         UInt32 nBlockId = std::stoi(strBlockId);
@@ -525,7 +513,7 @@ void CommAggLoopFunction::InitMocaState() {
 //     // }
 
 //     // unBlocksID += 1;
-//  }
+// //  }
 }
 
 /****************************************/

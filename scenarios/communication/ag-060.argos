@@ -5,7 +5,7 @@
   </framework>
   <loop_functions library="/home/robotmaster/argos3-installation/habanero/habanero-loopfunctions/build/loop-functions/communication/libcommunication_aggregation_loopfunc.so" label="comm_agg_loop_function">
   
-    <params number_robots="15" dist_radius="1.0" maximization="false" scenario_case="5" fsm-config=" --com1 --nstates 2 --s0 9 --fov0 1 --vel0 1.0 --clr0 6 --cle0 6 --phe0 0 --n0 3 --n0x0 0 --c0x0 4 --p0x0 0.88 --n0x1 0 --c0x1 1 --p0x1 0.91 --n0x2 0 --c0x2 0 --p0x2 0.15 --s1 9 --fov1 1 --vel1 1.0 --clr1 6 --cle1 0 --phe1 0 --n1 3 --n1x0 0 --c1x0 4 --p1x0 0.14 --n1x1 0 --c1x1 1 --p1x1 0.03 --n1x2 0 --c1x2 5 --p1x2 0.55 --f1x2 0 --l1x2 2" />
+    <params number_robots="15" dist_radius="1.0" maximization="false" scenario_case="3" fsm-config=" --com1 --nstates 2 --s0 9 --fov0 1 --vel0 1.0 --clr0 6 --cle0 6 --phe0 0 --n0 3 --n0x0 0 --c0x0 4 --p0x0 0.88 --n0x1 0 --c0x1 1 --p0x1 0.91 --n0x2 0 --c0x2 0 --p0x2 0.15 --s1 9 --fov1 1 --vel1 1.0 --clr1 6 --cle1 0 --phe1 0 --n1 3 --n1x0 0 --c1x0 4 --p1x0 0.14 --n1x1 0 --c1x1 1 --p1x1 0.03 --n1x2 0 --c1x2 5 --p1x2 0.55 --f1x2 0 --l1x2 2" />
   </loop_functions>
 
   <controllers>
@@ -43,12 +43,12 @@
     <cylinder id="cyl1" radius="0.035" height="0.05" movable="false" mass="2.5">
       <body position="0,-0.34,0" orientation="45,0,0" />
        <leds medium="leds">
-        <led offset="0.0, 0.0,0.058" anchor="origin" color="cyan" />  
-        <led offset="0.0, 0.0,0.075" anchor="origin" color="cyan" />  
-        <led offset="0.04, 0.0,0.058" anchor="origin" color="cyan" />  
-        <led offset="-0.04, 0.0,0.058" anchor="origin" color="cyan" />  
-        <led offset="0.0, 0.04,0.058" anchor="origin" color="cyan" />  
-        <led offset="0.0, -0.04,0.058" anchor="origin" color="cyan" />  
+        <led offset="0.0, 0.0,0.058" anchor="origin" color="black" />  
+        <led offset="0.0, 0.0,0.075" anchor="origin" color="black" />  
+        <led offset="0.04, 0.0,0.058" anchor="origin" color="black" />  
+        <led offset="-0.04, 0.0,0.058" anchor="origin" color="black" />  
+        <led offset="0.0, 0.04,0.058" anchor="origin" color="black" />  
+        <led offset="0.0, -0.04,0.058" anchor="origin" color="black" />  
         </leds>
     </cylinder>
 
