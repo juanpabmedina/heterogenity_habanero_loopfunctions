@@ -350,7 +350,7 @@ void CommHomAggLoopFunction::InitPhormicaState() {
     CSpace::TMapPerType& tPhormicaMap = GetSpace().GetEntitiesByType("phormica");
     CVector2 cLEDPosition(0,0);
     // Change the first argument to change the quantity of layers of pheromone
-    std::vector<int> pheromoneLayers(30,0);
+    std::vector<int> pheromoneLayers(150,0);
     for (CSpace::TMapPerType::iterator it = tPhormicaMap.begin(); it != tPhormicaMap.end(); ++it) {
         CPhormicaEntity* pcPhormica = any_cast<CPhormicaEntity*>(it->second);
         m_pcPhormica = pcPhormica;
@@ -400,9 +400,9 @@ void CommHomAggLoopFunction::UpdatePhormicaState() {
             //if (d <= m_fPheromoneParameter) {
             if (d <= fPheromone) {
 
-                itLED->second.unTimer = 500; // Pheromone decay time
+                itLED->second.unTimer = 750; // Pheromone decay time
                 // Check if the vector is full
-                if (itLED->second.pheromoneLayers[itLED->second.pheromoneLayers.size() - 1] == 0)
+                if (itLED->second.pheromoneLayers[itLED->second.pheromoneLayers.size() - 1] == 0){
                     // Find the first empty layer
                     for (UInt16 i = 0; i <  itLED->second.pheromoneLayers.size(); ++i) {
                         
@@ -412,6 +412,7 @@ void CommHomAggLoopFunction::UpdatePhormicaState() {
                             break;
                         } 
                     }
+                }
                 // If the vector is full shift layers down adn assign to the last position a new counter
                 else {
                     for (UInt16 i = 1; i < itLED->second.pheromoneLayers.size(); ++i) {
@@ -487,16 +488,16 @@ void CommHomAggLoopFunction::InitMocaState() {
       pcBlock->GetLEDEquippedEntity().Enable();
       pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::BLACK);
 
-    if (((nBlockId == 0 ) || (nBlockId == 31) || (nBlockId == 1 ) || (nBlockId == 30)) && m_uAggCorner == 1) {
+    if (((nBlockId == 0 ) || (nBlockId == 31)) && m_uAggCorner == 1) {
         pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::RED);
     }
-    else if ((nBlockId >= 6 && nBlockId <= 9) && m_uAggCorner == 2) {
+    else if ((nBlockId >= 7 && nBlockId <= 8) && m_uAggCorner == 2) {
         pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::RED);
     }
-    else if ((nBlockId >= 14 && nBlockId <= 17) && m_uAggCorner == 3) {
+    else if ((nBlockId >= 15 && nBlockId <= 16) && m_uAggCorner == 3) {
         pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::RED);
     }
-    else if ((nBlockId >= 22 && nBlockId <= 25) && m_uAggCorner == 4) {
+    else if ((nBlockId >= 23 && nBlockId <= 24) && m_uAggCorner == 4) {
         pcBlock->GetLEDEquippedEntity().SetAllLEDsColors(CColor::RED);
     }
 

@@ -121,7 +121,7 @@ void CommTskLoopFunction::PostExperiment() {
     m_fObjectiveFunction = count1 - count2;
 
     // ofstream score;
-    // score.open("data/score_tasking.txt", ofstream::app);
+    // score.open("/home/robotmaster/argos3-installation/habanero/habanero-loopfunctions/data/score_tasking.txt", ofstream::app);
 
     if (m_bMaximization == true){
         LOG << -m_fObjectiveFunction << std::endl;
@@ -531,7 +531,7 @@ void CommTskLoopFunction::InitPhormicaState() {
     CSpace::TMapPerType& tPhormicaMap = GetSpace().GetEntitiesByType("phormica");
     CVector2 cLEDPosition(0,0);
     // Change the first argument to change the quantity of layers of pheromone
-    std::vector<int> pheromoneLayers(30,0);
+    std::vector<int> pheromoneLayers(150,0);
     for (CSpace::TMapPerType::iterator it = tPhormicaMap.begin(); it != tPhormicaMap.end(); ++it) {
         CPhormicaEntity* pcPhormica = any_cast<CPhormicaEntity*>(it->second);
         m_pcPhormica = pcPhormica;
@@ -582,7 +582,7 @@ void CommTskLoopFunction::UpdatePhormicaState() {
             
             //if (d <= m_fPheromoneParameter) {
             if (d <= fPheromone) {
-                itLED->second.unTimer = 500; // Pheromone decay time
+                itLED->second.unTimer = 750; // Pheromone decay time
                 if (itLED->second.pheromoneLayers[itLED->second.pheromoneLayers.size() - 1] == 0)
                     // Find the first empty layer
                     for (UInt16 i = 0; i <  itLED->second.pheromoneLayers.size(); ++i) {
