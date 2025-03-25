@@ -117,15 +117,15 @@ void CommHomAggLoopFunction::PostStep() {
 
 void CommHomAggLoopFunction::PostExperiment() {
 
-    ofstream score;
-    score.open("/home/robotmaster/argos3-installation/habanero/habanero-loopfunctions/data/score_homing.txt", ofstream::app);
+    // ofstream score;
+    // score.open("/home/robotmaster/argos3-installation/habanero/habanero-loopfunctions/data/score_homing.txt", ofstream::app);
     if (m_bMaximization == true){
         LOG << -m_fObjectiveFunction << std::endl;
-        score <<-m_fObjectiveFunction << std::endl;
+        // score <<-m_fObjectiveFunction << std::endl;
     }
     else {
         LOG << m_fObjectiveFunction << std::endl;
-        score <<m_fObjectiveFunction << std::endl;
+        // score <<m_fObjectiveFunction << std::endl;
 
     }
 }
