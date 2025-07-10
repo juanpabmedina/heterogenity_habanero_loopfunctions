@@ -82,7 +82,7 @@ class CommAggLoopFunction: public CoreLoopFunctions {
     /* 
      * Parameter to determine which corner the robots aggregate
      */
-    int m_scenarioCase;
+    int m_uAggCorner;
 
     UInt32 agg_number;
 

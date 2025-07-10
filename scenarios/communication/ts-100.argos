@@ -24,7 +24,7 @@
         <epuck_ground implementation="rot_z_only" noise_level="0.05" calibrated="true" />
         <epuck_omnidirectional_camera implementation="rot_z_only" medium="leds" show_rays="false" />
       </sensors>
-      <params readable="false" history="false" fsm-config="--com0 --nstates 2 --s0 3 --fov0 1 --vel0 1.0 --clr0 5 --cle0 0 --phe0 0 --n0 3 --n0x0 0 --c0x0 1 --p0x0 0.26 --n0x1 0 --c0x1 5 --p0x1 0.43 --f0x1 0 --l0x1 1 --n0x2 0 --c0x2 1 --p0x2 0.79 --s1 1 --cle1 0 --phe1 2 --n1 4 --n1x0 0 --c1x0 0 --p1x0 0.29 --n1x1 0 --c1x1 0 --p1x1 0.73 --n1x2 0 --c1x2 0 --p1x2 0.79 --n1x3 0 --c1x3 0 --p1x3 0.28" />
+      <params readable="true" history="false" fsm-config="--com0 --nstates 2 --s0 3 --fov0 1 --vel0 1.0 --clr0 5 --cle0 0 --phe0 0 --n0 3 --n0x0 0 --c0x0 1 --p0x0 0.26 --n0x1 0 --c0x1 5 --p0x1 0.43 --f0x1 0 --l0x1 1 --n0x2 0 --c0x2 1 --p0x2 0.79 --s1 1 --cle1 0 --phe1 2 --n1 4 --n1x0 0 --c1x0 0 --p1x0 0.29 --n1x1 0 --c1x1 0 --p1x1 0.73 --n1x2 0 --c1x2 0 --p1x2 0.79 --n1x3 0 --c1x3 0 --p1x3 0.28" />
     </automode_controller>
   </controllers>
   <arena size="2.5, 2.5, 0.30" center="0,0,0">

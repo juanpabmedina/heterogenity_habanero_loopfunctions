@@ -1,10 +1,11 @@
+<?xml version='1.0' ?>
 <argos-configuration>
   <framework>
     <experiment length="120" ticks_per_second="10" random_seed="109" />
   </framework>
   <loop_functions library="/home/robotmaster/argos3-installation/habanero/habanero-loopfunctions/build/loop-functions/communication/libcommunication_tsk_loopfunc.so" label="communication_tsk_loop_function">
   
-    <params number_robots="3" dist_radius="1.0" maximization="true" fsm-config="--com0 --nstates 3 --s0 3 --fov0 1 --vel0 1.0 --clr0 1 --cle0 0 --phe0 2 --n0 4 --n0x0 1 --c0x0 1 --p0x0 0.64 --n0x1 0 --c0x1 5 --p0x1 0.63 --f0x1 0 --l0x1 2 --n0x2 1 --c0x2 2 --p0x2 0.59 --n0x3 0 --c0x3 0 --p0x3 0.77 --s1 2 --fov1 0 --vel1 1.0 --clr1 2 --cle1 0 --phe1 2 --n1 3 --n1x0 0 --c1x0 2 --p1x0 0.51 --n1x1 1 --c1x1 5 --p1x1 0.32 --f1x1 1 --l1x1 1 --n1x2 0 --c1x2 1 --p1x2 0.08 --s2 2 --fov2 1 --vel2 1.0 --clr2 2 --cle2 0 --phe2 2 --n2 1 --n2x0 1 --c2x0 5 --p2x0 0.91 --f2x0 1 --l2x0 5" />
+    <params number_robots="3" dist_radius="1.0" maximization="true" fsm-config="--com0 --nstates 4 --s0 0 --rwm0 59 --cle0 0 --phe0 2 --n0 3 --n0x0 2 --c0x0 4 --p0x0 0.28 --n0x1 1 --c0x1 2 --p0x1 0.73 --n0x2 1 --c0x2 4 --p0x2 0.07 --s1 0 --rwm1 34 --cle1 0 --phe1 2 --n1 1 --n1x0 0 --c1x0 2 --p1x0 0.88 --s2 2 --fov2 1 --vel2 1.0 --clr2 2 --cle2 0 --phe2 2 --n2 2 --n2x0 2 --c2x0 5 --p2x0 0.87 --f2x0 1 --l2x0 5 --n2x1 1 --c2x1 5 --p2x1 0.46 --f2x1 0 --l2x1 1 --s3 0 --rwm3 62 --cle3 0 --phe3 2 --n3 3 --n3x0 1 --c3x0 1 --p3x0 0.75 --n3x1 0 --c3x1 5 --p3x1 0.44 --f3x1 0 --l3x1 1 --n3x2 0 --c3x2 4 --p3x2 0.87" />
   </loop_functions>
   <controllers>
     <automode_controller id="heterogeneity1" library="/home/robotmaster/argos3-installation/habanero/AutoMoDe-habanero/build/src/libautomode.so">
@@ -23,7 +24,7 @@
         <epuck_ground implementation="rot_z_only" noise_level="0.05" calibrated="true" />
         <epuck_omnidirectional_camera implementation="rot_z_only" medium="leds" show_rays="false" />
       </sensors>
-      <params readable="false" history="false" fsm-config="--com0 --nstates 3 --s0 3 --fov0 1 --vel0 1.0 --clr0 1 --cle0 0 --phe0 2 --n0 4 --n0x0 1 --c0x0 1 --p0x0 0.64 --n0x1 0 --c0x1 5 --p0x1 0.63 --f0x1 0 --l0x1 2 --n0x2 1 --c0x2 2 --p0x2 0.59 --n0x3 0 --c0x3 0 --p0x3 0.77 --s1 2 --fov1 0 --vel1 1.0 --clr1 2 --cle1 0 --phe1 2 --n1 3 --n1x0 0 --c1x0 2 --p1x0 0.51 --n1x1 1 --c1x1 5 --p1x1 0.32 --f1x1 1 --l1x1 1 --n1x2 0 --c1x2 1 --p1x2 0.08 --s2 2 --fov2 1 --vel2 1.0 --clr2 2 --cle2 0 --phe2 2 --n2 1 --n2x0 1 --c2x0 5 --p2x0 0.91 --f2x0 1 --l2x0 5" />
+      <params readable="false" history="false" fsm-config="--com0 --nstates 4 --s0 0 --rwm0 59 --cle0 0 --phe0 2 --n0 3 --n0x0 2 --c0x0 4 --p0x0 0.28 --n0x1 1 --c0x1 2 --p0x1 0.73 --n0x2 1 --c0x2 4 --p0x2 0.07 --s1 0 --rwm1 34 --cle1 0 --phe1 2 --n1 1 --n1x0 0 --c1x0 2 --p1x0 0.88 --s2 2 --fov2 1 --vel2 1.0 --clr2 2 --cle2 0 --phe2 2 --n2 2 --n2x0 2 --c2x0 5 --p2x0 0.87 --f2x0 1 --l2x0 5 --n2x1 1 --c2x1 5 --p2x1 0.46 --f2x1 0 --l2x1 1 --s3 0 --rwm3 62 --cle3 0 --phe3 2 --n3 3 --n3x0 1 --c3x0 1 --p3x0 0.75 --n3x1 0 --c3x1 5 --p3x1 0.44 --f3x1 0 --l3x1 1 --n3x2 0 --c3x2 4 --p3x2 0.87" />
     </automode_controller>
   </controllers>
   <arena size="2.5, 2.5, 0.30" center="0,0,0">
@@ -4371,4 +4372,5 @@
     <led id="leds" grid_size="20,20,1" />
     <range_and_bearing id="rab" grid_size="20,20,1" />
   </media>
+        
 </argos-configuration>
